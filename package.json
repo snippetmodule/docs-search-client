@@ -1,7 +1,7 @@
 {
-  "name": "rrr-basic-example",
+  "name": "docs-search-client",
   "version": "0.0.0",
-  "repository": "reactjs/react-router-redux",
+  "repository": "snippetmodule/docs-search-client",
   "license": "MIT",
   "dependencies": {
     "react": "^0.14.7",
