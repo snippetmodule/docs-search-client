@@ -12,7 +12,7 @@ var config = {
 
   resolve: {
     root: path.resolve(__dirname),
-    extensions: ['', '.ts', '.tsx', '.js', '.jsx']
+    extensions: ['', '.ts', '.tsx','.js']
   },
 
   entry: {
@@ -41,10 +41,6 @@ var config = {
       {
         test: /\.tsx?$/,
         loader: 'react-hot!ts'
-      },
-      {
-        test: /\.jsx$/,
-        loader: 'babel?presets[]=es2015'
       },
       {
         test: /\.json$/,
