@@ -8,9 +8,8 @@
     "prebuild": "rm -rf build/*",
     "build": "webpack --config config/webpack/index.js",
     "build:prod": "cross-env NODE_ENV=production npm run build",
-    "postbuild": "webpack --config config/webpack/server.js",
     "prestart": "npm run build",
-    "start": "node build/server.js",
+    "start": "webpack-dev-server --config config/webpack/index.js --content-base ./ --history-api-fallback --no-info --open",
     "start:prod": "cross-env NODE_ENV=production npm start",
     "lint": "node_modules/.bin/tslint \"src/**/**.ts*\""
   },
@@ -85,8 +84,6 @@
   },
   "dependencies": {
     "es6-promise": "^3.1.2",
-    "express": "^4.13.4",
-    "history": "^2.1.0",
     "isomorphic-fetch": "^2.2.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",

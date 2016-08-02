@@ -6,7 +6,7 @@ var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
 
 var config = {
-  devtool: 'eval',
+  devtool: 'source-map',
 
   debug: true,
 
@@ -24,8 +24,8 @@ var config = {
   },
 
   output: {
-    path: path.resolve('./build/public'),
-    publicPath: '/public/',
+    path: path.resolve('./build/'),
+    publicPath: '/build/',
     filename: 'js/[name].js',
     pathinfo: true
   },
@@ -102,9 +102,6 @@ var config = {
   },
 
   plugins: [
-    new ManifestPlugin({
-      fileName: '../manifest.json'
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         BROWSER: JSON.stringify(true),

@@ -31,8 +31,8 @@ var config = {
   },
 
   output: {
-    path: path.resolve('./build/public'),
-    publicPath: '/public/',
+    path: path.resolve('./build/'),
+    publicPath: '/build/',
     filename: 'js/[name].[chunkhash].js'
   },
 
@@ -122,9 +122,6 @@ var config = {
       }
     }),
     new ExtractTextPlugin('css/[name].[hash].css'),
-    new ManifestPlugin({
-      fileName: '../manifest.json'
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         BROWSER: JSON.stringify(true),

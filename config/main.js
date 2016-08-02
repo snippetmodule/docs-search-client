@@ -2,11 +2,7 @@
 
 var config = {
   env: process.env.NODE_ENV || 'development',
-  host: process.env.HOST || 'localhost',
-  port: process.env.PORT || 8889,
-  karmaPort: 9876,
-
-  // This part goes to React-Helmet for Head of our HTML
+    // This part goes to React-Helmet for Head of our HTML
   app: {
     head: {
       title: 'barbar-vortigern',
