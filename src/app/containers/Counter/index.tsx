@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { increment, decrement } from '../../redux/modules/counter/counter';
-import { ICounter } from '../../redux/modules/counter/counter.model';
+import {IReduxState, IReduxAction } from '../../redux/model';
 const { connect } = require('react-redux');
 const s = require('./style.css');
 
 interface IProps {
-  counter: ICounter;
-  increment: Redux.ActionCreator;
-  decrement: Redux.ActionCreator;
+  counter: IReduxState;
+  increment: Redux.ActionCreator<IReduxAction>;
+  decrement: Redux.ActionCreator<IReduxAction>;
 }
 
 @connect(

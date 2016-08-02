@@ -4,6 +4,7 @@ import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import rootReducer from '../redux/reducers';
+import {IReduxState, IReduxAction } from '../redux/model';
 
 const fetchMock = require('fetch-mock');
 
@@ -16,9 +17,9 @@ const mockStore = configureStore(middlewares);
 
 /** Render Component */
 function renderComponent(ComponentClass, state?, props?) {
-  const store: Redux.Store = createStore(rootReducer, state);
+  const store: Redux.Store<IReduxState> = createStore(rootReducer, state);
 
-  return mount (
+  return mount(
     <Provider store={store}>
       <ComponentClass {...props} />
     </Provider>

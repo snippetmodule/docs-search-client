@@ -3,9 +3,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
+import { IReduxState } from './model';
 const createLogger = require('redux-logger');
 
-export function configureStore(history, initialState?: any): Redux.Store {
+export function configureStore(history, initialState?: any): Redux.Store<IReduxState> {
 
   let middlewares: any[] = [
     routerMiddleware(history),
@@ -21,12 +22,12 @@ export function configureStore(history, initialState?: any): Redux.Store {
   const finalCreateStore = compose(
     applyMiddleware(...middlewares),
     appConfig.env === 'development' &&
-    typeof window === 'object' &&
-    typeof window.devToolsExtension !== 'undefined'
+      typeof window === 'object' &&
+      typeof window.devToolsExtension !== 'undefined'
       ? window.devToolsExtension() : f => f
   )(createStore);
 
-  const store: Redux.Store = finalCreateStore(rootReducer, initialState);
+  const store: Redux.Store<IReduxState> = finalCreateStore(rootReducer, initialState);
 
   if (appConfig.env === 'development' && (module as any).hot) {
     (module as any).hot.accept('./reducers', () => {

@@ -1,16 +1,16 @@
-import { ICounter, ICounterAction } from './counter.model';
+import {IReduxState, IReduxAction } from '../../model';
 
 /** Action Types */
 export const INCREMENT: string = 'INCREMENT';
 export const DECREMENT: string = 'DECREMENT';
 
 /** Counter: Initial State */
-const initialState: ICounter = {
+const initialState: IReduxState = {
   count: 0,
 };
 
 /** Reducer: CounterReducer */
-export function counterReducer(state = initialState, action?: ICounterAction) {
+export function counterReducer(state = initialState, action?: IReduxAction) {
 
   switch (action.type) {
     case INCREMENT:
@@ -29,14 +29,14 @@ export function counterReducer(state = initialState, action?: ICounterAction) {
 }
 
 /** Action Creator: Increments the Counter */
-export function increment(): ICounterAction {
+export function increment(): IReduxAction {
   return {
     type: INCREMENT,
   };
 }
 
 /** Action Creator: Decrements the Counter */
-export function decrement(): ICounterAction {
+export function decrement(): IReduxAction {
   return {
     type: DECREMENT,
   };
