@@ -1,4 +1,4 @@
-import {IReduxState, IReduxAction } from '../../model';
+import {IReduxState, IReduxAction } from './model';
 
 /** Action Types */
 export const INCREMENT: string = 'INCREMENT';

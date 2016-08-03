@@ -1,5 +1,5 @@
 import { IStars, IStarsAction } from './stars.model';
-import { IReduxAction } from '../../model';
+import { IReduxAction } from './model';
 /** Action Types */
 export const STARS_REQUEST: string = 'STARS_REQUEST';
 export const STARS_SUCCESS: string = 'STARS_SUCCESS';

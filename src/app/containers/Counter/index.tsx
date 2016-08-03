@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { increment, decrement } from '../../redux/modules/counter/counter';
-import {IReduxState, IReduxAction } from '../../redux/model';
+import { increment, decrement } from '../../redux/reducers/counter';
+import {IReduxState, IReduxAction } from '../../redux/reducers/model';
 const { connect } = require('react-redux');
 const s = require('./style.css');
 

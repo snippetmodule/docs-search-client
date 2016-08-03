@@ -2,8 +2,8 @@ const appConfig = require('../../../config/main');
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
-import rootReducer from './reducers';
-import { IReduxState } from './model';
+import rootReducer from './reducers/';
+import { IReduxState } from './reducers/model';
 const createLogger = require('redux-logger');
 
 export function configureStore(history, initialState?: any): Redux.Store<IReduxState> {

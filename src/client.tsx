@@ -9,7 +9,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 const { ReduxAsyncConnect } = require('redux-connect');
 import { configureStore } from './app/redux/store';
 import routes from './app/routes';
-import {IReduxState } from './app/redux/model';
+import {IReduxState } from './app/redux/reducers/model';
 
 const store: Redux.Store<IReduxState> = configureStore(
   browserHistory,
