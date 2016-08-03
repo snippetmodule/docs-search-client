@@ -12,15 +12,15 @@ var config = {
 
   resolve: {
     root: path.resolve(__dirname),
-    extensions: ['', '.ts', '.tsx','.js']
+    extensions: ['', '.ts', '.tsx', '.js']
   },
 
   entry: {
     app: [
       'webpack-hot-middleware/client?reload=true',
-      './src/client.tsx',
-      './src/vendor/main.ts'
-    ]
+      './src/client.tsx'
+    ],
+    vendor: './src/vendor.ts'
   },
 
   output: {

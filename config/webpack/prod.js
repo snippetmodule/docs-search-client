@@ -15,18 +15,7 @@ var config = {
 
   entry: {
     app: './src/client.tsx',
-    vendor: [
-      './src/vendor/main.ts',
-      'react',
-      'react-dom',
-      'react-router',
-      'react-helmet',
-      'react-redux',
-      'react-router-redux',
-      'redux',
-      'redux-connect',
-      'redux-thunk'
-    ]
+    vendor: './src/vendor.ts'
   },
 
   output: {
