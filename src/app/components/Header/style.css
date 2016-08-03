@@ -1,9 +1,4 @@
-.nav ul {
-	list-style-type: none;
-	padding: 0;
-}
-
-.nav ul li {
-	display: inline;
-	padding: 5px;
+.nav{
+	background: #f0f0f0;
+	border-bottom: 1px solid #d9d9d9
 }

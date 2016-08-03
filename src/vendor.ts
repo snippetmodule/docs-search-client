@@ -15,3 +15,14 @@ import 'redux';
 import 'react-dom';
 import 'redux-connect';
 import 'redux-thunk';
+
+import 'react-bootstrap';
+
+// for Test
+// const appConfig = require('../config/main');
+
+// if (appConfig.isDevelopment) {
+//     try {
+//         require('index.html'); // 触发webpack dev server 更新 html
+//     }catch (e) {}
+// }
