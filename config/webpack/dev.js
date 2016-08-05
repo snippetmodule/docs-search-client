@@ -18,7 +18,7 @@ var config = {
   entry: {
     app: [
       'webpack-hot-middleware/client?reload=true',
-      './src/client.tsx'
+      './src/index.tsx'
     ],
     vendor: './src/vendor.ts'
   },
@@ -94,7 +94,7 @@ var config = {
   },
 
   tslint: {
-    failOnHint: true
+    failOnHint: false
   },
 
   plugins: [

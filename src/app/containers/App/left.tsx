@@ -4,9 +4,9 @@ import * as React from 'react';
 class Left extends React.Component<any, any> {
     public render() {
         return (
-            <section >
+            <div >
                 <div> 11111 </div>
-            </section>
+            </div>
         );
     }
 }

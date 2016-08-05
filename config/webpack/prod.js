@@ -14,7 +14,7 @@ var config = {
   },
 
   entry: {
-    app: './src/client.tsx',
+    app: './src/index.tsx',
     vendor: './src/vendor.ts'
   },
 
