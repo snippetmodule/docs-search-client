@@ -16,8 +16,6 @@ import 'react-dom';
 import 'redux-connect';
 import 'redux-thunk';
 
-import 'react-bootstrap';
-
 // for Test
 // const appConfig = require('../config/main');
 
