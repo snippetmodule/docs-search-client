@@ -4,7 +4,7 @@
   "description": "docs-search-client",
   "main": "build/server.js",
   "scripts": {
-    "preinstall": "rm -rf build/* node_modules/* typings/*",
+    "clear": "rm -rf build/* node_modules/* typings/*",
     "postinstall": "typings install",
     "prebuild": "rm -rf build/*",
     "build": "webpack --config config/webpack/index.js",
