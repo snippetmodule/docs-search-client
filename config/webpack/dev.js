@@ -7,14 +7,11 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var config = {
   devtool: 'source-map',
-
   debug: true,
-
   resolve: {
     root: path.resolve(__dirname),
     extensions: ['', '.ts', '.tsx', '.js']
   },
-
   entry: {
     app: [
       'webpack-hot-middleware/client?reload=true',
@@ -22,20 +19,15 @@ var config = {
     ],
     vendor: './src/vendor.ts'
   },
-
   output: {
     path: path.resolve('./build/'),
     publicPath: '/build/',
     filename: 'js/[name].js',
     pathinfo: true
   },
-
   module: {
     preLoaders: [
-      {
-        test: /\.tsx?$/,
-        loader: 'tslint'
-      }
+      { test: /\.tsx?$/, loader: 'tslint' }
     ],
     loaders: [
       {
@@ -92,11 +84,9 @@ var config = {
       postcssAssets({ relative: true })
     ];
   },
-
   tslint: {
     failOnHint: false
   },
-
   plugins: [
     new HtmlWebpackPlugin({                        //根据模板插入css/js等生成最终HTML
       favicon: './src/favicon.ico', //favicon路径
@@ -118,5 +108,4 @@ var config = {
     new webpack.NoErrorsPlugin()
   ]
 };
-
 module.exports = config;

@@ -2,14 +2,14 @@
   "name": "docs-search-client",
   "version": "0.1.0",
   "description": "docs-search-client",
-  "main": "build/server.js",
   "scripts": {
     "clear": "rm -rf build/* node_modules/* typings/*",
+    "stop":"$(lsof -i :8080 | awk '{print \"kill -9 \" $2}')",
     "postinstall": "typings install",
     "prebuild": "rm -rf build/*",
     "build": "webpack --config config/webpack/index.js",
     "build:prod": "cross-env NODE_ENV=production npm run build",
-    "prestart": "npm run build",
+    "prestart": "npm run stop | npm run build",
     "start": "webpack-dev-server --config config/webpack/index.js --content-base ./build --history-api-fallback --no-info --open",
     "start:prod": "cross-env NODE_ENV=production npm start",
     "lint": "node_modules/.bin/tslint \"src/**/**.ts*\""
