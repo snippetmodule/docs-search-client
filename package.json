@@ -4,7 +4,7 @@
   "description": "docs-search-client",
   "scripts": {
     "clear": "rm -rf build/* node_modules/* typings/*",
-    "stop":"$(lsof -i :8080 | awk '{print \"kill -9 \" $2}')",
+    "stop": "$(lsof -i :8080 | awk '{print \"kill -9 \" $2}')",
     "postinstall": "typings install",
     "prebuild": "rm -rf build/*",
     "build": "webpack --config config/webpack/index.js",
@@ -82,6 +82,7 @@
     "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-connect": "^2.4.0",
-    "redux-thunk": "^2.0.1"
+    "redux-thunk": "^2.0.1",
+    "trackjs": "^2.4.0"
   }
 }

@@ -5,6 +5,8 @@
  * Example:
  * require('./bootstrap/css/bootstrap.min.css');
  */
+Object.defineProperty(window, '_trackJs', { value: { 'token': 'de2e5b341ed24eff992e0746306327b7' } });
+import 'trackjs';
 import 'isomorphic-fetch';
 import 'react';
 import 'react-dom';
