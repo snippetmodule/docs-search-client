@@ -1,5 +1,5 @@
-import * as e6p from 'es6-promise';
-(e6p as any).polyfill();
+// import * as e6p from 'es6-promise';
+// (e6p as any).polyfill();
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';

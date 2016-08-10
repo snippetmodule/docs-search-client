@@ -3,13 +3,14 @@ import {localStorage } from './storage';
 
 export let docsArrays: Array<DocsModel> = [];
 
-export function init() {
-    localStorage.iterate(function (value, key, iterationNumber) {
+export async function init() {
+    await test().catch(error => console.log('docs init test =' + ' ' + error));
+    await localStorage.iterate(function (value, key, iterationNumber) {
         docsArrays.push({
             key: key,
             value: JSON.parse(value),
         });
-    }, function (error) {
+    }).catch(function (error) {
         if (error) {
             console.log('docs init error ' + error);
         }
@@ -46,28 +47,35 @@ export function storeDocs(key: string, value: any) {
     localStorage.setItem(key, value).catch(error => console.log('docs store key ' + key + ' ' + error));
     init();
 }
-function downAndStore(url: string, key: string): Promise<any> {
-    return fetch(url, {
+async function downAndStore(url: string, key: string) {
+    let res: any = await fetch(url, {
         headers: {
             'Accept': 'application/json',
         },
-    }).then(res => {
-        if (res.ok) {
-            return res.text()
-                .then(res =>
-                    localStorage.setItem(key, res).catch(error => console.log('docs downAndStore key ' + key + ' ' + error)));
-        } else {
-            return res.json()
-                .then(res => console.log('docs downAndStore url =' + url + ' ' + res));
-        }
+    }).catch(error => console.log('docs test ' + error));
+    if (res.ok) {
+        res = await res.text();
+        res = await localStorage.setItem(key, res);
+    } else {
+        await res.text();
+    }
+    // return fetch(url, {
+    //     headers: {
+    //         'Accept': 'application/json',
+    //     },
+    // }).then<string>((res: IResponse) => {
+    //     if (res.ok) {
+    //         return res.text()
+    //             .then(res =>
+    //                 localStorage.setItem(key, res).catch(error => console.log('docs downAndStore key ' + key + ' ' + error)));
+    //     } else {
+    //         return res.text();
+    //     }
+    // }).catch(error => console.log('docs downAndStore url =' + url + ' ' + error));
+}
 
-    }).catch(error => console.log('docs downAndStore url =' + url + ' ' + error));
+export async function test() {
+    await downAndStore('http://devdocs.io/docs/git/index.json?1469993122', 'git');
+    await downAndStore('http://devdocs.io/docs/haxe~java/index.json?1457299146', 'java');
+    await downAndStore('http://devdocs.io/docs/javascript/index.json?1469397360', 'javascript');
 }
-export function test() {
-    Promise.all([
-        downAndStore('http://devdocs.io/docs/git/index.json?1469993122', 'git'),
-        downAndStore('http://devdocs.io/docs/haxe~java/index.json?1457299146', 'java'),
-        downAndStore('http://devdocs.io/docs/javascript/index.json?1469397360', 'javascript'),
-    ]).then(() => init()).catch(error => console.log('docs test ' + error));
-}
-test();

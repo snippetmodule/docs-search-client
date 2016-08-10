@@ -2,11 +2,12 @@
 import { search } from '../../core/docs';
 import { DocsModel } from '../../core/model';
 /** Action Types */
-export const STARS_REQUEST: string = 'STARS_REQUEST';
-export const STARS_SUCCESS: string = 'STARS_SUCCESS';
-export const STARS_FAILURE: string = 'STARS_FAILURE';
+export const SEARCH_REQUEST: string = 'SEARCH_REQUEST';
+export const SEARCH_SUCCESS: string = 'SEARCH_SUCCESS';
+export const SEARCH_FAILURE: string = 'SEARCH_FAILURE';
 
 export interface ISearchState {
+    input: string;
     isSearch: boolean;
     error?: boolean;
     message?: Array<DocsModel>;
@@ -14,22 +15,25 @@ export interface ISearchState {
 
 export interface ISearchAction {
     type: string;
+    input: string;
     message?: Array<DocsModel>;
 }
 
 /** Reducer */
-export function searchDocsReducer(state = { isSearch: false }, action: ISearchAction): ISearchState {
+export function searchDocsReducer(state = { input: '', isSearch: false }, action: ISearchAction): ISearchState {
 
     switch (action.type) {
-        case STARS_SUCCESS:
+        case SEARCH_SUCCESS:
             return Object.assign({}, state, {
+                input: action.input,
                 isSearch: false,
                 error: false,
                 message: action.message,
             });
 
-        case STARS_FAILURE:
+        case SEARCH_FAILURE:
             return Object.assign({}, state, {
+                input: action.input,
                 isSearch: false,
                 error: true,
                 message: action.message,
@@ -45,31 +49,19 @@ export function searchDocsReducer(state = { isSearch: false }, action: ISearchAc
 export function getSearchResult(dispatch, input: string): ISearchAction {
     search(input)
         .then((res: Array<DocsModel>) => {
-            return dispatch(searchSuccess(res));
+            return dispatch({
+                input: input,
+                type: SEARCH_SUCCESS,
+                message: res,
+            });
         })
-        .catch(err => dispatch(searchFailure(err)));
-    return searchRequest();
-}
-
-/** Action Creator */
-export function searchRequest(): ISearchAction {
+        .catch(err => dispatch({
+            input: input,
+            type: SEARCH_SUCCESS,
+            message: err,
+        }));
     return {
-        type: STARS_REQUEST,
-    };
-}
-
-/** Action Creator */
-export function searchSuccess(message: Array<DocsModel>): ISearchAction {
-    return {
-        type: STARS_SUCCESS,
-        message: message,
-    };
-}
-
-/** Action Creator */
-export function searchFailure(message: any): ISearchAction {
-    return {
-        type: STARS_FAILURE,
-        message: message,
+        input: input,
+        type: SEARCH_REQUEST,
     };
 }
