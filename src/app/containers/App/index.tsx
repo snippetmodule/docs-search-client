@@ -11,7 +11,7 @@ class App extends React.Component<any, any> {
       <div className={s.rootStyle} >
         <Helmet {...appConfig.app} {...appConfig.app.head}/>
         <div className={s.headerStyle}>
-          <Header />
+          <Header/>
         </div>
 
         <div className={s.contentLayout}>
