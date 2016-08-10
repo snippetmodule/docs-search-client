@@ -1,17 +1,10 @@
 import * as React from 'react';
-import { ISearchState, ISearchAction, getSearchResult } from '../../redux/reducers/searchdocs';
+import { getSearchResult } from '../../redux/reducers/searchdocs';
 import { Link } from 'react-router';
 const { connect } = require('react-redux');
 
-interface ISearchProps {
-  searchState: ISearchState;
-  getSearchResult: Redux.ActionCreator<ISearchAction>;
-}
-
 @connect(
-  state => ({
-    searchState: state.searchState,
-  }),
+  null,
   dispatch => ({
     getSearchResult: (input: string) => dispatch(getSearchResult(dispatch, input)),
   })

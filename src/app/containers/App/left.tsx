@@ -1,30 +1,50 @@
 
 import * as React from 'react';
-import { ISearchState, ISearchAction, getSearchResult } from '../../redux/reducers/searchdocs';
-const { connect } = require('react-redux');
+import { DocsModel } from '../../core/model';
+import { Link } from 'react-router';
 
 interface ISearchProps {
-    searchState: ISearchState;
-    getSearchResult: Redux.ActionCreator<ISearchAction>;
+    error?: string;
+    searchResult: DocsModel[];
+}
+interface IMenuProps {
+    data: DocsModel;
+}
+class Menu extends React.Component<IMenuProps, any> {
+    public render() {
+        // console.log('Menu key' + this.props.data.key);
+        return (
+            <li key = {this.props.data.key}>
+                <Link to={this.props.data.value.entries[0].path}> {this.props.data.key}</Link>
+                <ul>
+                    {this.props.data.value.entries.map(function (item, index) {
+                        return (
+                            <li>
+                                <Link key={index} to={item.path}> {item.name}</Link>
+                            </li>
+                        );
+                    }) }
+                </ul>
+            </li >
+        );
+    }
 }
 
-@connect(
-    state => ({
-        searchState: state.searchState,
-    })
-)
-
-
-class Left extends React.Component<any, ISearchState> {
-    public getInitialState() {
-        return { isSearching: false };
-    }
+class Left extends React.Component<ISearchProps, any> {
     public render() {
-        return (
-            <div >
-                <div> {this.state.isSearch} </div>
-            </div>
-        );
+        if (this.props.error) {
+            return (<div> {this.props.error} </div>);
+        } else if (this.props.searchResult.length === 0) {
+            return (<div> １１１１ </div>);
+        } else {
+            return (
+                <ul >
+                    {this.props.searchResult.map(function (item, index) {
+                        return (<Menu  key = {index} data={item} > </Menu>);
+                    }) }
+                </ul>
+            );
+        }
     }
 }
 

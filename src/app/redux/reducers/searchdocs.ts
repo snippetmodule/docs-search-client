@@ -9,12 +9,12 @@ export const STARS_FAILURE: string = 'STARS_FAILURE';
 export interface ISearchState {
     isSearch: boolean;
     error?: boolean;
-    message?: Array<DocsModel> | any;
+    message?: Array<DocsModel> ;
 }
 
 export interface ISearchAction {
     type: string;
-    message?: Array<DocsModel> | any;
+    message?: Array<DocsModel>;
 }
 
 /** Reducer */

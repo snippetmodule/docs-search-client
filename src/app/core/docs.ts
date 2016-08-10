@@ -10,7 +10,9 @@ export function init() {
             value: JSON.parse(value),
         });
     }, function (error) {
-        console.log('docs init error ' + error);
+        if (error) {
+            console.log('docs init error ' + error);
+        }
     });
 }
 export function search(input: string): Promise<Array<DocsModel>> {
@@ -23,7 +25,7 @@ export function search(input: string): Promise<Array<DocsModel>> {
             entries = entries.filter((item: DocsModelEntriyType): boolean => {
                 return item.name.match(regexp) == null ? false : true;
             });
-            types = entries.filter((item: DocsModelTypeType) => {
+            types = types.filter((item: DocsModelTypeType) => {
                 return item.name.match(regexp) == null ? false : true;
             });
             return { key: item.key, value: { entries: entries, types: types } };
