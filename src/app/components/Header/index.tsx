@@ -1,20 +1,17 @@
 import * as React from 'react';
-import { getSearchResult } from '../../redux/reducers/searchdocs';
 import { Link } from 'react-router';
-const { connect } = require('react-redux');
 
-@connect(
-  null,
-  dispatch => ({
-    getSearchResult: (input: string) => dispatch(getSearchResult(dispatch, input)),
-  })
-)
+interface IHeaderProps {
+  getSearchResult: (input: string) => void;
+}
 
-class Header extends React.Component<any, void> {
+class Header extends React.Component<IHeaderProps, void> {
 
   private handleChange(event) {
     let input = event.target.value;
     this.props.getSearchResult(input);
+    event.stopPropagation();
+    event.preventDefault();
   }
   public render() {
     const s = require('./style.css');

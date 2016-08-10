@@ -12,15 +12,14 @@ interface IMenuProps {
 }
 class Menu extends React.Component<IMenuProps, any> {
     public render() {
-        // console.log('Menu key' + this.props.data.key);
         return (
-            <li key = {this.props.data.key}>
+            <li>
                 <Link to={this.props.data.value.entries[0].path}> {this.props.data.key}</Link>
                 <ul>
                     {this.props.data.value.entries.map(function (item, index) {
                         return (
-                            <li>
-                                <Link key={index} to={item.path}> {item.name}</Link>
+                            <li key={index}>
+                                <Link to={item.path}> {item.name}</Link>
                             </li>
                         );
                     }) }
@@ -40,7 +39,7 @@ class Left extends React.Component<ISearchProps, any> {
             return (
                 <ul >
                     {this.props.searchResult.map(function (item, index) {
-                        return (<Menu  key = {index} data={item} > </Menu>);
+                        return (<Menu key={item.key} data={item} > </Menu>);
                     }) }
                 </ul>
             );

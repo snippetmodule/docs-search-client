@@ -9,7 +9,7 @@ export const STARS_FAILURE: string = 'STARS_FAILURE';
 export interface ISearchState {
     isSearch: boolean;
     error?: boolean;
-    message?: Array<DocsModel> ;
+    message?: Array<DocsModel>;
 }
 
 export interface ISearchAction {
@@ -21,11 +21,6 @@ export interface ISearchAction {
 export function searchDocsReducer(state = { isSearch: false }, action: ISearchAction): ISearchState {
 
     switch (action.type) {
-        case STARS_REQUEST:
-            return Object.assign({}, state, {
-                isSearch: true,
-            });
-
         case STARS_SUCCESS:
             return Object.assign({}, state, {
                 isSearch: false,
