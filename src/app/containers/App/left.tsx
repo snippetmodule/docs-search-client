@@ -15,17 +15,28 @@ interface ISearchProps {
 interface IMenuProps {
     data: DocsModel;
 }
+interface IMyLinkProps {
+    name: string;
+    path: string;
+}
 
+class MyLink extends React.Component<IMyLinkProps, any>{
+    public render() {
+        return (
+            <Link to={'page'} query={{url:this.props.path}}> {this.props.name}</Link>
+        );
+    }
+}
 class Menu extends React.Component<IMenuProps, any> {
     public render() {
         return (
-            <li>
-                <Link to={this.props.data.value.entries[0].path}> {this.props.data.key}</Link>
+            <li key={this.props.data.key}>
+                <MyLink path={this.props.data.value.entries[0].path} name = {this.props.data.key} />
                 <ul>
                     {this.props.data.value.entries.map(function (item, index) {
                         return (
                             <li key={index}>
-                                <Link to={item.path}> {item.name}</Link>
+                                <MyLink path={item.path} name = {item.name} />
                             </li>
                         );
                     }) }

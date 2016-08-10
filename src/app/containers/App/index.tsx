@@ -6,17 +6,17 @@ import {Left} from './left';
 import { IInitState, startInit } from '../../redux/reducers/init';
 
 const { connect } = require('react-redux');
-const { asyncConnect } = require('redux-connect');
+// const { asyncConnect } = require('redux-connect');
 
 interface IProps {
   init: IInitState;
 }
 
-@asyncConnect([{
-  promise: ({ store: { dispatch } }) => {
-    return dispatch(startInit());
-  },
-}])
+// @asyncConnect([{
+//   promise: ({ store: { dispatch } }) => {
+//     return dispatch(this.propos && this.props.init.isIntited?{}:startInit());
+//   },
+// }])
 @connect(
   state => ({ init: state.init })
 )
