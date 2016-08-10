@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { Link } from 'react-router';
+import { getSearchResult } from '../../redux/reducers/searchdocs';
+const { connect } = require('react-redux');
 
-interface IHeaderProps {
-  getSearchResult: (input: string) => void;
-}
+@connect(
+  null,
+  dispatch => ({
+    getSearchResult: (input: string) => dispatch(getSearchResult(dispatch, input)),
+  })
+)
 
-class Header extends React.Component<IHeaderProps, void> {
+class Header extends React.Component<any, void> {
 
   private handleChange(event) {
     let input = event.target.value;

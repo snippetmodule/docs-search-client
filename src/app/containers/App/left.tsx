@@ -2,14 +2,19 @@
 import * as React from 'react';
 import { DocsModel } from '../../core/model';
 import { Link } from 'react-router';
+import { ISearchState } from '../../redux/reducers/searchdocs';
+import { search } from '../../core/docs';
+
+const { connect } = require('react-redux');
 
 interface ISearchProps {
-    error?: string;
-    searchResult: DocsModel[];
+    searchState?: ISearchState;
 }
+
 interface IMenuProps {
     data: DocsModel;
 }
+
 class Menu extends React.Component<IMenuProps, any> {
     public render() {
         return (
@@ -29,16 +34,28 @@ class Menu extends React.Component<IMenuProps, any> {
     }
 }
 
-class Left extends React.Component<ISearchProps, any> {
+@connect(state => ({ searchState: state.searchDocs }))
+class Left extends React.Component<ISearchProps, void> {
+    private defaultState: ISearchState = null;
+    constructor(props, state) {
+        super(props, state);
+        search('')
+            .then(
+            res => { this.defaultState = { isSearch: false, message: res }; this.forceUpdate(); })
+            .catch(error => console.log(' App init defaultState error' + error));
+    }
     public render() {
-        if (this.props.error) {
-            return (<div> {this.props.error} </div>);
-        } else if (this.props.searchResult.length === 0) {
+        if (!this.props.searchState || !this.props.searchState.message || this.props.searchState.message.length === 0) {
             return (<div> １１１１ </div>);
+        } else if (this.props.searchState.error) {
+            return (<div> {this.props.searchState.error} </div>);
         } else {
+            let searchResult = this.props.searchState.message
+                ? this.props.searchState.message
+                : (this.defaultState ? this.defaultState.message : []);
             return (
                 <ul >
-                    {this.props.searchResult.map(function (item, index) {
+                    {searchResult.map(function (item, index) {
                         return (<Menu key={item.key} data={item} > </Menu>);
                     }) }
                 </ul>

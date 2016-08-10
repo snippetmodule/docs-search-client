@@ -16,6 +16,9 @@ export function init() {
     });
 }
 export function search(input: string): Promise<Array<DocsModel>> {
+    if (!input || input.length === 0) {
+        return new Promise((resolve, reject) => { resolve(docsArrays); });
+    }
     return new Promise((resolve, reject) => {
         let regexp = new RegExp('^' + input, 'i');
         let result: Array<DocsModel> = docsArrays.map((item: DocsModel) => {
