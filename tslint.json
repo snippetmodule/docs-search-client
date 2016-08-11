@@ -10,6 +10,8 @@
     "object-literal-sort-keys": false,
     "no-shadowed-variable": false,
     "no-console": false,
-    "max-line-length":false
+    "variable-name": false,
+    "no-string-literal": false,
+    "max-line-length":false 
   }
 }

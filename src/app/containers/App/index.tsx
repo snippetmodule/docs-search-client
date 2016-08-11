@@ -3,20 +3,14 @@ import * as React from 'react';
 import * as Helmet from 'react-helmet';
 import { Header } from '../../components';
 import {Left} from './left';
-import { IInitState, startInit } from '../../redux/reducers/init';
+import { IInitState } from '../../redux/reducers/init';
 
 const { connect } = require('react-redux');
-// const { asyncConnect } = require('redux-connect');
 
 interface IProps {
   init: IInitState;
 }
 
-// @asyncConnect([{
-//   promise: ({ store: { dispatch } }) => {
-//     return dispatch(this.propos && this.props.init.isIntited?{}:startInit());
-//   },
-// }])
 @connect(
   state => ({ init: state.init })
 )

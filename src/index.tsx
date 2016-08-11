@@ -4,18 +4,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-const { Router, browserHistory } = require('react-router');
-import { syncHistoryWithStore } from 'react-router-redux';
+const { Router } = require('react-router');
 const { ReduxAsyncConnect } = require('redux-connect');
-import { configureStore } from './app/redux/store';
-import routes from './app/routes';
-import {IReduxState } from './app/redux/reducers/model';
-
-const store: Redux.Store<IReduxState> = configureStore(
-  browserHistory,
-  window.__INITIAL_STATE__
-);
-const history = syncHistoryWithStore(browserHistory, store);
+import {store, history, routeConfig} from './app/routes';
 
 ReactDOM.render(
   <Provider store={store} key="provider">
@@ -24,7 +15,7 @@ ReactDOM.render(
       render={(props) =>
         <ReduxAsyncConnect {...props} />
       }>
-      {routes}
+      {routeConfig}
     </Router>
   </Provider>,
   document.getElementById('app')

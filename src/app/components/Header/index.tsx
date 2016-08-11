@@ -12,8 +12,17 @@ const { connect } = require('react-redux');
 
 class Header extends React.Component<any, void> {
 
+  private stripscript(s: string): string {
+    let pattern = new RegExp('[`~!@#$^&*()=|{}\:\;,\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：\“。，、？]');
+    let rs = '';
+    for (let i = 0; i < s.length; i++) {
+      rs = rs + s.substr(i, 1).replace(pattern, '');
+    }
+    return rs;
+  }
   private handleChange(event) {
-    let input = event.target.value;
+    let input: string = event.target.value;
+    input = this.stripscript(input);
     this.props.getSearchResult(input);
     event.stopPropagation();
     event.preventDefault();

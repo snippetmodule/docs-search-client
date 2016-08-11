@@ -10,7 +10,7 @@ const { reducer } = require('redux-connect');
 
 const rootReducer: Redux.Reducer<IReduxState> = combineReducers({
   init: initReducer,
-  initLinkPage :initLinkPageReducer,
+  initLinkPage: initLinkPageReducer,
   routing: routerReducer,
   counter: counterReducer,
   stars: starsReducer,

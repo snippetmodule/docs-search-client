@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers/';
 import { IReduxState } from './reducers/model';
 const createLogger = require('redux-logger');
-import { IInitState, startInit } from './reducers/init';
+import {startInit } from './reducers/init';
 
 export function configureStore(history, initialState?: any): Redux.Store<IReduxState> {
 

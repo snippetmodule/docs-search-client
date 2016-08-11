@@ -34,6 +34,7 @@ export function initLinkPageReducer(state: ILinkPageState = { isInited: false, u
             return Object.assign({}, state, {
                 isInited: false,
                 url: action.url,
+                content: action.content,
             });
         default:
             return state;
@@ -42,14 +43,15 @@ export function initLinkPageReducer(state: ILinkPageState = { isInited: false, u
 }
 
 /** Async Action Creator */
-export function startInit(dispatch, url: string): ILinkPageAction {
-    fetch('https://api.github.com/repos/barbar/vortigern')
-        .then(res => {
-            dispatch({ type: INIT_SUCCESS, url: url, content: res });
-        }).catch(err => dispatch({ type: INIT_FAILURE, url: url }));
+export function startRequestPage(dispatch, url: string): ILinkPageAction {
+    fetch('http://docs.devdocs.io/' + url)
+        .catch(err => dispatch({ type: INIT_FAILURE, url: url, content: err }))
+        .then(res => res.text())
+        .catch(err => dispatch({ type: INIT_FAILURE, url: url, content: err }))
+        .then(res => dispatch({ type: INIT_SUCCESS, url: url, content: res }));
     return {
         type: INIT_REQUEST,
-        url: url
+        url: url,
     };
 
 }
