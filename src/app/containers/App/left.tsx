@@ -1,32 +1,26 @@
 
 import * as React from 'react';
+import { Link } from 'react-router';
 import {DocsModel} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
 import {isMounted} from '../../utils/react-utils';
 import {docsArrays} from '../../core/docs';
-import {startRequestPage} from '../../redux/reducers/linkpage';
-import {history} from '../../routes';
 const { connect } = require('react-redux');
 
 interface IMyLinkProps {
     name: string;
     path: string;
-    linkClickHandle: (routerPath: string, jumpUrl: string) => void;
 }
 
 class MyLink extends React.Component<IMyLinkProps, any> {
-    private _onClick() {
-        this.props.linkClickHandle('page', this.props.path);
-    }
     public render() {
         return (
-            <a onClick={this._onClick.bind(this) } > { this.props.name }</a >
+            <Link to={{ pathname: 'page', query: { url: this.props.path + '.html'} }} > { this.props.name }</Link >
         );
     }
 }
 interface IMenuProps {
     data: DocsModel;
-    linkClickHandle: (routerPath: string, jumpUrl: string) => void;
 }
 class Menu extends React.Component<IMenuProps, any> {
     public shouldComponentUpdate(nextProps: ISearchProps, nextState: void, nextContext: any): boolean {
@@ -38,13 +32,12 @@ class Menu extends React.Component<IMenuProps, any> {
     public render() {
         const docsItem: DocsModel = this.props.data;
         const rootPath: string = this.props.data.key + '/';
-        let _linkClickHandle: (routerPath: string, jumpUrl: string) => void = this.props.linkClickHandle;
         if (!docsItem.value.entries[0].path) {
             console.log('key1111:' + docsItem.key);
         }
         return (
             <li key={docsItem.key} ref="Menu">
-                <MyLink linkClickHandle={_linkClickHandle} path={rootPath + docsItem.value.entries[0].path} name = {docsItem.key} />
+                <MyLink  path={rootPath + docsItem.value.entries[0].path} name = {docsItem.key} />
                 <ul>
                     {docsItem.value.entries.map(function (item, index) {
                         if (!item.path) {
@@ -52,7 +45,7 @@ class Menu extends React.Component<IMenuProps, any> {
                         }
                         return (
                             <li key={index}>
-                                <MyLink linkClickHandle={_linkClickHandle} path={rootPath + item.path} name = {item.name} />
+                                <MyLink path={rootPath + item.path} name = {item.name} />
                             </li>
                         );
                     }) }
@@ -64,27 +57,21 @@ class Menu extends React.Component<IMenuProps, any> {
 
 interface ISearchProps {
     searchState?: ISearchState;
-    startRequestPage?: (url: string) => void;
 }
-@connect(
-    state => ({ searchState: state.searchDocs }),
-    dispatch => ({
-        startRequestPage: (url: string) => (dispatch(startRequestPage(dispatch, url))),
-    }))
+@connect(state => ({ searchState: state.searchDocs }))
 class Left extends React.Component<ISearchProps, void> {
     public shouldComponentUpdate(nextProps: ISearchProps, nextState: void, nextContext: any): boolean {
         // if(this.)
         return this.props.searchState.input !== nextProps.searchState.input;
     }
-    public linkClickHandle(routerPath: string, jumpUrl: string) {
-        console.trace();
-        this.props.startRequestPage(jumpUrl);
-        history.push({ pathname: routerPath });
-    }
+    // public linkClickHandle(routerPath: string, jumpUrl: string) {
+    //     console.trace();
+    //     this.props.startRequestPage(jumpUrl);
+    //     history.push({ pathname: routerPath, query: { url: jumpUrl } });
+    // }
     public render() {
         let {searchState} = this.props;
         let searchResult = searchState.message ? searchState.message : docsArrays;
-        let _linkClickHandle: (routerPath: string, jumpUrl: string) => void = this.linkClickHandle.bind(this);
         if (searchState.error) {
             return (<div> {searchState.error} </div>);
         }
@@ -94,7 +81,7 @@ class Left extends React.Component<ISearchProps, void> {
         return (
             <ul >
                 {searchResult.map(function (item, index) {
-                    return (<Menu key={item.key} data={item} linkClickHandle ={_linkClickHandle} > </Menu>);
+                    return (<Menu key={item.key} data={item} > </Menu>);
                 }) }
             </ul>
         );
