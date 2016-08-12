@@ -9,7 +9,7 @@
     "prebuild": "rm -rf build/*",
     "build": "webpack --config config/webpack/index.js",
     "build:prod": "cross-env NODE_ENV=production npm run build",
-    "prestart": "npm run stop | npm run build",
+    "prestart": "npm run build",
     "start": "webpack-dev-server --config config/webpack/index.js --content-base ./build --history-api-fallback --no-info --open",
     "start:prod": "cross-env NODE_ENV=production npm start",
     "lint": "node_modules/.bin/tslint \"src/**/**.ts*\""

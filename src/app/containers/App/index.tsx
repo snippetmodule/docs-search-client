@@ -20,7 +20,7 @@ class App extends React.Component<IProps, any> {
     console.log('App ' + this.props.init.isInited);
     if (!this.props.init.isInited) {
       return (
-        <div> 初始化中 </div>
+        <div className= {s.rootLoading}> Loading </div>
       );
     }
     return (

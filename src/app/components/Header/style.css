@@ -1,27 +1,57 @@
-.content{
+.content {
 	width: 100%;
 	height: 100%;
 	display: inline-flex;
 	flex-wrap: nowrap;
 	flex-direction: row;
-	align-items: center;
+	align-items: stretch;
 	background: #f0f0f0;
-	border-bottom: 1px solid #d9d9d9
+	border-bottom: 1px solid #d9d9d9;
 }
-.left{
-	flex: 0 0 30rem;
+
+.left {
+	flex: 0 0 20rem;
 	display: flex;
 	flex-wrap: nowrap;
-	align-items: center;
+	padding: .5rem 0 .5rem .5rem;
 }
-.right{
+
+.left:before {
+	content: '';
+	display: block;
+	width: 1rem;
+	height: 1rem;
+	background-image: url(./barbar.png);
+	background-size: 10rem 10rem;
+}
+
+.right {
 	flex: 1;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
-	align-items: center;
 	justify-content: flex-end;
 }
-.rightA{
+
+.rightA {
 	margin-right: 3px;
 }
+
+.searchInput {
+	display: block;
+	width: 100%;
+	height: 100%;
+	padding: 0 .75rem 1px 1.75rem;
+	font-size: .875rem;
+	background: #fff;
+	border: 1px solid;
+	border-color: #d4d4d4;
+	border-radius: 3px;
+}
+
+.searchInput:focus {
+	outline: 0;
+	border-color: #35b5f4;
+	box-shadow: 0 0 1px #35b5f4;
+}
+ 

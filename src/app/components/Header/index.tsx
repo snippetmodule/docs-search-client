@@ -9,7 +9,6 @@ const { connect } = require('react-redux');
     getSearchResult: (input: string) => dispatch(getSearchResult(dispatch, input)),
   })
 )
-
 class Header extends React.Component<any, void> {
 
   private stripscript(s: string): string {
@@ -32,8 +31,7 @@ class Header extends React.Component<any, void> {
     return (
       <div className={s.content}>
         <form  className={s.left} role="search">
-          <input type="search" onChange={this.handleChange.bind(this) }/>
-          <button type="reset" >Clear search</button>
+          <input className={s.searchInput} type="search" onChange={this.handleChange.bind(this) }/>
           <div></div>
         </form>
         <div className={s.right}>
