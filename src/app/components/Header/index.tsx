@@ -31,8 +31,9 @@ class Header extends React.Component<any, void> {
     return (
       <div className={s.content}>
         <form  className={s.left} role="search">
-          <input className={s.searchInput} type="search" onChange={this.handleChange.bind(this) }/>
+          <input className={s.searchInput} type="search" onChange={this.handleChange.bind(this) } placeholder="搜索"/>
           <div></div>
+          <Link className={s.homeLink} to= "/" >DevDocs中文网</Link>
         </form>
         <div className={s.right}>
           <Link className={s.rightA} to= "/" >docs</Link>
