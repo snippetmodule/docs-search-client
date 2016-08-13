@@ -10,10 +10,7 @@ var config = {
   debug: true,
   resolve: {
     root: path.resolve(__dirname),
-    extensions: ['', '.ts', '.tsx', '.js'],
-    alias: {
-      'localforage': 'localforage/dist/localforage.js'
-    }
+    extensions: ['', '.ts', '.tsx', '.js']
   },
   entry: {
     app: [
@@ -33,10 +30,6 @@ var config = {
       { test: /\.tsx?$/, loader: 'tslint' }
     ],
     loaders: [
-      {
-        test: /localforage\/dist\/localforage.js/,
-        loader: 'exports?localforage',
-      },
       {
         test: /\.tsx?$/,
         loader: 'react-hot!ts'
@@ -82,9 +75,6 @@ var config = {
         test: /\.(jpe?g|png|gif)$/i,
         loader: 'url?limit=1000&name=images/[hash].[ext]'
       }
-    ],
-    noParse: [
-      /localforage\/dist\/localforage.js/
     ]
   },
   postcss: function () {
