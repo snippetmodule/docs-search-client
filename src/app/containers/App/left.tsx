@@ -5,6 +5,7 @@ import {DocsModel} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
 import {isMounted} from '../../utils/react-utils';
 import {docsArrays} from '../../core/docs';
+import {ReactList} from '../../utils/react-lists';
 const { connect } = require('react-redux');
 
 interface IMyLinkProps {
@@ -15,7 +16,7 @@ interface IMyLinkProps {
 class MyLink extends React.Component<IMyLinkProps, any> {
     public render() {
         return (
-            <Link to={{ pathname: 'page', query: { url: this.props.path + '.html'} }} > { this.props.name }</Link >
+            <Link to={{ pathname: 'page', query: { url: this.props.path + '.html' } }} > { this.props.name }</Link >
         );
     }
 }
@@ -59,33 +60,54 @@ interface ISearchProps {
     searchState?: ISearchState;
 }
 @connect(state => ({ searchState: state.searchDocs }))
-class Left extends React.Component<ISearchProps, void> {
-    public shouldComponentUpdate(nextProps: ISearchProps, nextState: void, nextContext: any): boolean {
-        // if(this.)
-        return this.props.searchState.input !== nextProps.searchState.input;
+class Left extends React.Component<ISearchProps, void>{
+
+    renderItem(index, key) {
+        return <div key={key}>{'index ' + index + 'key' + key}</div>;
     }
-    // public linkClickHandle(routerPath: string, jumpUrl: string) {
-    //     console.trace();
-    //     this.props.startRequestPage(jumpUrl);
-    //     history.push({ pathname: routerPath, query: { url: jumpUrl } });
-    // }
+
     public render() {
-        let {searchState} = this.props;
-        let searchResult = searchState.message ? searchState.message : docsArrays;
-        if (searchState.error) {
-            return (<div> {searchState.error} </div>);
-        }
-        if (searchState.input.length !== 0 && searchResult.length === 0) {
-            return (<div> 未找到搜索结果 </div>);
-        }
-        return (
-            <ul >
-                {searchResult.map(function (item, index) {
-                    return (<Menu key={item.key} data={item} > </Menu>);
-                }) }
-            </ul>
-        );
+        return (<div>
+            <h1>Accounts</h1>
+            <div style={{ overflow: 'auto', maxHeight: 400 }}>
+                <ReactList
+                    itemRenderer={this.renderItem}
+                    length={50}
+                    type ='uniform'
+                    />
+            </div>
+        </div>);
     }
 }
+
+// @connect(state => ({ searchState: state.searchDocs }))
+// class Left extends React.Component<ISearchProps, void> {
+//     public shouldComponentUpdate(nextProps: ISearchProps, nextState: void, nextContext: any): boolean {
+//         // if(this.)
+//         return this.props.searchState.input !== nextProps.searchState.input;
+//     }
+//     // public linkClickHandle(routerPath: string, jumpUrl: string) {
+//     //     console.trace();
+//     //     this.props.startRequestPage(jumpUrl);
+//     //     history.push({ pathname: routerPath, query: { url: jumpUrl } });
+//     // }
+//     public render() {
+//         let {searchState} = this.props;
+//         let searchResult = searchState.message ? searchState.message : docsArrays;
+//         if (searchState.error) {
+//             return (<div> {searchState.error} </div>);
+//         }
+//         if (searchState.input.length !== 0 && searchResult.length === 0) {
+//             return (<div> 未找到搜索结果 </div>);
+//         }
+//         return (
+//             <ul >
+//                 {searchResult.map(function (item, index) {
+//                     return (<Menu key={item.key} data={item} > </Menu>);
+//                 }) }
+//             </ul>
+//         );
+//     }
+// }
 
 export {Left }
