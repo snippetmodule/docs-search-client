@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {createMergedResultFunction } from './react-utils';
 const {findDOMNode} = ReactDOM;
 
 const isEqualSubset = (a, b) => {
@@ -19,8 +18,7 @@ const OVERFLOW_KEYS = { x: 'overflowX', y: 'overflowY' };
 const SCROLL_SIZE_KEYS = { x: 'scrollWidth', y: 'scrollHeight' };
 const SCROLL_START_KEYS = { x: 'scrollLeft', y: 'scrollTop' };
 const SIZE_KEYS = { x: 'width', y: 'height' };
-
-const NOOP = () => { };
+const NOOP = () => { ; };
 
 interface IReactListProp {
     axis?: 'x' | 'y';
@@ -38,20 +36,22 @@ interface IReactListProp {
     useTranslate3d?: boolean;
 }
 
-class ReactList extends React.Component<IReactListProp, any> {
-    private items: React.ReactInstance;
-    private cache = {};
-    private scrollParent;
+export default React.createClass<IReactListProp, { from: number, size: number, itemsPerRow: number }>({
+    displayName: 'ReactList',
+    cache: {},
+    // private items: React.ReactInstance;
+    // private cache = {};
+    // private scrollParent;
 
-    constructor(props: IReactListProp) {
-        super(props);
-        this.props = createMergedResultFunction(this.props, this.getDefaultProps())();
-        const {initialIndex, pageSize} = this.props;
-        const itemsPerRow = 1;
-        const {from, size} = this.constrain(initialIndex, pageSize, itemsPerRow, this.props);
-        this.state = { from, size, itemsPerRow };
-    }
-    public getDefaultProps(): IReactListProp {
+    // constructor(props: IReactListProp) {
+    //     super(props);
+    //     this.props = createMergedResultFunction(this.props, this.getDefaultProps())();
+    //     const {initialIndex, pageSize} = this.props;
+    //     const itemsPerRow = 1;
+    //     const {from, size} = this.constrain(initialIndex, pageSize, itemsPerRow, this.props);
+    //     this.state = { from, size, itemsPerRow };
+    // }
+    getDefaultProps(): IReactListProp {
         return {
             axis: 'y',
             initialIndex: 0,
@@ -63,42 +63,48 @@ class ReactList extends React.Component<IReactListProp, any> {
             type: 'simple',
             useStaticSize: false,
             useTranslate3d: false,
-        }
-    }
-    public componentWillReceiveProps(next) {
+        };
+    },
+    getInitialState() {
+        const {initialIndex, pageSize} = this.props;
+        const itemsPerRow = 1;
+        const {from, size} = this.constrain(initialIndex, pageSize, itemsPerRow, this.props);
+        return { from, size, itemsPerRow };
+    },
+    componentWillReceiveProps(next) {
         let {from, size, itemsPerRow} = this.state;
         this.setState(this.constrain(from, size, itemsPerRow, next));
-    }
+    },
 
-    public componentDidMount() {
+    componentDidMount() {
         this.updateFrame = this.updateFrame.bind(this);
         window.addEventListener('resize', this.updateFrame);
         this.updateFrame(this.scrollTo.bind(this, this.props.initialIndex));
-    }
+    },
 
-    public shouldComponentUpdate(props, state) {
+    shouldComponentUpdate(props, state) {
         return !isEqual(props, this.props) || !isEqual(state, this.state);
-    }
+    },
 
-    public componentDidUpdate() {
+    componentDidUpdate() {
         this.updateFrame(NOOP);
-    }
+    },
 
-    public componentWillUnmount() {
+    componentWillUnmount() {
         window.removeEventListener('resize', this.updateFrame);
         this.scrollParent.removeEventListener('scroll', this.updateFrame);
         this.scrollParent.removeEventListener('mousewheel', NOOP);
-    }
+    },
 
-    private getOffset(el) {
+    getOffset(el) {
         const {axis} = this.props;
         let offset = el[CLIENT_START_KEYS[axis]] || 0;
         const offsetKey = OFFSET_START_KEYS[axis];
         do { offset += el[offsetKey] || 0; } while (el = el.offsetParent);
         return offset;
-    }
+    },
 
-    private getScrollParent() {
+    getScrollParent() {
         const {axis, scrollParentGetter} = this.props;
         if (scrollParentGetter) { return scrollParentGetter(); }
         let el = findDOMNode(this);
@@ -109,13 +115,13 @@ class ReactList extends React.Component<IReactListProp, any> {
                 case 'scroll':
                 case 'overlay':
                     return el;
-                default: break;
+                default: continue;
             }
         }
         return window;
-    }
+    },
 
-    private getScroll() {
+    getScroll() {
         const {scrollParent} = this;
         const {axis} = this.props;
         const scrollKey = SCROLL_START_KEYS[axis];
@@ -129,9 +135,9 @@ class ReactList extends React.Component<IReactListProp, any> {
         const scroll = Math.max(0, Math.min(actual, max));
         const el = findDOMNode(this);
         return this.getOffset(scrollParent) + scroll - this.getOffset(el);
-    }
+    },
 
-    private setScroll(offset) {
+    setScroll(offset) {
         const {scrollParent} = this;
         const {axis} = this.props;
         offset += this.getOffset(findDOMNode(this));
@@ -139,31 +145,31 @@ class ReactList extends React.Component<IReactListProp, any> {
 
         offset -= this.getOffset(this.scrollParent);
         scrollParent[SCROLL_START_KEYS[axis]] = offset;
-    }
+    },
 
-    private getViewportSize() {
+    getViewportSize() {
         const {scrollParent} = this;
         const {axis} = this.props;
         return scrollParent === window ?
             window[INNER_SIZE_KEYS[axis]] :
             scrollParent[CLIENT_SIZE_KEYS[axis]];
-    }
+    },
 
-    private getScrollSize() {
+    getScrollSize() {
         const {scrollParent} = this;
         const {body, documentElement} = document;
         const key = SCROLL_SIZE_KEYS[this.props.axis];
         return scrollParent === window ?
             Math.max(body[key], documentElement[key]) :
             scrollParent[key];
-    }
+    },
 
-    private hasDeterminateSize() {
+    hasDeterminateSize() {
         const {itemSizeGetter, type} = this.props;
         return type === 'uniform' || itemSizeGetter;
-    }
+    },
 
-    private getStartAndEnd(threshold = this.props.threshold) {
+    getStartAndEnd(threshold = this.props.threshold) {
         const scroll = this.getScroll();
         const start = Math.max(0, scroll - threshold);
         let end = scroll + this.getViewportSize() + threshold;
@@ -171,9 +177,9 @@ class ReactList extends React.Component<IReactListProp, any> {
             end = Math.min(end, this.getSpaceBefore(this.props.length));
         }
         return { start, end };
-    }
+    },
 
-    private getItemSizeAndItemsPerRow(): { itemSize: number, itemsPerRow: number } {
+    getItemSizeAndItemsPerRow(): { itemSize: number, itemsPerRow: number } {
         const {axis, useStaticSize} = this.props;
         let {itemSize, itemsPerRow} = this.state;
         if (useStaticSize && itemSize && itemsPerRow) {
@@ -205,9 +211,9 @@ class ReactList extends React.Component<IReactListProp, any> {
         ) { ++itemsPerRow; }
 
         return { itemSize, itemsPerRow };
-    }
+    },
 
-    private updateFrame(cb) {
+    updateFrame(cb) {
         this.updateScrollParent();
         if (typeof cb !== 'function') { cb = NOOP; }
         switch (this.props.type) {
@@ -216,9 +222,9 @@ class ReactList extends React.Component<IReactListProp, any> {
             case 'uniform': return this.updateUniformFrame(cb);
             default: break;
         }
-    }
+    },
 
-    private updateScrollParent() {
+    updateScrollParent() {
         const prev = this.scrollParent;
         this.scrollParent = this.getScrollParent();
         if (prev === this.scrollParent) { return; }
@@ -228,9 +234,9 @@ class ReactList extends React.Component<IReactListProp, any> {
         }
         this.scrollParent.addEventListener('scroll', this.updateFrame);
         this.scrollParent.addEventListener('mousewheel', NOOP);
-    }
+    },
 
-    private updateSimpleFrame(cb) {
+    updateSimpleFrame(cb) {
         const {end} = this.getStartAndEnd();
         const itemEls = findDOMNode(this.items).childNodes;
         let elEnd = 0;
@@ -247,9 +253,9 @@ class ReactList extends React.Component<IReactListProp, any> {
 
         const {pageSize, length} = this.props;
         this.setState({ size: Math.min(this.state.size + pageSize, length) }, cb);
-    }
+    },
 
-    private updateVariableFrame(cb) {
+    updateVariableFrame(cb) {
         if (!this.props.itemSizeGetter) { this.cacheSizes(); }
 
         const {start, end} = this.getStartAndEnd();
@@ -279,9 +285,9 @@ class ReactList extends React.Component<IReactListProp, any> {
         }
 
         this.setState({ from, size }, cb);
-    }
+    },
 
-    private updateUniformFrame(cb) {
+    updateUniformFrame(cb) {
         let {itemSize, itemsPerRow} = this.getItemSizeAndItemsPerRow();
 
         if (!itemSize || !itemsPerRow) { return cb(); }
@@ -295,9 +301,9 @@ class ReactList extends React.Component<IReactListProp, any> {
         );
 
         return this.setState({ itemsPerRow, from, itemSize, size }, cb);
-    }
+    },
 
-    private getSpaceBefore(index, cache = {}) {
+    getSpaceBefore(index, cache = {}) {
         if (cache[index] != null) { return cache[index]; }
 
         // Try the static itemSize.
@@ -320,9 +326,9 @@ class ReactList extends React.Component<IReactListProp, any> {
         }
 
         return cache[index] = space;
-    }
+    },
 
-    private cacheSizes() {
+    cacheSizes() {
         const {cache} = this;
         const {from} = this.state;
         const itemEls = findDOMNode(this.items).childNodes;
@@ -330,9 +336,9 @@ class ReactList extends React.Component<IReactListProp, any> {
         for (let i = 0, l = itemEls.length; i < l; ++i) {
             cache[from + i] = itemEls[i][sizeKey];
         }
-    }
+    },
 
-    private getSizeOf(index) {
+    getSizeOf(index) {
         const {cache, items} = this;
         const {axis, itemSizeGetter, itemSizeEstimator, type} = this.props;
         const {from, itemSize, size} = this.state;
@@ -354,9 +360,9 @@ class ReactList extends React.Component<IReactListProp, any> {
 
         // Try the itemSizeEstimator.
         if (itemSizeEstimator) { return itemSizeEstimator(index, cache); }
-    }
+    },
 
-    private constrain(from, size, itemsPerRow, props) {
+    constrain(from, size, itemsPerRow, props) {
         const {length = 0, pageSize = 0, type = 'simple'} = props;
         size = Math.max(size, pageSize);
         let mod = size % itemsPerRow;
@@ -372,11 +378,11 @@ class ReactList extends React.Component<IReactListProp, any> {
         }
 
         return { from, size };
-    }
+    },
 
-    private scrollTo(index) {
+    scrollTo(index) {
         if (index != null) { this.setScroll(this.getSpaceBefore(index)); }
-    }
+    },
 
     // private scrollAround(index) {
     //     const current = this.getScroll();
@@ -402,15 +408,15 @@ class ReactList extends React.Component<IReactListProp, any> {
     //     return [first, last];
     // }
 
-    private renderItems() {
+    renderItems() {
         const {itemRenderer, itemsRenderer} = this.props;
         const {from, size} = this.state;
         const items = [];
         for (let i = 0; i < size; ++i) { items.push(itemRenderer(from + i, i)); }
         return itemsRenderer(items, c => this.items = c);
-    }
+    },
 
-    public render() {
+    render() {
         const {axis, length, type, useTranslate3d} = this.props;
         const {from, itemsPerRow} = this.state;
 
@@ -437,7 +443,6 @@ class ReactList extends React.Component<IReactListProp, any> {
             WebkitTransform: transform,
             transform,
         };
-        return <div {...{ style }}><div style={listStyle}>{items}</div></div>;
-    }
-}
-export { ReactList }
+        return <div className="ReactList" {...{ style }}><div style={listStyle}>{items}</div></div>;
+    },
+});

@@ -12,6 +12,8 @@
     "no-console": false,
     "variable-name": false,
     "no-string-literal": false,
+    "eofline":false,
+    "no-conditional-assignment":false,
     "max-line-length":false 
   }
 }

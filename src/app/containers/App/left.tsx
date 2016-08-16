@@ -5,7 +5,7 @@ import {DocsModel} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
 import {isMounted} from '../../utils/react-utils';
 import {docsArrays} from '../../core/docs';
-import {ReactList} from '../../utils/react-lists';
+import ReactList from '../../utils/react-lists';
 const { connect } = require('react-redux');
 
 interface IMyLinkProps {
@@ -62,7 +62,7 @@ interface ISearchProps {
 @connect(state => ({ searchState: state.searchDocs }))
 class Left extends React.Component<ISearchProps, void>{
 
-    renderItem(index, key) {
+    private renderItem(index, key) {
         return <div key={key}>{'index ' + index + 'key' + key}</div>;
     }
 
