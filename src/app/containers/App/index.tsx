@@ -20,7 +20,15 @@ class App extends React.Component<IProps, any> {
     console.log('App ' + this.props.init.isInited);
     if (!this.props.init.isInited) {
       return (
-        <div className= {s.rootLoading}> Loading </div>
+        <div style={{
+          height: '100px',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          fontSize: '2rem',
+          color: 'grey',
+          margin: '-50px 0 0 -50px',
+        }} > Loading </div>
       );
     }
     return (
