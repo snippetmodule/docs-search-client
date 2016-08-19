@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/1936f51e478dcd840d6a44f76402672a45cd9d1e/localForage/localForage.d.ts",
+    "raw": "registry:dt/localforage#0.0.0+20160629074517",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/1936f51e478dcd840d6a44f76402672a45cd9d1e/localForage/localForage.d.ts"
+  }
+}

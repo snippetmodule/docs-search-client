@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/17d06b6644dfd4b38cba2ce8aca72590e02047d8/react-helmet/react-helmet.d.ts",
+    "raw": "registry:dt/react-helmet#0.0.0+20160619032521",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/17d06b6644dfd4b38cba2ce8aca72590e02047d8/react-helmet/react-helmet.d.ts"
+  }
+}
