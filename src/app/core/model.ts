@@ -6,12 +6,23 @@ export type DocsModelEntriyType = {
 };
 export type DocsModelTypeType = {
     name: string,
-    path: string,
-    type: string,
+    slug: string,
+    count: number,
+    childs?: DocsModelEntriyType[],
 };
 export type DocsModel = {
-    key: string, value: {
+    key: string,
+    value: {
         entries: DocsModelEntriyType[],
         types: DocsModelTypeType[]
     }
 };
+
+export interface ISearchResultItem {
+    name: string;
+    path?: string;
+    type?: string;
+    slug?: string;
+    count?: number;
+    childs?: DocsModelEntriyType[];
+}

@@ -1,4 +1,4 @@
-import { init } from '../../core/docs';
+import { app } from '../../core/app';
 /** Action Types */
 export const INIT_REQUEST: string = 'INIT_REQUEST';
 export const INIT_SUCCESS: string = 'INIT_SUCCESS';
@@ -41,9 +41,10 @@ export function startInit(): Redux.Dispatch<IInitAction> {
     return dispatch => {
         dispatch({ type: INIT_REQUEST });
 
-        return init()
+        return app.docs.init()
             .then(res => {
-                    dispatch({ type: INIT_SUCCESS});
-            }) .catch(err => dispatch({ type: INIT_FAILURE }));
+                dispatch({ type: INIT_SUCCESS });
+            }).catch(err =>
+                dispatch({ type: INIT_FAILURE }));
     };
 }

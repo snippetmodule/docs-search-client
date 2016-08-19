@@ -72,8 +72,11 @@
     "webpack-hot-middleware": "^2.10.0"
   },
   "dependencies": {
+    "fbemitter": "^2.0.2",
+    "fuse.js": "^2.4.1",
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",
+    "js-cookie": "^2.1.2",
     "localforage": "^1.4.2",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",

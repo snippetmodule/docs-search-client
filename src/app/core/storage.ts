@@ -24,5 +24,4 @@ let indexDB: LocalForage = localForage.createInstance({
     storeName: 'keyvaluepairs', // Should be alphanumeric, with underscores.
     description: 'docs localStorage description',
 });
-
 export {localStorage, webSql, indexDB}

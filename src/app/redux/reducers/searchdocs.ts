@@ -1,6 +1,6 @@
 
-import { search } from '../../core/docs';
-import { DocsModel } from '../../core/model';
+import { app } from '../../core/app';
+import { ISearchResultItem } from '../../core/model';
 /** Action Types */
 export const SEARCH_REQUEST: string = 'SEARCH_REQUEST';
 export const SEARCH_SUCCESS: string = 'SEARCH_SUCCESS';
@@ -10,13 +10,13 @@ export interface ISearchState {
     input: string;
     isSearch: boolean;
     error?: boolean;
-    message?: Array<DocsModel>;
+    message?: Array<ISearchResultItem>;
 }
 
 export interface ISearchAction {
     type: string;
     input: string;
-    message?: Array<DocsModel>;
+    message?: Array<ISearchResultItem>;
 }
 
 /** Reducer */
@@ -47,8 +47,8 @@ export function searchDocsReducer(state = { input: '', isSearch: false }, action
 
 /** Async Action Creator */
 export function getSearchResult(dispatch, input: string): ISearchAction {
-    search(input)
-        .then((res: Array<DocsModel>) => {
+    app.docs.search(input)
+        .then((res: Array<ISearchResultItem>) => {
             return dispatch({
                 input: input,
                 type: SEARCH_SUCCESS,
