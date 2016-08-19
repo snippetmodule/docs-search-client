@@ -3,11 +3,13 @@ export type DocsModelEntriyType = {
     name: string,
     path: string,
     type: string,
+    doc?: DocsModel,
 };
 export type DocsModelTypeType = {
     name: string,
     slug: string,
     count: number,
+    doc?: DocsModel,
     childs?: DocsModelEntriyType[],
 };
 export type DocsModel = {
@@ -20,6 +22,7 @@ export type DocsModel = {
 
 export interface ISearchResultItem {
     name: string;
+    doc: DocsModel;
     path?: string;
     type?: string;
     slug?: string;

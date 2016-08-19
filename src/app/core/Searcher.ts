@@ -1,13 +1,5 @@
 import Fuse = require('fuse.js');
 
-interface ISearchItem {
-    name: string;
-    author?: {
-        firstName: string,
-        lastName: string
-    };
-}
-
 class Searcher<T> {
     private fuseOption = {
         caseSensitive: false,

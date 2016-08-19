@@ -11,16 +11,21 @@ class Docs {
     private initSearcher() {
         let searchItems: SearchType[] = [];
         this.docsArrays.map<{ entries: DocsModelEntriyType[], types: DocsModelTypeType[] }>(
-            (item: DocsModel) => {
-                let entries: DocsModelEntriyType[] = item.value.entries;
-                let types: DocsModelTypeType[] = item.value.types;
+            (docsItem: DocsModel) => {
+                let entries: DocsModelEntriyType[] = docsItem.value.entries;
+                let types: DocsModelTypeType[] = docsItem.value.types;
+                entries = entries.map(item => {
+                    item.doc = docsItem;
+                    return item;
+                });
                 types = types.map((item: DocsModelTypeType) => {
                     item.childs = entries.filter((entry: DocsModelEntriyType) => {
                         return entry.type === item.name;
                     });
+                    item.doc = docsItem;
                     return item;
                 });
-                item.value.types = types;
+                docsItem.value.types = types;
                 return { entries: entries, types: types };
             }).map((item: { entries: DocsModelEntriyType[], types: DocsModelTypeType[] }) => {
                 return [...item.entries, ...item.types];
