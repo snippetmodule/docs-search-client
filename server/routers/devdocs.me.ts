@@ -53,8 +53,14 @@ async function getDocsItem(docsItem: IDocsItem) {
     if (!fs.existsSync(path)) {
         fs.mkdir(path);
     }
-    await download('http://www.devdocs.me/docs/' + docsItem.slug + '/index.json', path + '/index.json');
-    await download('http://www.devdocs.me/docs/' + docsItem.slug + '/db.json', path + '/db.json');
+    let savePath = path + '/index.json';
+    if (!fs.existsSync(savePath)) {
+        await download('http://www.devdocs.me/docs/' + docsItem.slug + '/index.json', savePath);
+    }
+    savePath = path + '/db.json';
+    if (!fs.existsSync(savePath)) {
+        await download('http://www.devdocs.me/docs/' + docsItem.slug + '/index.json', savePath);
+    }
 }
 async function getDocs(list: string) {
     //console.log('------------devdocs.me-----------start');
@@ -65,6 +71,10 @@ async function getDocs(list: string) {
     //console.log('------------devdocs.me-----------end');
 }
 export function getDocsList(req: restify.Request, res: restify.Response, next: restify.Next) {
+    if (req.params.force) {
+        fs.removeSync(rootPath);
+    }
+    console.log('getDocsList:'+req.params.force);
     getDocsListImpl()
         .then(result => {
             res.json(200, { result })
