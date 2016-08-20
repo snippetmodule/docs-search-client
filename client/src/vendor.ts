@@ -16,7 +16,7 @@ import 'react-dom';
 import 'redux-connect';
 import 'redux-thunk';
 
-import app from './app/core/app';
+import app from './app/config';
 if (app.htmlConfig.isDevelopment) {
     Object.defineProperty(window, '_trackJs', { value: { 'token': 'de2e5b341ed24eff992e0746306327b7' } });
     require('trackjs');

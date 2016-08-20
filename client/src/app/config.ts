@@ -1,4 +1,4 @@
-import {Docs} from './Docs';
+import {Docs} from './core/Docs';
 
 let htmlConfig = {
     env: process.env.NODE_ENV || 'development',

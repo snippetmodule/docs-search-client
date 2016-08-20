@@ -1,4 +1,4 @@
-import app  from '../../core/app';
+import app  from '../../config';
 /** Action Types */
 export const INIT_REQUEST: string = 'INIT_REQUEST';
 export const INIT_SUCCESS: string = 'INIT_SUCCESS';

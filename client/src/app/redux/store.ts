@@ -1,4 +1,4 @@
-import app  from '../core/app';
+import app  from '../config';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
