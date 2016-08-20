@@ -1,0 +1,76 @@
+import * as restify from 'restify';
+import * as fetch from 'isomorphic-fetch';
+import * as fs from 'fs';
+
+let rootPath = 'build/docs/';
+
+interface IDocsItem {
+    name: string,
+    slug: string,
+    type: string,
+    version: string,
+    index_path?: string,
+    db_path?: string,
+    links?: {
+        home: string,
+        code: string
+    },
+    mtime: number,
+    db_size: number
+}
+
+async function getDocsListImpl() {
+    let res: IResponse = await fetch('http://www.devdocs.me/assets/docs.js');
+    let result: string;
+    if (res.ok) {
+        result = await res.text();
+        result = result.substring(result.indexOf('app.DOCS =') + 10, result.lastIndexOf(';'));
+        if (!fs.existsSync(rootPath)) {
+            fs.mkdir(rootPath);
+        }
+        fs.writeFile(rootPath + 'list.json', result, error => console.log('list.json     :' + error));
+        getDocs(result);
+    } else {
+        throw new Error();
+    }
+}
+
+async function download(url: string, path: string) {
+    let res: IResponse = await fetch(url);
+    let result: string;
+    if (res.ok) {
+        result = await res.text();
+        fs.writeFile(path, result, error => console.log(url + '    ' + path + ' :' + error));
+        return new Promise<string>((resove, reject) => {
+            resove(result);
+        });
+    } else {
+        throw new Error();
+    }
+}
+async function getDocsItem(docsItem: IDocsItem) {
+    let path = rootPath + docsItem.slug;
+    if (!fs.existsSync(path)) {
+        fs.mkdir(path);
+    }
+    await download('http://www.devdocs.me/docs/' + docsItem.slug + '/index.json', path + '/index.json');
+    await download('http://www.devdocs.me/docs/' + docsItem.slug + '/db.json', path + '/db.json');
+}
+async function getDocs(list: string) {
+    //console.log('------------devdocs.me-----------start');
+    let object: IDocsItem[] = JSON.parse(list);
+    for (let item of object) {
+        getDocsItem(item);
+    }
+    //console.log('------------devdocs.me-----------end');
+}
+export function getDocsList(req: restify.Request, res: restify.Response, next: restify.Next) {
+    getDocsListImpl()
+        .then(result => {
+            res.json(200, { result })
+        })
+        .catch(error => {
+            res.json(400, error)
+        });
+}
+

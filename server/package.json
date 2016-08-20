@@ -6,6 +6,9 @@
   "scripts": {
     "tsc": "tsc",
     "tsc:w": "tsc -w",
+    "prebuild": "rm -rf build/*",
+    "build": "tsc",
+    "prestart": "npm run build",
     "start": "node build/www.js"
   },
   "author": "wfc",
@@ -19,6 +22,7 @@
     "bunyan": "^1.8.1",
     "mongoose": "^4.3.4",
     "restify": "^4.0.3",
+    "isomorphic-fetch": "^2.2.1",
     "systemjs": "^0.19.9"
   }
 }
