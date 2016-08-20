@@ -1,8 +1,8 @@
 import * as restify from 'restify';
 import * as fetch from 'isomorphic-fetch';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 
-let rootPath = 'build/docs/';
+let rootPath = '../api-docs/';
 
 interface IDocsItem {
     name: string,
@@ -80,6 +80,11 @@ interface CheckResult {
         db: boolean,
     }
 }
+export function clearDocsList(req: restify.Request, res: restify.Response, next: restify.Next) {
+    fs.removeSync(rootPath);
+    res.json(200, { message: 'ok' });
+}
+
 export function checkDocsList(req: restify.Request, res: restify.Response, next: restify.Next) {
     if (!fs.existsSync(rootPath + 'list.json')) {
         res.json(400, { message: 'list.json file　not found' });
