@@ -1,4 +1,4 @@
-import appConfig  from '../../appconfig';
+import app  from '../core/app';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
@@ -15,14 +15,14 @@ export function configureStore(history, initialState?: any): Redux.Store<IReduxS
   ];
 
   /** Add Only Dev. Middlewares */
-  if (appConfig.env !== 'production' && process.env.BROWSER) {
+  if (app.htmlConfig.env !== 'production' && process.env.BROWSER) {
     const logger = createLogger();
     middlewares.push(logger);
   }
 
   const finalCreateStore = compose(
     applyMiddleware(...middlewares),
-    appConfig.env === 'development' &&
+    app.htmlConfig.env === 'development' &&
       typeof window === 'object' &&
       typeof window.devToolsExtension !== 'undefined'
       ? window.devToolsExtension() : f => f
@@ -30,7 +30,7 @@ export function configureStore(history, initialState?: any): Redux.Store<IReduxS
 
   const store: Redux.Store<IReduxState> = finalCreateStore(rootReducer, initialState);
 
-  if (appConfig.env === 'development' && (module as any).hot) {
+  if (app.htmlConfig.env === 'development' && (module as any).hot) {
     (module as any).hot.accept('./reducers', () => {
       store.replaceReducer((require('./reducers')));
     });

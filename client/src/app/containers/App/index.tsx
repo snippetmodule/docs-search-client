@@ -1,4 +1,4 @@
-import appConfig  from '../../../appconfig';
+import app  from '../../core/app';
 import * as React from 'react';
 import * as Helmet from 'react-helmet';
 import { Header } from '../../components';
@@ -33,7 +33,7 @@ class App extends React.Component<IProps, any> {
     }
     return (
       <div className={s.rootStyle} >
-        <Helmet {...appConfig.app} {...appConfig.app.head}/>
+        <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head}/>
         <div className={s.headerStyle}>
           <Header/>
         </div>
