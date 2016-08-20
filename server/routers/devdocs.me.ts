@@ -73,4 +73,33 @@ export function getDocsList(req: restify.Request, res: restify.Response, next: r
             res.json(400, error)
         });
 }
+interface CheckResult {
+    [key: string]: {
+        path: string,
+        index: boolean,
+        db: boolean,
+    }
+}
+export function checkDocsList(req: restify.Request, res: restify.Response, next: restify.Next) {
+    if (!fs.existsSync(rootPath + 'list.json')) {
+        res.json(400, { message: 'list.json file　not found' });
+    }
+    let docsList: string = fs.readFileSync(rootPath + 'list.json', 'utf-8');
+    if (!docsList) {
+        res.json(400, { message: 'file　not found' });
+    }
+    let docsArray: IDocsItem[] = JSON.parse(docsList);
+    let result: CheckResult[] = [];
+    for (let docsItem of docsArray) {
+        let path: string = rootPath + docsItem.slug;
+        let resultItem = {};
+        resultItem[docsItem.slug] = {
+            path: path,
+            index: fs.existsSync(path + '/index.json'),
+            db: fs.existsSync(path + '/db.json'),
+        }
+        result.push(<CheckResult>resultItem);
+    }
+    res.json(200, { result });
+}
 

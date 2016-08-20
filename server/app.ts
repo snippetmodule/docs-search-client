@@ -7,4 +7,5 @@ export default function app(server: restify.Server) {
   let path = 'api/docs';
 
   server.get(path + '/list', devdocs.getDocsList);
+  server.get(path + '/checklist', devdocs.checkDocsList);
 }
