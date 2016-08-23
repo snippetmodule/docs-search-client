@@ -10,6 +10,5 @@ export function getDocs(req: restify.Request, res: restify.Response, next: resti
         } else {
             res.json(200, JSON.parse(data));
         }
-
     });
 }
