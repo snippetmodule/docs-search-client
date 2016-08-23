@@ -1,6 +1,8 @@
 import {DocsModelEntriyType, DocsModelTypeType, DocsModel, ISearchResultItem} from './model';
 import {localStorage } from './storage';
 import {Searcher}from './Searcher';
+import app from '../config';
+
 type SearchType = { name: string, [key: string]: any };
 
 class Docs {
@@ -35,26 +37,49 @@ class Docs {
         this.mSearcher = new Searcher(searchItems, ['name']);
     }
     public async init() {
-        let temp = this.docsArrays;
+        // let temp = this.docsArrays;
         await this.test().catch(error => console.log('docs init test =' + ' ' + error));
-        await localStorage.iterate(function (value, key, iterationNumber) {
-            temp.push({
-                key: key,
-                value: JSON.parse(value),
-            });
-        }).catch(function (error) {
-            if (error) {
-                console.log('docs init error ' + error);
-            }
-        });
+        // await localStorage.iterate(function (value, key, iterationNumber) {
+        //     temp.push({
+        //         key: key,
+        //         value: JSON.parse(value),
+        //     });
+        // }).catch(function (error) {
+        //     if (error) {
+        //         console.log('docs init error ' + error);
+        //     }
+        // });
         this.initSearcher();
     }
     private async test() {
-        await this.downAndStore('http://devdocs.io/docs/git/index.json?1469993122', 'git');
-        await this.downAndStore('http://devdocs.io/docs/haxe~java/index.json?1457299146', 'java');
-        await this.downAndStore('http://devdocs.io/docs/javascript/index.json?1469397360', 'javascript');
+        let defaultDocs = app.docConfig.default_docs;
+        let docsInfos = app.docInfos;
+        for (let docs of defaultDocs) {
+            for (let info of docsInfos) {
+                if (info.slug === docs) {
+                    let value: DocsModel = <DocsModel> (await localStorage.getItem(info.slug));
+                    if (!value) {
+                        let res = await fetch('docs/' + info.slug + '/index.json', {
+                            headers: { 'Accept': 'application/json' },
+                        });
+                        if (res.ok) {
+                            let responseString = await res.text();
+                            value = JSON.parse(responseString);
+                        }
+                    }
+                    if (value) {
+                        await localStorage.setItem(info.slug, value);
+                        this.docsArrays.push(value);
+                    }
+                }
+            }
+        }
+        // await this.downAndStore('http://devdocs.io/docs/git/index.json?1469993122', 'git');
+        // await this.downAndStore('http://devdocs.io/docs/haxe~java/index.json?1457299146', 'java');
+        // await this.downAndStore('http://devdocs.io/docs/javascript/index.json?1469397360', 'javascript');
     }
-    private async downAndStore(url: string, key: string) {
+
+    public async downAndStore(url: string, key: string) {
         let res: any = await fetch(url, {
             headers: {
                 'Accept': 'application/json',

@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import {DocsModel, ISearchResultItem} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
 import {isMounted} from '../../utils/react-utils';
+// import {docsArrays} from '../../core/docs';
 import ReactList from '../../utils/react-lists';
 const { connect } = require('react-redux');
 
@@ -60,7 +61,6 @@ interface ISearchProps {
 }
 @connect(state => ({ searchState: state.searchDocs }))
 class Left extends React.Component<ISearchProps, void> {
-
     public shouldComponentUpdate(nextProps: ISearchProps, nextState: void, nextContext: any): boolean {
         return this.props.searchState.input !== nextProps.searchState.input;
     }
@@ -68,9 +68,10 @@ class Left extends React.Component<ISearchProps, void> {
         let searchResultItem: ISearchResultItem = this.props.searchState.message[index];
         if (searchResultItem.path) {
             return (<li key={key}> <Link  to={{ pathname: 'page', query: { url: searchResultItem.path + '.html' } }} > { searchResultItem.name}</Link ></li>);
-        }else {
-            return (  <li key={key}> <Link  to={{ pathname: 'page', query: { url: searchResultItem.path + '.html' } }} > { searchResultItem.name}</Link ></li>);
+        } else {
+            return (<li key={key}> <Link  to={{ pathname: 'page', query: { url: searchResultItem.path + '.html' } }} > { searchResultItem.name}</Link ></li>);
         }
+        // return <div key={key}>{'index ' + index + 'key' + key}</div>;
     }
     public render() {
         let {searchState} = this.props;
@@ -85,9 +86,9 @@ class Left extends React.Component<ISearchProps, void> {
             return (<div> 未找到搜索结果 </div>);
         }
         return (
-            <ul style={{ overflowX: 'scroll',overflowY:'hidden' }}>
+            <ul style={{ overflowX: 'scroll', overflowY: 'hidden' }}>
                 <ReactList
-                    itemRenderer={this.renderItem.bind(this)}
+                    itemRenderer={this.renderItem.bind(this) }
                     length={50}
                     type ="uniform"
                     />
@@ -125,4 +126,4 @@ class Left extends React.Component<ISearchProps, void> {
 //     }
 // }
 
-export {Left }
+export { Left }

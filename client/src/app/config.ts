@@ -18,6 +18,7 @@ let htmlConfig = {
         },
     },
 };
+
 let docConfig = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
     docs_host: '/docs',
@@ -31,9 +32,25 @@ let docConfig = {
     version: '1450281649',
 };
 
+interface IDocInfo {
+    name: string;
+    slug: string;
+    type: string;
+    version: string;
+    index_path: string;
+    db_path: string;
+    links: { home?: string };
+    mtime: number;
+    db_size: number;
+}
+
+let docInfos: IDocInfo[] = require('../../../api-docs/list.json');
+
 let app = {
     htmlConfig: htmlConfig,
     docConfig: docConfig,
     docs: new Docs(),
+    docInfos: docInfos,
 };
+
 export default app;
