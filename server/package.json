@@ -24,6 +24,7 @@
     "isomorphic-fetch": "^2.2.1",
     "mongoose": "^4.3.4",
     "restify": "^4.0.3",
+    "serve-static-restify": "^1.0.0",
     "systemjs": "^0.19.9"
   }
 }

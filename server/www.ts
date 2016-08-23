@@ -9,10 +9,13 @@ let server: restify.Server = restify.createServer({
 server.use(restify.gzipResponse());//gzip压缩
 server.use(restify.bodyParser());//将post请求的body数据转化到req.params
 server.use(restify.queryParser());//将url？后的参数转化到req.params
-server.get(/\/docs\/public\/?.*/, restify.serveStatic({
-    directory: '../public'
+// server.get(/\/docs\/public\/?.*/, restify.serveStatic({
+//     directory: '../public'
+// }));
+server.get(/^\/?.*/, restify.serveStatic({
+    directory: '../client/build',
+    default: 'index.html'
 }));
-
 //http服务器错误捕捉
 // server.on('err', function (err) {
 //     mongoose.disconnect(function (err) {
