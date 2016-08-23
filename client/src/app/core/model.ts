@@ -13,11 +13,8 @@ export type DocsModelTypeType = {
     childs?: DocsModelEntriyType[],
 };
 export type DocsModel = {
-    key: string,
-    value: {
-        entries: DocsModelEntriyType[],
-        types: DocsModelTypeType[]
-    }
+    entries: DocsModelEntriyType[],
+    types: DocsModelTypeType[]
 };
 
 export interface ISearchResultItem {

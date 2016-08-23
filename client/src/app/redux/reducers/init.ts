@@ -44,7 +44,10 @@ export function startInit(): Redux.Dispatch<IInitAction> {
         return app.docs.init()
             .then(res => {
                 dispatch({ type: INIT_SUCCESS });
-            }).catch(err =>
-                dispatch({ type: INIT_FAILURE }));
+                console.log('startInit:' + res);
+            }).catch(err => {
+                dispatch({ type: INIT_FAILURE });
+                console.log('startInit:' + err);
+            });
     };
 }

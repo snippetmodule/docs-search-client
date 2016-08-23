@@ -21,7 +21,7 @@ let htmlConfig = {
 
 let docConfig = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
-    docs_host: '/docs',
+    docs_host: 'http://127.0.0.1:8081/docs/',
     env: 'development',
     history_cache_size: 10,
     index_path: '/docs',
