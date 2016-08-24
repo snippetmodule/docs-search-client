@@ -39,6 +39,9 @@ class Docs {
     public async init() {
         await this.initDocsArray();
         this.initSearcher();
+        if(this.docsArrays.length === 0){
+            throw new Error('docsArrays is empty');
+        }
     }
     private async initDocsArray() {
         let defaultDocs = app.docConfig.default_docs;
@@ -50,8 +53,8 @@ class Docs {
                     if (!value) {
                         let res = await fetch(app.docConfig.docs_host + info.slug + '/index.json', {
                             headers: { 'Accept': 'application/json' },
-                        });
-                        if (res.ok) {
+                        }).catch(error=>console.log('initDocsArray　error：'+error));
+                        if (res && res.ok) {
                             let responseString = await res.text();
                             await localStorage.setItem(info.slug, value);
                             value = JSON.parse(responseString);
