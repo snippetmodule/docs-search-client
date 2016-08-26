@@ -32,13 +32,13 @@ export interface IDocInfo {
     db_size: number;
 }
 
-let docInfos: IDocInfo[] = require('../../../api-docs/list.json');
+let {DOCS} = require('../../../api-docs/list.js');
 
 let app = {
     htmlConfig: htmlConfig,
     docSetting: new DocsSetting(),
     docs: new Docs(),
-    docInfos: docInfos,
+    docInfos: DOCS,
 };
 
 export default app;
