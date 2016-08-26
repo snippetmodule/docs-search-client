@@ -1,4 +1,5 @@
 import {Docs} from './core/Docs';
+import {DocsSetting} from './core/DocsSetting';
 
 let htmlConfig = {
     env: process.env.NODE_ENV || 'development',
@@ -19,20 +20,7 @@ let htmlConfig = {
     },
 };
 
-let docConfig = {
-    default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
-    docs_host: 'http://127.0.0.1:8081/docs/',
-    env: 'development',
-    history_cache_size: 10,
-    index_path: '/docs',
-    max_results: 50,
-    production_host: 'www.devdocs.me',
-    search_param: 'q',
-    sentry_dsn: '',
-    version: '1450281649',
-};
-
-interface IDocInfo {
+export interface IDocInfo {
     name: string;
     slug: string;
     type: string;
@@ -48,7 +36,7 @@ let docInfos: IDocInfo[] = require('../../../api-docs/list.json');
 
 let app = {
     htmlConfig: htmlConfig,
-    docConfig: docConfig,
+    docSetting: new DocsSetting(),
     docs: new Docs(),
     docInfos: docInfos,
 };

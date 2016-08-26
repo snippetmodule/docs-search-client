@@ -39,25 +39,25 @@ class Docs {
     public async init() {
         await this.initDocsArray();
         this.initSearcher();
-        if(this.docsArrays.length === 0){
+        if (this.docsArrays.length === 0) {
             throw new Error('docsArrays is empty');
         }
     }
     private async initDocsArray() {
-        let defaultDocs = app.docConfig.default_docs;
+        let defaultDocs = app.docSetting.getConfig().default_docs;
         let docsInfos = app.docInfos;
         for (let docs of defaultDocs) {
             for (let info of docsInfos) {
                 if (info.slug === docs) {
                     let value: DocsModel = <DocsModel> (await localStorage.getItem(info.slug));
                     if (!value) {
-                        let res = await fetch(app.docConfig.docs_host + info.slug + '/index.json', {
+                        let res = await fetch(app.docSetting.getConfig().docs_host + info.slug + '/index.json', {
                             headers: { 'Accept': 'application/json' },
-                        }).catch(error=>console.log('initDocsArray　error：'+error));
+                        }).catch(error => console.log('initDocsArray　error：' + error));
                         if (res && res.ok) {
                             let responseString = await res.text();
-                            await localStorage.setItem(info.slug, value);
                             value = JSON.parse(responseString);
+                            await localStorage.setItem(info.slug, value);
                         }
                     }
                     if (value) {
