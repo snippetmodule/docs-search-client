@@ -71,6 +71,7 @@ async function getDocs(list: string) {
     //console.log('------------devdocs.me-----------end');
 }
 export function getDocsList(req: restify.Request, res: restify.Response, next: restify.Next) {
+    console.log('devdovs.me.ts getDocsList:'+req.params.force);
     if (req.params.force) {
         fs.removeSync(rootPath);
     }
