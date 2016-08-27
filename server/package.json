@@ -4,10 +4,12 @@
   "description": "First server Test",
   "main": "build/www.js",
   "scripts": {
+    "clear": "rm -rf build/* node_modules/* typings/*",
+    "stop": "$(lsof -i :8081 | awk '{print \"kill -9 \" $2}')",
+    "postinstall": "typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "prebuild": "rm -rf build/*",
-    "build": "tsc",
+    "build": "tsc -w &",
     "prestart": "npm run build",
     "start": "node build/www.js"
   },
