@@ -1,25 +1,36 @@
-
 export type DocsModelEntriyType = {
     name: string,
     path: string,
     type: string,
-    doc?: DocsModel,
+    doc?: IDocInfo,
 };
 export type DocsModelTypeType = {
     name: string,
     slug: string,
     count: number,
-    doc?: DocsModel,
+    doc?: IDocInfo,
     childs?: DocsModelEntriyType[],
 };
-export type DocsModel = {
-    entries: DocsModelEntriyType[],
-    types: DocsModelTypeType[]
-};
+
+export interface IDocInfo {
+    name: string;
+    slug: string;
+    type: string;
+    version: string;
+    index_path: string;
+    db_path: string;
+    links?: { home?: string };
+    mtime: number;
+    db_size: number;
+    storeValue?: {
+        entries: DocsModelEntriyType[],
+        types: DocsModelTypeType[]
+    };
+}
 
 export interface ISearchResultItem {
     name: string;
-    doc: DocsModel;
+    doc: IDocInfo;
     path?: string;
     type?: string;
     slug?: string;

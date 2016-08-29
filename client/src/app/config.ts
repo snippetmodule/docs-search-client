@@ -1,6 +1,5 @@
 import {Docs} from './core/Docs';
 import {DocsSetting} from './core/DocsSetting';
-
 let htmlConfig = {
     env: process.env.NODE_ENV || 'development',
     isDevelopment: this.env === 'development' ? true : false,
@@ -20,25 +19,12 @@ let htmlConfig = {
     },
 };
 
-export interface IDocInfo {
-    name: string;
-    slug: string;
-    type: string;
-    version: string;
-    index_path: string;
-    db_path: string;
-    links: { home?: string };
-    mtime: number;
-    db_size: number;
-}
-
 let {DOCS} = require('../../../api-docs/list.js');
 
 let app = {
     htmlConfig: htmlConfig,
     docSetting: new DocsSetting(),
-    docs: new Docs(),
-    docInfos: DOCS,
+    docs: new Docs(DOCS),
 };
 
 export default app;

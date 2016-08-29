@@ -1,4 +1,4 @@
-import {DocsModelEntriyType, DocsModelTypeType, DocsModel, ISearchResultItem} from './model';
+import {DocsModelEntriyType, DocsModelTypeType, IDocInfo, ISearchResultItem} from './model';
 import {localStorage } from './storage';
 import {Searcher}from './Searcher';
 import app from '../config';
@@ -7,15 +7,18 @@ type SearchType = { name: string, [key: string]: any };
 
 class Docs {
     private mSearcher: Searcher<SearchType>;
-    constructor(private docsArrays: Array<DocsModel> = []) {
+    constructor(private docsInfoArrays: Array<IDocInfo> = []) {
     }
 
     private initSearcher() {
         let searchItems: SearchType[] = [];
-        this.docsArrays.map<{ entries: DocsModelEntriyType[], types: DocsModelTypeType[] }>(
-            (docsItem: DocsModel) => {
-                let entries: DocsModelEntriyType[] = docsItem.entries;
-                let types: DocsModelTypeType[] = docsItem.types;
+        this.docsInfoArrays.map<{ entries: DocsModelEntriyType[], types: DocsModelTypeType[] }>(
+            (docsItem: IDocInfo) => {
+                if (!docsItem.storeValue) {
+                    return { entries: [], types: [] };
+                }
+                let entries: DocsModelEntriyType[] = docsItem.storeValue.entries;
+                let types: DocsModelTypeType[] = docsItem.storeValue.types;
                 entries = entries.map(item => {
                     item.doc = docsItem;
                     return item;
@@ -27,7 +30,8 @@ class Docs {
                     item.doc = docsItem;
                     return item;
                 });
-                docsItem.types = types;
+                docsItem.storeValue.entries = entries;
+                docsItem.storeValue.types = types;
                 return { entries: entries, types: types };
             }).map((item: { entries: DocsModelEntriyType[], types: DocsModelTypeType[] }) => {
                 return [...item.entries, ...item.types];
@@ -36,32 +40,27 @@ class Docs {
             });
         this.mSearcher = new Searcher(searchItems, ['name']);
     }
+
     public async init() {
         await this.initDocsArray();
         this.initSearcher();
-        if (this.docsArrays.length === 0) {
+        if (this.docsInfoArrays.length === 0) {
             throw new Error('docsArrays is empty');
         }
     }
+
     private async initDocsArray() {
         let defaultDocs = app.docSetting.getConfig().default_docs;
-        let docsInfos = app.docInfos;
+        let docsInfos = this.docsInfoArrays;
         for (let docs of defaultDocs) {
             for (let info of docsInfos) {
                 if (info.slug === docs) {
-                    let value: DocsModel = <DocsModel> (await localStorage.getItem(info.slug));
+                    let value: IDocInfo = <IDocInfo> (await localStorage.getItem(info.slug));
                     if (!value) {
-                        let res = await fetch(app.docSetting.getConfig().docs_host + info.slug + '/index.json', {
-                            headers: { 'Accept': 'application/json' },
-                        }).catch(error => console.log('initDocsArray　error：' + error));
-                        if (res && res.ok) {
-                            let responseString = await res.text();
-                            value = JSON.parse(responseString);
-                            await localStorage.setItem(info.slug, value);
-                        }
+                        value = await app.docSetting.addDoc(info);
                     }
                     if (value) {
-                        this.docsArrays.push(value);
+                        info.storeValue = value.storeValue;
                     }
                 }
             }

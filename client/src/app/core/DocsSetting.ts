@@ -1,5 +1,4 @@
-import {IDocInfo} from　'../config';
-import {DocsModel} from './model';
+import {IDocInfo} from './model';
 import * as Cookies from 'js-cookie';
 import {localStorage } from './storage';
 
@@ -32,7 +31,7 @@ class DocsSetting {
     private config = defaultConfig;
 
     constructor() {
-        let setting: DocsSetting = <DocsSetting> Cookies.getJSON('docs_settings');
+        let setting: DocsSetting = <DocsSetting>Cookies.getJSON('docs_settings');
         if (setting) {
             this.isAutoUpdate = setting.isAutoUpdate;
             this.downloadStatusList = setting.downloadStatusList;
@@ -44,16 +43,16 @@ class DocsSetting {
     // }
     // public async removeOffLineDoc(docInfo: IDocInfo) {
     // }
-    public async addDoc(docInfo: IDocInfo) {
+    public async addDoc(docInfo: IDocInfo): Promise<IDocInfo> {
         if (docInfo) {
             let res = await fetch(this.config.docs_host + docInfo.slug + '/index.json', {
                 headers: { 'Accept': 'application/json' },
             }).catch(error => console.log('initDocsArray　error：' + error));
             if (res && res.ok) {
                 let responseString = await res.text();
-                let value: DocsModel = JSON.parse(responseString);
-                await localStorage.setItem(docInfo.slug, value);
+                docInfo.storeValue = JSON.parse(responseString);
                 this.config.default_docs.push(docInfo.slug);
+                return localStorage.setItem(docInfo.slug, docInfo);
                 // todo 通知docs类更新
             }
         }
