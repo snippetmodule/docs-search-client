@@ -4,28 +4,43 @@ import { Link } from 'react-router';
 import {ISearchResultItem} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
 import * as Immutable from 'immutable';
+import {history} from '../../routes';
 // import {isMounted} from '../../utils/react-utils';
 // import {docsArrays} from '../../core/docs';
 import ReactList from '../../utils/react-lists';
-import {ICanExpendedState, getDefaultState} from './defaultDocList';
+import {ICanExpendedItem, ICanExpendedState, getDefaultState} from './defaultDocList';
 const { connect } = require('react-redux');
 
 interface ISearchProps {
     searchState?: ISearchState;
 }
 
-class DefaultList extends React.Component<void, ICanExpendedState> {
+class DefaultList extends React.Component<any, ICanExpendedState> {
     constructor() {
         super();
         this.state = getDefaultState();
     }
+    private onClickItem(stateItem: ICanExpendedItem) {
+        this.setState(this.state.expandItem(stateItem));
+        if (stateItem.link) {
+            history.push({
+                pathname: 'page',
+                query: { url: stateItem.link },
+            });
+        }else{
+            history.push({
+                pathname: 'page',
+                state: { data: stateItem.child },
+            });
+        }
 
+    }
     private renderItem(index, key) {
         let stateItem = this.state.listItems[index];
         return (
             // <Link  to={{ pathname: 'page', query: { url: searchResultItem.path + '.html' } }} > { searchResultItem.name}
             // </Link >
-            <li key={key} onClick={() => { this.setState(this.state.expandItem(index, stateItem)); } }>
+            <li key={key} onClick={this.onClickItem.bind(this, stateItem) }>
                 <span style={{ paddingLeft: stateItem.deep * 8, display: 'inline' }}>
                     { stateItem.child.length === 0 ? '' : (stateItem.isExpended ? '-' : '+') }
                 </span>

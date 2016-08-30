@@ -2,7 +2,7 @@
 import {DocsModelEntriyType, DocsModelTypeType} from '../../core/model';
 import * as appConfig from '../../config';
 
-interface ICanExpendedItem {
+export interface ICanExpendedItem {
     name: string;
     isExpended: boolean; // 是否已经展开
     child: ICanExpendedItem[];
@@ -16,7 +16,7 @@ export interface ICanExpendedState {
     enableDocs: ICanExpendedItem[];
     disableDocs: ICanExpendedItem;
     listItems: ICanExpendedItem[];
-    expandItem: (index: number, stateItem) => ICanExpendedState;
+    expandItem: (stateItem) => ICanExpendedState;
 }
 let defaultState: ICanExpendedState;
 
@@ -35,9 +35,8 @@ export function getDefaultState(): ICanExpendedState {
         if (docItem.storeValue) {
             let types: ICanExpendedItem[] = docItem.storeValue.types.map((item: DocsModelTypeType) => {
                 let subChild: ICanExpendedItem[] = item.childs.map((entry: DocsModelEntriyType) => {
-                    return { name: entry.name, isExpended: false, child: [] };
+                    return { name: entry.name, link: docItem.slug + '/' + entry.path + '.html', isExpended: false, child: [] };
                 });
-                console.log();
                 return { name: item.name, isExpended: false, child: subChild };
             });
             enableDocs.push({ name: docItem.name, link: docItem.slug + '/index.html', isExpended: false, child: types });
@@ -89,20 +88,21 @@ export function getDefaultState(): ICanExpendedState {
         }
         return lists;
     }
-    function expandItem(index: number, stateItem): ICanExpendedState {
+    function expandItem(stateItem): ICanExpendedState {
         stateItem.isExpended = !stateItem.isExpended;
-        return {
+        defaultState = {
             enableDocs: enableDocs,
             disableDocs: disableDocs,
             listItems: generalList(enableDocs),
             expandItem: expandItem,
         };
+        return defaultState;
     }
     defaultState = {
         enableDocs: enableDocs,
         disableDocs: disableDocs,
         listItems: generalList(enableDocs),
         expandItem: expandItem,
-    }
+    };
     return defaultState;
 }
