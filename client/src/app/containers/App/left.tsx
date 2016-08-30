@@ -27,7 +27,7 @@ class DefaultList extends React.Component<any, ICanExpendedState> {
                 pathname: 'page',
                 query: { url: stateItem.link },
             });
-        }else {
+        } else {
             history.push({
                 pathname: 'page',
                 state: { data: stateItem.child },
@@ -71,9 +71,9 @@ class Left extends React.Component<ISearchProps, void> {
     private renderItem(index, key) {
         let searchResultItem: ISearchResultItem = this.props.searchState.message[index];
         if (searchResultItem.path) {
-            return (<li key={key}> <Link  to={{ pathname: 'page', query: { url: searchResultItem.path + '.html' } }} > { searchResultItem.name}</Link ></li>);
+            return (<li key={key}> <Link  to={{ pathname: 'page', query: { url: searchResultItem.doc.slug + '/' + searchResultItem.path + '.html' } }} > { searchResultItem.name}</Link ></li>);
         } else {
-            return (<li key={key}> <Link  to={{ pathname: 'page', query: { url: searchResultItem.path + '.html' } }} > { searchResultItem.name}</Link ></li>);
+            return (<li key={key}> <Link  to={{ pathname: 'page', query: { url: searchResultItem.doc.slug + '/' + searchResultItem.path + '.html' } }} > { searchResultItem.name}</Link ></li>);
         }
         // return <div key={key}>{'index ' + index + 'key' + key}</div>;
     }
