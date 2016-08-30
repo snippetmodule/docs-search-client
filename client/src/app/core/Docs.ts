@@ -2,6 +2,7 @@ import {DocsModelEntriyType, DocsModelTypeType, IDocInfo, ISearchResultItem} fro
 import {localStorage } from './storage';
 import {Searcher}from './Searcher';
 import app from '../config';
+import { getDefaultState } from '../containers/App/defaultDocList';
 
 type SearchType = { name: string, [key: string]: any };
 
@@ -49,13 +50,17 @@ class Docs {
         }
     }
 
+    public get getDocsInfoArrays() {
+        return this.docsInfoArrays;
+    }
+
     private async initDocsArray() {
         let defaultDocs = app.docSetting.getConfig().default_docs;
         let docsInfos = this.docsInfoArrays;
         for (let docs of defaultDocs) {
             for (let info of docsInfos) {
                 if (info.slug === docs) {
-                    let value: IDocInfo = <IDocInfo> (await localStorage.getItem(info.slug));
+                    let value: IDocInfo = <IDocInfo>(await localStorage.getItem(info.slug));
                     if (!value) {
                         value = await app.docSetting.addDoc(info);
                     }

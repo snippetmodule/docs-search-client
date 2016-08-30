@@ -77,7 +77,6 @@ export default React.createClass<IReactListProp, { from: number, size: number, i
     },
 
     componentDidMount() {
-        this.updateFrame = this.updateFrame.bind(this);
         window.addEventListener('resize', this.updateFrame);
         this.updateFrame(this.scrollTo.bind(this, this.props.initialIndex));
     },

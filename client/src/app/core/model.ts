@@ -17,9 +17,8 @@ export interface IDocInfo {
     slug: string;
     type: string;
     version: string;
-    index_path: string;
-    db_path: string;
-    links?: { home?: string };
+    release: string;
+    links?: { home?: string; code?: string };
     mtime: number;
     db_size: number;
     storeValue?: {

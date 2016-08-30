@@ -19,7 +19,7 @@ let htmlConfig = {
     },
 };
 
-let {DOCS} = require('../../../api-docs/list.js');
+let DOCS = require('../../../api-docs/list.js').DOCS;
 
 let app = {
     htmlConfig: htmlConfig,
