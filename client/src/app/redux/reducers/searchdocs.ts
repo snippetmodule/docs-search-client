@@ -45,22 +45,22 @@ export function searchDocsReducer(state = { input: '', isSearch: false }, action
 }
 
 /** Async Action Creator */
-export function getSearchResult(dispatch, input: string): ISearchAction {
-    app.docs.search(input)
+export function getSearchResult(dispatch, _input: string): ISearchAction {
+    app.docs.search(_input)
         .then((res: Array<ISearchResultItem>) => {
             return dispatch({
-                input: input,
+                input: _input,
                 type: SEARCH_SUCCESS,
                 message: res,
             });
         })
         .catch(err => dispatch({
-            input: input,
+            input: _input,
             type: SEARCH_SUCCESS,
             message: err,
         }));
     return {
-        input: input,
+        input: _input,
         type: SEARCH_REQUEST,
     };
 }

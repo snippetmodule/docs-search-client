@@ -31,7 +31,7 @@ class DocsSetting {
     private config = defaultConfig;
 
     constructor() {
-        let setting: DocsSetting = <DocsSetting>Cookies.getJSON('docs_settings');
+        let setting: DocsSetting = <DocsSetting> Cookies.getJSON('docs_settings');
         if (setting) {
             this.isAutoUpdate = setting.isAutoUpdate;
             this.downloadStatusList = setting.downloadStatusList;
@@ -46,7 +46,7 @@ class DocsSetting {
     public async addDoc(docInfo: IDocInfo): Promise<IDocInfo> {
         if (docInfo) {
             let res = await fetch(this.config.docs_host + docInfo.slug + '/index.json', {
-                headers: { 'Accept': 'application/json' },
+                headers: { Accept: 'application/json' },
             }).catch(error => console.log('initDocsArray　error：' + error));
             if (res && res.ok) {
                 let responseString = await res.text();

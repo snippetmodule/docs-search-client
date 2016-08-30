@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Link } from 'react-router';
 import {ISearchResultItem} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
-import * as Immutable from 'immutable';
+// import * as Immutable from 'immutable';
 import {history} from '../../routes';
 // import {isMounted} from '../../utils/react-utils';
 // import {docsArrays} from '../../core/docs';
@@ -27,7 +27,7 @@ class DefaultList extends React.Component<any, ICanExpendedState> {
                 pathname: 'page',
                 query: { url: stateItem.link },
             });
-        }else{
+        }else {
             history.push({
                 pathname: 'page',
                 state: { data: stateItem.child },

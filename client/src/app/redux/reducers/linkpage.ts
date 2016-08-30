@@ -43,15 +43,15 @@ export function initLinkPageReducer(state: ILinkPageState = { isInited: false, u
 }
 
 /** Async Action Creator */
-export function startRequestPage(dispatch, url: string): ILinkPageAction {
-    fetch('http://docs.devdocs.io/' + url)
-        .catch(err => dispatch({ type: INIT_FAILURE, url: url, content: err }))
+export function startRequestPage(dispatch, _url: string): ILinkPageAction {
+    fetch('http://docs.devdocs.io/' + _url)
+        .catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
         .then(res => res.text())
-        .catch(err => dispatch({ type: INIT_FAILURE, url: url, content: err }))
-        .then(res => dispatch({ type: INIT_SUCCESS, url: url, content: res }));
+        .catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
+        .then(res => dispatch({ type: INIT_SUCCESS, url: _url, content: res }));
     return {
         type: INIT_REQUEST,
-        url: url,
+        url: _url,
     };
 
 }

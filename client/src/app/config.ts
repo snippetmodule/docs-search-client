@@ -1,6 +1,6 @@
 import {Docs} from './core/Docs';
 import {DocsSetting} from './core/DocsSetting';
-let htmlConfig = {
+let _htmlConfig = {
     env: process.env.NODE_ENV || 'development',
     isDevelopment: this.env === 'development' ? true : false,
 
@@ -22,7 +22,7 @@ let htmlConfig = {
 let DOCS = require('../../../api-docs/list.js').DOCS;
 
 let app = {
-    htmlConfig: htmlConfig,
+    htmlConfig: _htmlConfig,
     docSetting: new DocsSetting(),
     docs: new Docs(DOCS),
 };

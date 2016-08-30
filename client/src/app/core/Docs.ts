@@ -2,7 +2,7 @@ import {DocsModelEntriyType, DocsModelTypeType, IDocInfo, ISearchResultItem} fro
 import {localStorage } from './storage';
 import {Searcher}from './Searcher';
 import app from '../config';
-import { getDefaultState } from '../containers/App/defaultDocList';
+// import { getDefaultState } from '../containers/App/defaultDocList';
 
 type SearchType = { name: string, [key: string]: any };
 
@@ -18,22 +18,22 @@ class Docs {
                 if (!docsItem.storeValue) {
                     return { entries: [], types: [] };
                 }
-                let entries: DocsModelEntriyType[] = docsItem.storeValue.entries;
-                let types: DocsModelTypeType[] = docsItem.storeValue.types;
-                entries = entries.map(item => {
+                let _entries: DocsModelEntriyType[] = docsItem.storeValue.entries;
+                let _types: DocsModelTypeType[] = docsItem.storeValue.types;
+                _entries = _entries.map(item => {
                     item.doc = docsItem;
                     return item;
                 });
-                types = types.map((item: DocsModelTypeType) => {
-                    item.childs = entries.filter((entry: DocsModelEntriyType) => {
+                _types = _types.map((item: DocsModelTypeType) => {
+                    item.childs = _entries.filter((entry: DocsModelEntriyType) => {
                         return entry.type === item.name;
                     });
                     item.doc = docsItem;
                     return item;
                 });
-                docsItem.storeValue.entries = entries;
-                docsItem.storeValue.types = types;
-                return { entries: entries, types: types };
+                docsItem.storeValue.entries = _entries;
+                docsItem.storeValue.types = _types;
+                return { entries: _entries, types: _types };
             }).map((item: { entries: DocsModelEntriyType[], types: DocsModelTypeType[] }) => {
                 return [...item.entries, ...item.types];
             }).forEach(item => {
@@ -60,7 +60,7 @@ class Docs {
         for (let docs of defaultDocs) {
             for (let info of docsInfos) {
                 if (info.slug === docs) {
-                    let value: IDocInfo = <IDocInfo>(await localStorage.getItem(info.slug));
+                    let value: IDocInfo = <IDocInfo> (await localStorage.getItem(info.slug));
                     if (!value) {
                         value = await app.docSetting.addDoc(info);
                     }
@@ -78,7 +78,7 @@ class Docs {
     public async downAndStore(url: string, key: string) {
         let res: any = await fetch(url, {
             headers: {
-                'Accept': 'application/json',
+                Accept: 'application/json',
             },
         }).catch(error => console.log('docs test ' + error));
         if (res.ok) {

@@ -8,7 +8,7 @@ export interface ICanExpendedItem {
     child: ICanExpendedItem[];
     deep?: number; // 此节点在整个树中的的深度
     link?: string; // 点击链接地址
-    linkParams?: any; //点击链接参数
+    linkParams?: any; // 点击链接参数
     [key: string]: any;
 }
 
@@ -24,8 +24,8 @@ export function getDefaultState(): ICanExpendedState {
     if (defaultState) {
         return defaultState;
     }
-    let enableDocs: ICanExpendedItem[] = [];
-    let disableDocs = {
+    let _enableDocs: ICanExpendedItem[] = [];
+    let _disableDocs = {
         name: 'disable',
         isExpended: false,
         deep: 0,
@@ -39,9 +39,9 @@ export function getDefaultState(): ICanExpendedState {
                 });
                 return { name: item.name, isExpended: false, child: subChild };
             });
-            enableDocs.push({ name: docItem.name, link: docItem.slug + '/index.html', isExpended: false, child: types });
+            _enableDocs.push({ name: docItem.name, link: docItem.slug + '/index.html', isExpended: false, child: types });
         } else {
-            disableDocs.child.push({ name: docItem.name, isExpended: false, link: docItem.slug + '/index.html', deep: 1, child: [] });
+            _disableDocs.child.push({ name: docItem.name, isExpended: false, link: docItem.slug + '/index.html', deep: 1, child: [] });
         }
     }
     // 标记节点在树中的深度
@@ -70,11 +70,10 @@ export function getDefaultState(): ICanExpendedState {
         return deep - 1;
     }
 
-    function generalList(enableDocs: ICanExpendedItem[]): ICanExpendedItem[] {
+    function generalList(): ICanExpendedItem[] {
         let lists: ICanExpendedItem[] = [];
-        let temp: ICanExpendedItem[] = [...enableDocs];
-        let maxDeep = markNodeDeep(enableDocs);
-
+        let temp: ICanExpendedItem[] = [..._enableDocs];
+        markNodeDeep(_enableDocs);
         while (temp.length !== 0) {
             let item = temp.shift();
             lists.push(item);
@@ -82,27 +81,27 @@ export function getDefaultState(): ICanExpendedState {
                 temp.unshift(...item.child);
             }
         }
-        lists.push(disableDocs);
-        if (disableDocs.isExpended) {
-            lists.push(...disableDocs.child);
+        lists.push(_disableDocs);
+        if (_disableDocs.isExpended) {
+            lists.push(..._disableDocs.child);
         }
         return lists;
     }
-    function expandItem(stateItem): ICanExpendedState {
+    function _expandItem(stateItem): ICanExpendedState {
         stateItem.isExpended = !stateItem.isExpended;
         defaultState = {
-            enableDocs: enableDocs,
-            disableDocs: disableDocs,
-            listItems: generalList(enableDocs),
-            expandItem: expandItem,
+            enableDocs: _enableDocs,
+            disableDocs: _disableDocs,
+            listItems: generalList(),
+            expandItem: _expandItem,
         };
         return defaultState;
     }
     defaultState = {
-        enableDocs: enableDocs,
-        disableDocs: disableDocs,
-        listItems: generalList(enableDocs),
-        expandItem: expandItem,
+        enableDocs: _enableDocs,
+        disableDocs: _disableDocs,
+        listItems: generalList(),
+        expandItem: _expandItem,
     };
     return defaultState;
 }
