@@ -21,7 +21,13 @@ interface IDocsItem {
 }
 
 async function getDocsListImpl() {
-    let res: IResponse = await fetch('http://cdn.devdocs.io/assets/docs-4c60d8654b06e74694362fb3bbc68830873770c2fd00aad880192d8a96162375.js');
+    let res: IResponse = await fetch(
+        'http://cdn.devdocs.io/assets/docs-e19b8b8052be2ab6a1c171cd1959ba3d43dcddcaa5953e787174a33ef32c0928.js'
+        , {
+            headers: {
+                Referer: 'http://devdocs.io/'
+            }
+        });
     let result: string;
     if (res.ok) {
         result = await res.text();
@@ -43,7 +49,13 @@ async function getDocsListImpl() {
             }
         });
     } else {
-        throw new Error();
+        console.log('getDocsListImpl download list.js error ');
+        if (mTasks) {
+            mTasks.isCancenl = true;
+        }
+        let {DOCS} = require("../../" + rootPath + 'list.js');
+        mTasks = new TasksPromise(DOCS);
+        // throw new Error();
     }
 }
 
@@ -52,7 +64,6 @@ export function getDocsList(req: restify.Request, res: restify.Response, next: r
     if (req.params.force) {
         fs.removeSync(rootPath);
     }
-    console.log('getDocsList:' + req.params.force);
     getDocsListImpl()
         .then(result => {
             res.json(200, { result })
@@ -89,6 +100,7 @@ export function checkDocsList(req: restify.Request, res: restify.Response, next:
         resultItem[docsItem.slug] = {
             path: path,
             index: fs.existsSync(path + '/index.json'),
+            indexhtml: fs.existsSync(path + '/index.html'),
             db: fs.existsSync(path + '/db.json'),
         }
         result.push(<CheckResult>resultItem);
@@ -121,7 +133,10 @@ class TasksPromise {
                 savePath = path + '/db.json';
                 if (!fs.existsSync(savePath)) {
                     promises.push(this.download('http://docs.devdocs.io/' + item.slug + '/db.json', savePath));
-
+                }
+                savePath = path + '/index.html';
+                if (!fs.existsSync(savePath)) {
+                    promises.push(this.download('http://docs.devdocs.io/' + item.slug + '/index.html', savePath));
                 }
                 if (promises.length !== 0) {
                     Promise.all(promises).then(res => {
@@ -153,6 +168,7 @@ class TasksPromise {
     private download(url: string, path: string): Promise<void> {
         return fetch(url)
             .then(res => res.text())
-            .then(res => fs.writeFile(path, res, error => console.log(url + '    ' + path + ' :' + error)));
+            .then(res => fs.writeFile(path, res, error => console.log(url + '    ' + path + ' :' + error)))
+            .catch(err => console.log(url + '    ' + path + ' :' + err));
     }
 }
