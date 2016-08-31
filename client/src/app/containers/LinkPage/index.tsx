@@ -26,6 +26,8 @@ class LinkPage extends React.Component<IProps, void> {
         if (nextProps.location.query.url !== this.props.location.query.url) {
             if (nextProps.location.query.url) {
                 nextProps.startRequestPage(nextProps.location.query.url);
+                nextProps.init.isInited = false;
+                nextProps.init.content = undefined;
             }
         }
     }
@@ -33,7 +35,7 @@ class LinkPage extends React.Component<IProps, void> {
         let { init} = this.props;
         if (this.props.location.state) {
             return (
-                <div>
+                <div style={{ textAlign: 'left', padding: '1.25rem 1.5rem 0' }}>
                     <h1></h1>
                     <ul>
                         {this.props.location.state.data.map(item => {
@@ -51,7 +53,7 @@ class LinkPage extends React.Component<IProps, void> {
             return (<div>加载中</div>);
         }
         return (
-            <div dangerouslySetInnerHTML={{ __html: init.content }}>
+            <div style={{ textAlign: 'left', padding: '1.25rem 1.5rem 0' }} dangerouslySetInnerHTML={{ __html: init.content }}>
             </div>
         );
     }
