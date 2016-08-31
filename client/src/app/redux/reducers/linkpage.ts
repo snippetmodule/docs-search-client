@@ -1,3 +1,4 @@
+import * as appConfig from '../../config';
 /** Action Types */
 export const INIT_REQUEST: string = 'INIT_PAGE_REQUEST';
 export const INIT_SUCCESS: string = 'INIT_PAGE_SUCCESS';
@@ -44,8 +45,11 @@ export function initLinkPageReducer(state: ILinkPageState = { isInited: false, u
 
 /** Async Action Creator */
 export function startRequestPage(dispatch, _url: string): ILinkPageAction {
-    fetch('http://docs.devdocs.io/' + _url)
-        .catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
+    fetch(appConfig.default.docSetting.getConfig().docs_host + _url, {
+        headers: {
+            Accept: _url.endsWith('.html') ? 'text/html' : 'application/json',
+        },
+    }).catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
         .then(res => res.text())
         .catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
         .then(res => dispatch({ type: INIT_SUCCESS, url: _url, content: res }));

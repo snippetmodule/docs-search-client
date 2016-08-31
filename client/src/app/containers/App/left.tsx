@@ -52,7 +52,7 @@ class DefaultList extends React.Component<any, ICanExpendedState> {
     }
     public render() {
         return (
-            <ul style={{ overflowY: 'scroll', overflowX: 'hidden' }}>
+            <ul style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden' }}>
                 <ReactList
                     itemRenderer={this.renderItem.bind(this) }
                     length={this.state.listItems.length }
@@ -93,7 +93,7 @@ class Left extends React.Component<ISearchProps, void> {
             return (<div> 未找到搜索结果 </div>);
         }
         return (
-            <ul style={{ overflowY: 'scroll', overflowX: 'hidden' }}>
+            <ul style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden' }}>
                 <ReactList
                     itemRenderer={this.renderItem.bind(this) }
                     length={50}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 import {ILinkPageState} from '../../redux/reducers/linkpage';
 import {startRequestPage} from '../../redux/reducers/linkpage';
@@ -15,19 +16,57 @@ interface IProps {
         startRequestPage: (url: string) => (dispatch(startRequestPage(dispatch, url))),
     }))
 class LinkPage extends React.Component<IProps, void> {
+    public refs: {
+        [key: string]: (HTMLInputElement);
+        rootElem?: HTMLInputElement;
+    } = {};
+    private nextScroolToElement: string = null;
+
     constructor(props) {
         super(props);
         if (this.props.location.query.url) {
-            console.log('loading url:' + this.props.location.query.url);
-            this.props.startRequestPage(this.props.location.query.url);
+            let curUrl: string = this.props.location.query.url || '';
+            let indexCurrUrl = curUrl.indexOf('#');
+            curUrl = indexCurrUrl === -1 ? curUrl : curUrl.substr(0, indexCurrUrl);
+            this.props.startRequestPage(curUrl);
+        }
+    }
+    public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
+        if (this.nextScroolToElement) {
+            let element = document.getElementById(this.nextScroolToElement);
+            if (element) {
+                console.log('componentDidUpdate:' + this.refs.rootElem.scrollTop + '   ' + element.offsetTop);
+                this.refs.rootElem.scrollTop = element.offsetTop;
+                console.log('componentDidUpdate:' + this.refs.rootElem.scrollTop);
+            }
         }
     }
     public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
-        if (nextProps.location.query.url !== this.props.location.query.url) {
-            if (nextProps.location.query.url) {
-                nextProps.startRequestPage(nextProps.location.query.url);
+        this.nextScroolToElement = null;
+        if (nextProps.location.state) {
+            return;
+        }
+        let nextUrl: string = nextProps.location.query.url;
+        let curUrl: string = this.props.location.query.url || '';
+        let indexNextUrl = nextUrl.indexOf('#');
+        let indexCurrUrl = curUrl.indexOf('#');
+        let nextScroolTo: string = indexNextUrl === -1 ? '' : nextUrl.substr(indexNextUrl + 1, nextUrl.length);
+
+        if (!nextScroolTo) { // 不包含＃
+            if (nextUrl !== curUrl && nextUrl) {
+                nextProps.startRequestPage(nextUrl);
                 nextProps.init.isInited = false;
                 nextProps.init.content = undefined;
+            }
+        } else {
+            nextUrl = nextUrl.substr(0, indexNextUrl);
+            curUrl = curUrl.substr(0, indexCurrUrl);
+            if (nextUrl !== curUrl) {
+                nextProps.startRequestPage(nextUrl);
+                nextProps.init.isInited = false;
+                nextProps.init.content = undefined;
+            } else {
+                this.nextScroolToElement = nextScroolTo.replace('.html', '');
             }
         }
     }
@@ -35,12 +74,12 @@ class LinkPage extends React.Component<IProps, void> {
         let { init} = this.props;
         if (this.props.location.state) {
             return (
-                <div style={{ textAlign: 'left', padding: '1.25rem 1.5rem 0' }}>
+                <div ref="rootElem" style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden', textAlign: 'left', padding: '1.25rem 1.5rem 0' }}>
                     <h1></h1>
                     <ul>
                         {this.props.location.state.data.map(item => {
                             return (
-                                <li >
+                                <li key={item.name}>
                                     <Link to={{ pathname: 'page', query: { url: item.link } }}>{item.name}</Link>
                                 </li >
                             );
@@ -50,10 +89,14 @@ class LinkPage extends React.Component<IProps, void> {
             );
         }
         if (!init.isInited && !init.content) {
-            return (<div>加载中</div>);
+            return (
+                <div ref="rootElem" style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden', textAlign: 'left', padding: '1.25rem 1.5rem 0' }}>
+                    加载中
+                </div>);
         }
         return (
-            <div style={{ textAlign: 'left', padding: '1.25rem 1.5rem 0' }} dangerouslySetInnerHTML={{ __html: init.content }}>
+            <div ref="rootElem" style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden', textAlign: 'left', padding: '1.25rem 1.5rem 0' }}
+                dangerouslySetInnerHTML={{ __html: init.content }}>
             </div>
         );
     }
