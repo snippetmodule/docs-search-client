@@ -37,10 +37,15 @@ class DefaultList extends React.Component<any, ICanExpendedState> {
     }
     private renderItem(index, key) {
         let stateItem = this.state.listItems[index];
+        if (stateItem.child.length === 0) {
+            return (
+                <li key={key} style={{ paddingLeft: stateItem.deep * 8 }}>
+                    <Link to="" onClick={event => { event.preventDefault(); this.onClickItem(stateItem); } } >{stateItem.name}</Link>
+                </li>
+            );
+        }
         return (
-            // <Link  to={{ pathname: 'page', query: { url: searchResultItem.path + '.html' } }} > { searchResultItem.name}
-            // </Link >
-            <li key={key} onClick={this.onClickItem.bind(this, stateItem) }>
+            <li key={key} onClick={event => { event.preventDefault(); this.onClickItem(stateItem); } }>
                 <span style={{ paddingLeft: stateItem.deep * 8, display: 'inline' }}>
                     { stateItem.child.length === 0 ? '' : (stateItem.isExpended ? '-' : '+') }
                 </span>
@@ -48,7 +53,6 @@ class DefaultList extends React.Component<any, ICanExpendedState> {
                 <span>{stateItem.child.length === 0 ? '' : '(' + stateItem.child.length + ')'}</span>
             </li>
         );
-        // return <div key={key}>{'index ' + index + 'key' + key}</div>;
     }
     public render() {
         return (

@@ -31,7 +31,7 @@ class DocsSetting {
     private config = defaultConfig;
 
     constructor() {
-        let setting: DocsSetting = <DocsSetting>Cookies.getJSON('docs_settings');
+        let setting: DocsSetting = <DocsSetting> Cookies.getJSON('docs_settings');
         if (setting) {
             this.isAutoUpdate = setting.isAutoUpdate;
             this.downloadStatusList = setting.downloadStatusList;
