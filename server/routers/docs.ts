@@ -41,31 +41,41 @@ function init() {
 init();
 
 export function getDocs(req: restify.Request, res: restify.Response, next: restify.Next) {
-    let floder:string = req.params.floder;
-    let filename:string = req.params.filename;
-    if (filename === 'db.json' || filename === 'index.html' || filename === 'index.json') {
-        fs.readFile(rootPath + floder + '/' + filename, { encoding: 'utf-8' }, (err, data) => {
+    let docType: string = req.params.docType;
+    let url: string = req.params.url;
+    console.log('getDocs: ' + JSON.stringify(req.params));
+    if (url === 'db.json' || url === 'index.html' || url === 'index.json') {
+        fs.readFile(rootPath + docType + '/' + url, { encoding: 'utf-8' }, (err, data) => {
             if (err) {
                 res.json(400, err);
             } else {
                 res.writeHead(200, {
-                    'Content-Type': filename.endsWith('.html') ? 'application/json' : 'text/html',
+                    'Content-Type': url.endsWith('.html') ? 'application/json' : 'text/html',
                 });
                 res.write(data);
                 res.end();
             }
         });
     } else {
-        filename = filename.replace('.html', '');
+        url = url.replace('.html', '');
         if (!docsLoadingState) {
             res.json(400, { message: 'docsDB not load ok' });
         } else {
-            res.writeHead(200, {
-                'Content-Type': 'text/html',
-            });
-            res.write(docsDB[floder][filename]);
-            res.end();
+            let isHasDos = (docType in docsDB);
+            let result;
+            if (isHasDos) {
+                result = docsDB[docType][url];
+            }
+            if (result) {
+                res.writeHead(200, {
+                    'Content-Type': 'text/html',
+                });
+                res.write(result);
+                res.end();
+            } else {
+                res.json(400, { message: 'not found' });
+            }
+
         }
     }
-
 }

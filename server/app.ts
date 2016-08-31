@@ -18,5 +18,5 @@ export default function app(server: restify.Server) {
   // 爬取接口结束－－－－－－－－－－－
 
   path = 'docs/';
-  server.get(path + '/:floder/:filename', docs.getDocs);
+  server.get(path, docs.getDocs);
 }
