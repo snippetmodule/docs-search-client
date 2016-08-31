@@ -13,7 +13,7 @@ interface IDownLoadStatus {
 
 let defaultConfig = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
-    docs_host: 'http://127.0.0.1:8081/docs/',
+    docs_host: 'http://127.0.0.1:8081/docs?docType=',
     env: 'development',
     history_cache_size: 10,
     index_path: '/docs',
@@ -31,7 +31,7 @@ class DocsSetting {
     private config = defaultConfig;
 
     constructor() {
-        let setting: DocsSetting = <DocsSetting> Cookies.getJSON('docs_settings');
+        let setting: DocsSetting = <DocsSetting>Cookies.getJSON('docs_settings');
         if (setting) {
             this.isAutoUpdate = setting.isAutoUpdate;
             this.downloadStatusList = setting.downloadStatusList;
@@ -45,7 +45,7 @@ class DocsSetting {
     // }
     public async addDoc(docInfo: IDocInfo): Promise<IDocInfo> {
         if (docInfo) {
-            let res = await fetch(this.config.docs_host + docInfo.slug + '/index.json', {
+            let res = await fetch(this.config.docs_host + docInfo.slug + '&url=index.json', {
                 headers: { Accept: 'application/json' },
             }).catch(error => console.log('initDocsArray　error：' + error));
             if (res && res.ok) {

@@ -39,6 +39,8 @@ class LinkPage extends React.Component<IProps, void> {
                 this.refs.rootElem.scrollTop = element.offsetTop;
                 console.log('componentDidUpdate:' + this.refs.rootElem.scrollTop);
             }
+        } else {
+            this.refs.rootElem.scrollTop = 0;
         }
     }
     public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
