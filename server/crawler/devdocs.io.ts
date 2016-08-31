@@ -22,7 +22,7 @@ interface IDocsItem {
 
 async function getDocsListImpl() {
     let res: IResponse = await fetch(
-        'http://cdn.devdocs.io/assets/docs-e19b8b8052be2ab6a1c171cd1959ba3d43dcddcaa5953e787174a33ef32c0928.js'
+        'http://cdn.devdocs.io/assets/docs-71a1b5319f1da19014ec52369623974ccb9017b2ff926ed892b16001bb5ebc84.js'
         , {
             headers: {
                 Referer: 'http://devdocs.io/'
