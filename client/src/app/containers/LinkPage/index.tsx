@@ -73,9 +73,10 @@ class LinkPage extends React.Component<IProps, void> {
     }
     public render() {
         let { init} = this.props;
+        const s = require('./style.css');
         if (this.props.location.state) {
             return (
-                <div ref="rootElem" style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden', textAlign: 'left', padding: '1.25rem 1.5rem 0' }}>
+                <div ref="rootElem" className={s._content}>
                     <h1></h1>
                     <ul>
                         {this.props.location.state.data.map(item => {
@@ -91,13 +92,13 @@ class LinkPage extends React.Component<IProps, void> {
         }
         if (!init.isInited && !init.content) {
             return (
-                <div ref="rootElem" style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden', textAlign: 'left', padding: '1.25rem 1.5rem 0' }}>
+                <div ref="rootElem" className={s._content}>
                     加载中
                 </div>);
         }
         return (
-            <div ref="rootElem" style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden', textAlign: 'left', padding: '1.25rem 1.5rem 0' }}
-                dangerouslySetInnerHTML={{ __html: init.content }}>
+            <div ref="rootElem" className={s._content}>
+                <div dangerouslySetInnerHTML={{ __html: init.content }}/>
             </div>
         );
     }
