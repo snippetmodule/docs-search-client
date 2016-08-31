@@ -1,0 +1,18 @@
+<h1 id="tensorflow-c-session-api-reference-documentation">TensorFlow C++ Session API reference documentation</h1> <p>TensorFlow's public C++ API includes only the API for executing graphs, as of version 0.5. To control the execution of a graph from C++:</p> <ol> <li>Build the computation graph using the <a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/">Python API</a>.</li> <li>Use <a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/train.html#write_graph"><code>tf.train.write_graph()</code></a> to write the graph to a file.</li> <li>
+<p>Load the graph using the C++ Session API. For example:</p> <pre class="lang-c++ no-auto-prettify" data-language="cpp">// Reads a model graph definition from disk, and creates a session object you
+// can use to run it.
+Status LoadGraph(string graph_file_name, Session** session) {
+  GraphDef graph_def;
+  TF_RETURN_IF_ERROR(
+      ReadBinaryProto(Env::Default(), graph_file_name, &amp;graph_def));
+  TF_RETURN_IF_ERROR(NewSession(SessionOptions(), session));
+  TF_RETURN_IF_ERROR((*session)-&gt;Create(graph_def));
+  return Status::OK();
+}
+</pre>
+</li> <li><p>Run the graph with a call to <code>session-&gt;Run()</code></p></li> </ol> <h2 id="env">Env</h2> <ul> <li><a href="classenv">tensorflow::Env</a></li> <li><a href="classrandomaccessfile">tensorflow::RandomAccessFile</a></li> <li><a href="classwritablefile">tensorflow::WritableFile</a></li> <li><a href="classenvwrapper">tensorflow::EnvWrapper</a></li> </ul> <h2 id="session">Session</h2> <ul> <li><a href="classsession">tensorflow::Session</a></li> <li><a href="structsessionoptions">tensorflow::SessionOptions</a></li> </ul> <h2 id="status">Status</h2> <ul> <li><a href="classstatus">tensorflow::Status</a></li> <li><a href="structstate">tensorflow::Status::State</a></li> </ul> <h2 id="tensor">Tensor</h2> <ul> <li><a href="classtensor">tensorflow::Tensor</a></li> <li><a href="classtensorshape">tensorflow::TensorShape</a></li> <li><a href="structtensorshapedim">tensorflow::TensorShapeDim</a></li> <li><a href="classtensorshapeutils">tensorflow::TensorShapeUtils</a></li> <li><a href="classpartialtensorshape">tensorflow::PartialTensorShape</a></li> <li><a href="classpartialtensorshapeutils">tensorflow::PartialTensorShapeUtils</a></li> <li><a href="structtf_buffer">TF_Buffer</a></li> </ul> <h2 id="thread">Thread</h2> <ul> <li><a href="classthread">tensorflow::Thread</a></li> <li><a href="structthreadoptions">tensorflow::ThreadOptions</a></li> </ul><div class="_attribution">
+  <p class="_attribution-p">
+    &copy; 2015 The TensorFlow Authors. All rights reserved.<br>Licensed under the Apache 2.0 License.<br>
+    <a href="https://www.tensorflow.org/versions/r0.10/api_docs/cc/" class="_attribution-link">https://www.tensorflow.org/versions/r0.10/api_docs/cc/</a>
+  </p>
+</div>

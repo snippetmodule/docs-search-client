@@ -1,0 +1,35 @@
+<h1>React Documentation</h1>  <h2 id="jsfiddle">
+JSFiddle </h2> <p>The easiest way to start hacking on React is using the following JSFiddle Hello World examples:</p> <ul> <li><strong><a href="https://jsfiddle.net/reactjs/69z2wepo/">React JSFiddle</a></strong></li> <li><a href="https://jsfiddle.net/reactjs/5vjqabv3/">React JSFiddle without JSX</a></li> </ul> <h2 id="starter-pack">
+Starter Pack </h2> <p>If you're just getting started, you can download the starter kit. The starter kit includes prebuilt copies of React and React DOM for the browser, as well as a collection of usage examples to help you get started.</p>  <a href="https://facebook.github.io/react/downloads/react-15.3.0.zip" class="button"> Download Starter Kit 15.3.0 </a>  <p>In the root directory of the starter kit, create a <code>helloworld.html</code> with the following contents.</p> <pre class="highlight" data-language="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;title&gt;Hello React!&lt;/title&gt;
+    &lt;script src="build/react.js"&gt;&lt;/script&gt;
+    &lt;script src="build/react-dom.js"&gt;&lt;/script&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="example"&gt;&lt;/div&gt;
+    &lt;script type="text/babel"&gt;
+      ReactDOM.render(
+        &lt;h1&gt;Hello, world!&lt;/h1&gt;,
+        document.getElementById('example')
+      );
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre> <p>The XML syntax inside of JavaScript is called JSX; check out the <a href="docs/jsx-in-depth">JSX syntax</a> to learn more about it. In order to translate it to vanilla JavaScript we use <code>&lt;script type="text/babel"&gt;</code> and include Babel to actually perform the transformation in the browser. Open the html from a browser and you should already be able to see the greeting!</p> <h3 id="separate-file">
+Separate File </h3> <p>Your React JSX code can live in a separate file. Create the following <code>src/helloworld.js</code>.</p> <pre class="highlight" data-language="javascript">ReactDOM.render(
+  &lt;h1&gt;Hello, world!&lt;/h1&gt;,
+  document.getElementById('example')
+);
+</pre> <p>Then reference it from <code>helloworld.html</code>:</p> <pre class="highlight" data-language="html">&lt;script type="text/babel" src="src/helloworld.js"&gt;&lt;/script&gt;
+</pre> <p>Note that some browsers (Chrome, e.g.) will fail to load the file unless it's served via HTTP.</p> <h2 id="using-react-with-npm-or-bower">
+Using React with npm or Bower </h2> <p>You can also use React with package managers like npm or Bower. You can learn more in our <a href="docs/package-management">Package Managers</a> section.</p> <h2 id="next-steps">
+Next Steps </h2> <p>Check out <a href="docs/tutorial">the tutorial</a> and the other examples in the starter kit's <code>examples</code> directory to learn more.</p> <p>Good luck, and welcome!</p><div class="_attribution">
+  <p class="_attribution-p">
+    &copy; 2013&ndash;2016 Facebook Inc.<br>Licensed under the Creative Commons Attribution 4.0 International Public License.<br>
+    <a href="https://facebook.github.io/react/docs/getting-started.html" class="_attribution-link">https://facebook.github.io/react/docs/getting-started.html</a>
+  </p>
+</div>

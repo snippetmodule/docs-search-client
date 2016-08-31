@@ -1,0 +1,89 @@
+<h1>React Native Documentation</h1>
+<p>Welcome to React Native! This page will help you install React Native on your system, so that you can build apps with it right away. If you already have React Native installed, you can skip ahead to the <a href="tutorial">Tutorial</a>.</p>
+<p>The instructions are a bit different depending on your development operating system, and whether you want to start developing for iOS or Android. If you want to develop for both iOS and Android, that's fine - you just have to pick one to start with, since the setup is a bit different.</p>       <h2 id="dependencies-for-mac-ios">
+Dependencies for Mac + iOS </h2>
+<p>You will need Xcode, node.js, the React Native command line tools, and Watchman.</p>
+ <h2 id="dependencies-for-mac-android">
+Dependencies for Mac + Android </h2>
+<p>You will need Android Studio, node.js, the React Native command line tools, and Watchman.</p>
+ <p>We recommend installing node and watchman via <a href="http://brew.sh/">Homebrew</a>.</p>
+<pre class="prism language-javascript" data-language="javascript">brew install node
+brew install watchman</pre>
+<p>Node comes with npm, which lets you install the React Native command line interface.</p>
+<pre class="prism language-javascript" data-language="javascript">npm install -g react-native-cli</pre>
+<p>If you get a permission error, try with sudo: <code>sudo npm install -g react-native-cli</code>.</p>
+ <p>The easiest way to install Xcode is via the <a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12">Mac App Store</a>.</p>
+ <p>Download and install <a href="https://developer.android.com/studio/install.html">Android Studio</a>.</p>
+<p>If you plan to make changes in Java code, we recommend <a href="https://docs.gradle.org/2.9/userguide/gradle_daemon.html">Gradle Daemon</a> which speeds up the build.</p>  <h2 id="dependencies-for-linux-android">
+Dependencies for Linux + Android </h2>
+ <h2 id="dependencies-for-windows-android">
+Dependencies for Windows + Android </h2>
+ <p>You will need node.js, the React Native command line tools, Watchman, and Android Studio.</p>
+ <p>Follow the <a href="https://nodejs.org/en/download/package-manager/">installation instructions for your Linux distribution</a> to install Node.js 4 or newer.</p>
+ <p>We recommend installing node.js and Python2 via <a href="https://chocolatey.org">Chocolatey</a>, a popular package manager for Windows. Open a Command Prompt as Administrator, then run:</p>
+<pre class="prism language-javascript" data-language="javascript">choco install nodejs.install
+choco install python2</pre>
+ <p>Node comes with npm, which lets you install the React Native command line interface.</p>
+<pre class="prism language-javascript" data-language="javascript">npm install -g react-native-cli</pre>
+ <p>Download and install <a href="https://developer.android.com/studio/install.html">Android Studio</a>.</p>
+ <p><a href="https://facebook.github.io/watchman">Watchman</a> is a tool by Facebook for watching changes in the filesystem. Installing it should improve performance, but you can also try not installing it, if the installation process is too annoying. You can follow the <a href="https://facebook.github.io/watchman/docs/install.html#installing-from-source">Watchman installation guide</a> to compile and install from source.</p>
+ <p>If you plan to make changes in Java code, we recommend <a href="https://docs.gradle.org/2.9/userguide/gradle_daemon.html">Gradle Daemon</a> which speeds up the build.</p>
+ <h2 id="testing-your-react-native-installation">
+Testing your React Native Installation </h2>
+ <p>Use the React Native command line tools to generate a new React Native project called "AwesomeProject", then run <code>react-native run-ios</code> inside the newly created folder.</p>
+<pre class="prism language-javascript" data-language="javascript">react-native init AwesomeProject
+cd AwesomeProject
+react-native run-ios</pre>
+<p>You should see your new app running in the iOS Simulator shortly. <code>react-native run-ios</code> is just one way to run your app - you can also run it directly from within Xcode or Nuclide.</p>
+ <p>Use the React Native command line tools to generate a new React Native project called "AwesomeProject", then run <code>react-native run-android</code> inside the newly created folder.</p>
+<pre class="prism language-javascript" data-language="javascript">react-native init AwesomeProject
+cd AwesomeProject
+react-native run-android</pre>
+<p>If everything is set up correctly, you should see your new app running in your Android emulator shortly. <code>react-native run-android</code> is just one way to run your app - you can also run it directly from within Android Studio or Nuclide.</p>
+ <h3 id="modifying-your-app">
+Modifying your app </h3>
+<p>Now that you have successfully run the app, let's modify it.</p>
+ <ul>
+<li>Open <code>index.ios.js</code> in your text editor of choice and edit some lines.</li>
+<li>Hit <code>Command⌘ + R</code> in your iOS Simulator to reload the app and see your change!</li>
+</ul>
+ <ul>
+<li>Open <code>index.android.js</code> in your text editor of choice and edit some lines.</li>
+<li>Press the <code>R</code> key twice or select <code>Reload</code> from the Developer Menu to see your change!</li>
+</ul>
+ <h3 id="that-s-it">
+That's it! </h3>
+<p>Congratulations! You've successfully run and modified your first React Native app.</p>
+  <h2 id="testing-your-react-native-installation">
+Testing your React Native Installation </h2>
+<p>Use the React Native command line tools to generate a new React Native project called "AwesomeProject", then run <code>react-native run-android</code> inside the newly created folder.</p>
+<pre class="prism language-javascript" data-language="javascript">react-native init AwesomeProject
+cd AwesomeProject
+react-native run-android</pre>
+<p>If everything is set up correctly, you should see your new app running in your Android emulator shortly.</p>
+<blockquote><p>A common issue is that the packager is not started automatically when you run <code>react-native run-android</code>. You can start it manually using <code>react-native start</code>.</p></blockquote>
+ <blockquote><p>If you hit a <code>ERROR  Watcher took too long to load</code> on Windows, try increasing the timeout in <a href="https://github.com/facebook/react-native/blob/5fa33f3d07f8595a188f6fe04d6168a6ede1e721/packager/react-packager/src/DependencyResolver/FileWatcher/index.js#L16">this file</a> (under your <code>node_modules/react-native/</code>).</p></blockquote>
+ <h3 id="modifying-your-app">
+Modifying your app </h3>
+<p>Now that you have successfully run the app, let's modify it.</p>
+<ul>
+<li>Open <code>index.android.js</code> in your text editor of choice and edit some lines.</li>
+<li>Press the <code>R</code> key twice or select <code>Reload</code> from the Developer Menu to see your change!</li>
+</ul>
+<h3 id="that-s-it">
+That's it! </h3>
+<p>Congratulations! You've successfully run and modified a React Native app.</p>
+  <h2 id="now-what">
+Now What? </h2>
+<ul>
+<li><p>If you want to add this new React Native code to an existing application, check out the <a href="integration-with-existing-apps">Integration guide</a>.</p></li>
+<li><p>If you can't get this to work, see the <a href="https://facebook.github.io/react-native/docs/troubleshooting.html#content">Troubleshooting</a> page.</p></li>
+<li><p>If you're curious to learn more about React Native, continue on to the <a href="tutorial">Tutorial</a>.</p></li>
+</ul> <p class="edit-page-block">You can <a href="https://github.com/facebook/react-native/blob/master/docs/GettingStarted.md">edit the content above on GitHub</a> and send us a pull request!</p>
+<p>Recently, we have been working hard to make the documentation better based on your feedback. Your responses to this yes/no style survey will help us gauge whether we moved in the right direction with the improvements. Thank you!</p>
+<div class="_attribution">
+  <p class="_attribution-p">
+    &copy; 2016 Facebook Inc.<br>Licensed under the Creative Commons Attribution 4.0 International Public License.<br>
+    <a href="https://facebook.github.io/react-native/docs/getting-started.html" class="_attribution-link">https://facebook.github.io/react-native/docs/getting-started.html</a>
+  </p>
+</div>

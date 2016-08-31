@@ -1,0 +1,196 @@
+<h1>Haxe API documentation <small>version 3.2.0</small>
+</h1>
+<p>Haxe is an open source toolkit based on a modern, high level, strictly typed programming language, a cross-compiler, a complete cross-platform standard library and ways to access each platform's native capabilities.</p> <h2>Getting Started With Haxe</h2>
+<p>For getting started with Haxe, take a look at our <a href="http://haxe.org/documentation/introduction/">introduction</a>, read through the <a href="http://haxe.org/manual/">Haxe Manual</a> or look at these use cases for Haxe, including tutorials and popular libraries:</p>
+<ul>
+<li><a href="http://haxe.org/use-cases/games/">Games</a></li>
+<li><a href="http://haxe.org/use-cases/web/">Web</a></li>
+<li><a href="http://haxe.org/use-cases/desktop/">Desktop Apps</a></li>
+<li><a href="http://haxe.org/use-cases/mobile/">Mobile Apps</a></li>
+<li><a href="http://haxe.org/use-cases/cli/">Command Line Tools</a></li>
+<li><a href="http://haxe.org/use-cases/cross-platform-apis/">Cross Platform APIs</a></li>
+</ul>
+<h2>Top Level</h2>
+<table class="table table-condensed"><tbody>
+<tr>
+<td width="200"><a href="http://api.haxe.org/cpp/index.html">cpp</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="http://api.haxe.org/cs/index.html">cs</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="http://api.haxe.org/flash/index.html">flash</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="haxe/index">haxe</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="http://api.haxe.org/java/index.html">java</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="http://api.haxe.org/js/index.html">js</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="http://api.haxe.org/neko/index.html">neko</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="http://api.haxe.org/php/index.html">php</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="http://api.haxe.org/python/index.html">python</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="sys/index">sys</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="array">Array</a></td>
+<td><p>An Array is a storage for values. You can access it using indexes or with its API.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="arrayaccess">ArrayAccess</a></td>
+<td><p>ArrayAccess is used to indicate a class that can be accessed using brackets. The type parameter represents the type of the elements stored.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="bool">Bool</a></td>
+<td><p>The standard Boolean type, which can either be true or false.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="class">Class</a></td>
+<td><p>An abstract type that represents a Class.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="date">Date</a></td>
+<td><p>The Date class provides a basic structure for date and time related information. Date instances can be created by</p></td>
+</tr>
+<tr>
+<td width="200"><a href="datetools">DateTools</a></td>
+<td><p>The DateTools class contains some extra functionalities for handling <code><a href="date">Date</a></code> instances and timestamps.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="dynamic">Dynamic</a></td>
+<td><p>Dynamic is a special type which is compatible with all other types.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="ereg">EReg</a></td>
+<td><p>The EReg class represents regular expressions.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="enum">Enum</a></td>
+<td><p>An abstract type that represents an Enum type.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="enumvalue">EnumValue</a></td>
+<td><p>An abstract type that represents any enum value. See <code><a href="type">Type</a></code> for the Haxe Reflection API.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="float">Float</a></td>
+<td><p>The standard Float type, this is a double-precision IEEE 64bit float.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="imap">IMap</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="int">Int</a></td>
+<td><p>The standard Int type. Its precision depends on the platform.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="intiterator">IntIterator</a></td>
+<td><p>IntIterator is used for implementing interval iterations.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="iterable">Iterable</a></td>
+<td><p>An Iterable is a data structure which has an iterator() method. See <code><a href="lambda">Lambda</a></code> for generic functions on iterable structures.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="iterator">Iterator</a></td>
+<td><p>An Iterator is a structure that permits iteration over elements of type T.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="lambda">Lambda</a></td>
+<td><p>The <code><a href="lambda">Lambda</a></code> class is a collection of methods to support functional programming. It is ideally used with 'using Lambda' and then acts as an extension to Iterable types.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="list">List</a></td>
+<td><p>A linked-list of elements. The list is composed of two-elements arrays that are chained together. It is optimized so that adding or removing an element does not imply copying the whole array content every time.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="map">Map</a></td>
+<td><p>Map allows key to value mapping for arbitrary value types, and many key types.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="math">Math</a></td>
+<td><p>This class defines mathematical functions and constants.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="null">Null</a></td>
+<td><p><code><a href="null">Null</a></code> can be useful in two cases. In order to document some methods that accepts or can return a <code><a href="null">null</a></code> value, or for the Flash compiler and AS3 generator to distinguish between base values that can be null and others that can't.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="reflect">Reflect</a></td>
+<td><p>The Reflect API is a way to manipulate values dynamically through an abstract interface in an untyped manner. Use with care.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="single">Single</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="std">Std</a></td>
+<td><p>The Std class provides standard methods for manipulating basic types.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="string">String</a></td>
+<td><p>The basic String class.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="stringbuf">StringBuf</a></td>
+<td><p>A String buffer is an efficient way to build a big string by appending small elements together.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="stringtools">StringTools</a></td>
+<td><p>This class provides advanced methods on Strings. It is ideally used with 'using StringTools' and then acts as an extension to the String class.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="sys">Sys</a></td>
+<td><p>This class gives you access to many base functionalities of system platforms. Looks in [sys] sub packages for more system APIs.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="type">Type</a></td>
+<td><p>The haxe Reflection API allows retrieval of type information at runtime.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="uint">UInt</a></td>
+<td><p>The unsigned Int type is only defined for Flash and C#. Simulate it for other platforms.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="valuetype">ValueType</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="void">Void</a></td>
+<td><p>The standard Void type. Only <code><a href="null">null</a></code> values can be of the type <code><a href="void">Void</a></code>.</p></td>
+</tr>
+<tr>
+<td width="200"><a href="xml">Xml</a></td>
+<td></td>
+</tr>
+<tr>
+<td width="200"><a href="xmltype">XmlType</a></td>
+<td></td>
+</tr>
+</tbody></table><div class="_attribution">
+  <p class="_attribution-p">
+    &copy; 2005&ndash;2016 Haxe Foundation<br>Licensed under a MIT license.<br>
+    <a href="http://api.haxe.org/" class="_attribution-link">http://api.haxe.org/</a>
+  </p>
+</div>

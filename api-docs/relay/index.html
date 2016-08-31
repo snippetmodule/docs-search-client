@@ -1,0 +1,36 @@
+<h1>Relay Documentation</h1>
+<p>To get started building Relay applications, you will need three things:</p>
+<ol>
+<li>
+<p><strong>A GraphQL Schema</strong></p>
+<p>A description of your data model with an associated set of resolve methods that know how to fetch any data your application could ever need.</p>
+<p>GraphQL is designed to support a wide range of data access patterns. In order to understand the structure of an application's data, Relay requires that you follow certain conventions when defining your schema. These are documented in the <a href="graphql-relay-specification#content">GraphQL Relay Specification</a>.</p>
+<ul>
+<li>
+<p><strong><a href="https://github.com/graphql/graphql-js">graphql-js</a></strong> on <a href="https://www.npmjs.com/package/graphql">npm</a></p>
+<p>General-purpose tools for building a GraphQL schema using JavaScript</p>
+</li>
+<li>
+<p><strong><a href="https://github.com/graphql/graphql-relay-js">graphql-relay-js</a></strong> on <a href="https://www.npmjs.com/package/graphql-relay">npm</a></p>
+<p>JavaScript helpers for defining connections between data, and mutations, in a way that smoothly integrates with Relay.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>A GraphQL Server</strong></p>
+<p>Any server can be taught to load a schema and speak GraphQL. Our <a href="https://github.com/relayjs/relay-examples">examples</a> use Express.</p>
+<ul><li>
+<strong><a href="https://github.com/graphql/express-graphql">express-graphql</a></strong> on <a href="https://www.npmjs.com/package/express-graphql">npm</a>
+</li></ul>
+</li>
+<li>
+<p><strong>Relay</strong></p>
+<p>Relay speaks to GraphQL servers through a network layer. The <a href="https://github.com/facebook/relay/tree/master/src/network-layer/default">network layer</a> that ships with Relay is compatible with express-graphql out of the box, and will continue to evolve as we add new features to the transport.</p>
+</li>
+</ol>
+<p>The best way to get started right now is to take a look at how these three parts come together to form a working example. The tutorial on the next page will lead you through an example application, using the <a href="https://github.com/facebook/relay-starter-kit">Relay Starter Kit</a>, to give you an idea of how you can start using Relay on yours.</p><div class="_attribution">
+  <p class="_attribution-p">
+    &copy; 2013&ndash;2016 Facebook Inc.<br>Licensed under the BSD License.<br>
+    <a href="https://facebook.github.io/relay/docs/getting-started.html" class="_attribution-link">https://facebook.github.io/relay/docs/getting-started.html</a>
+  </p>
+</div>
