@@ -352,15 +352,28 @@ mtime:1469396537,
 db_size:6525164
 }, {
 name:"D3.js",
-slug:"d3",
+slug:"d3~4",
 type:"d3",
 links:{
-home:"http://d3js.org/",
-code:"https://github.com/mbostock/d3"
+home:"https://d3js.org/",
+code:"https://github.com/d3/d3"
 },
-release:"3.5.16",
-mtime:1459699917,
-db_size:637232
+version:"4",
+release:"4.2.2",
+mtime:1472313910,
+db_size:1124230
+}, {
+name:"D3.js",
+slug:"d3~3",
+type:"d3",
+links:{
+home:"https://d3js.org/",
+code:"https://github.com/d3/d3"
+},
+version:"3",
+release:"3.5.17",
+mtime:1472313914,
+db_size:653806
 }, {
 name:"Django",
 slug:"django~1.10",
@@ -802,6 +815,18 @@ mtime:1467406713,
 db_size:6240557
 }, {
 name:"Laravel",
+slug:"laravel~5.3",
+type:"laravel",
+links:{
+home:"https://laravel.com/",
+code:"https://github.com/laravel/laravel"
+},
+version:"5.3",
+release:"5.3.0",
+mtime:1472405858,
+db_size:10053520
+}, {
+name:"Laravel",
 slug:"laravel~5.2",
 type:"laravel",
 links:{
@@ -896,14 +921,27 @@ mtime:1459023171,
 db_size:247886
 }, {
 name:"Marionette.js",
-slug:"marionette",
+slug:"marionette~3",
 type:"marionette",
 links:{
 home:"http://marionettejs.com/",
 code:"https://github.com/marionettejs/backbone.marionette"
 },
+version:"3",
+release:"3.0.0",
+mtime:1472422516,
+db_size:348637
+}, {
+name:"Marionette.js",
+slug:"marionette~2",
+type:"marionette",
+links:{
+home:"http://marionettejs.com/",
+code:"https://github.com/marionettejs/backbone.marionette"
+},
+version:"2",
 release:"2.4.7",
-mtime:1465741914,
+mtime:1472422100,
 db_size:318877
 }, {
 name:"Markdown",
@@ -990,9 +1028,9 @@ links:{
 home:"http://mongoosejs.com/",
 code:"https://github.com/Automattic/mongoose"
 },
-release:"4.5.7",
-mtime:1469992823,
-db_size:585352
+release:"4.5.9",
+mtime:1472404655,
+db_size:585755
 }, {
 name:"nginx",
 slug:"nginx",
@@ -1008,9 +1046,9 @@ db_size:981906
 name:"nginx / Lua Module",
 slug:"nginx_lua_module",
 type:"github",
-release:"0.10.0",
-mtime:1456678986,
-db_size:357647
+release:"0.10.6",
+mtime:1472421975,
+db_size:380413
 }, {
 name:"Node.js",
 slug:"node",
@@ -1140,9 +1178,9 @@ links:{
 home:"https://phalconphp.com/",
 code:"https://github.com/phalcon/cphalcon/"
 },
-release:"2.0.10",
-mtime:1463317522,
-db_size:3005192
+release:"3.0.0",
+mtime:1472406091,
+db_size:3035148
 }, {
 name:"Phaser",
 slug:"phaser",
@@ -1151,9 +1189,9 @@ links:{
 home:"http://phaser.io/",
 code:"https://github.com/photonstorm/phaser"
 },
-release:"2.6.0",
-mtime:1468181181,
-db_size:6684667
+release:"2.6.2",
+mtime:1472404795,
+db_size:6877092
 }, {
 name:"Phoenix",
 slug:"phoenix",
@@ -1162,9 +1200,9 @@ links:{
 home:"http://www.phoenixframework.org",
 code:"https://github.com/phoenixframework/phoenix"
 },
-release:"1.2.0",
-mtime:1469313237,
-db_size:862750
+release:"1.2.1",
+mtime:1472421094,
+db_size:937231
 }, {
 name:"PHP",
 slug:"php",
@@ -1173,9 +1211,9 @@ links:{
 home:"https://secure.php.net/",
 code:"https://github.com/php/php-src"
 },
-release:"up to 7.0.8",
-mtime:1468178995,
-db_size:22208242
+release:"up to 7.0.10",
+mtime:1472421700,
+db_size:22242130
 }, {
 name:"PHPUnit",
 slug:"phpunit~5",
@@ -1185,9 +1223,9 @@ home:"https://phpunit.de/",
 code:"https://github.com/sebastianbergmann/phpunit"
 },
 version:"5",
-release:"5.4",
-mtime:1469313480,
-db_size:384251
+release:"5.5",
+mtime:1472421894,
+db_size:384644
 }, {
 name:"PHPUnit",
 slug:"phpunit~4",
@@ -1365,9 +1403,9 @@ home:"https://rethinkdb.com/",
 code:"https://github.com/rethinkdb/rethinkdb"
 },
 version:"JavaScript",
-release:"2.3.2",
-mtime:1463317793,
-db_size:580737
+release:"2.3.5",
+mtime:1472417557,
+db_size:1361322
 }, {
 name:"RethinkDB",
 slug:"rethinkdb~ruby",
@@ -1377,9 +1415,9 @@ home:"https://rethinkdb.com/",
 code:"https://github.com/rethinkdb/rethinkdb"
 },
 version:"Ruby",
-release:"2.3.2",
-mtime:1463317799,
-db_size:555626
+release:"2.3.5",
+mtime:1472417579,
+db_size:1320925
 }, {
 name:"RethinkDB",
 slug:"rethinkdb~python",
@@ -1389,9 +1427,9 @@ home:"https://rethinkdb.com/",
 code:"https://github.com/rethinkdb/rethinkdb"
 },
 version:"Python",
-release:"2.3.2",
-mtime:1463317805,
-db_size:556153
+release:"2.3.5",
+mtime:1472417602,
+db_size:1326675
 }, {
 name:"RethinkDB",
 slug:"rethinkdb~java",
@@ -1401,9 +1439,9 @@ home:"https://rethinkdb.com/",
 code:"https://github.com/rethinkdb/rethinkdb"
 },
 version:"Java",
-release:"2.3.2",
-mtime:1463317812,
-db_size:565431
+release:"2.3.5",
+mtime:1472417625,
+db_size:1320429
 }, {
 name:"Ruby",
 slug:"ruby~2.3",
@@ -1472,8 +1510,8 @@ db_size:44110
 name:"Support Tables",
 slug:"browser_support_tables",
 type:"support_tables",
-mtime:1471812425,
-db_size:16664455
+mtime:1472420648,
+db_size:16668189
 }, {
 name:"SVG",
 slug:"svg",
