@@ -11,55 +11,10 @@
 	-webkit-padding-end: 1rem;
 }
 
-/*@media (-moz-overlay-scrollbars) {
-	._content {
-		padding-left: .75rem;
-	}
-}
-
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-	._content {
-		margin-left: 0;
-	}
-}*/
-
 ._content:after {
 	content: '';
 	display: block;
 	margin-bottom: 1.25rem;
-}
-
-._content::-webkit-scrollbar {
-	-webkit-appearance: none;
-}
-
-._content::-webkit-scrollbar:vertical {
-	width: 14px;
-}
-
-._content::-webkit-scrollbar:horizontal {
-	height: 14px;
-}
-
-._content::-webkit-scrollbar-button {
-	display: none;
-}
-
-._content::-webkit-scrollbar-track {
-	background: #fff;
-}
-
-._content::-webkit-scrollbar-thumb {
-	min-height: 2rem;
-	background: #d2d2d2;
-	background-clip: padding-box;
-	border: 5px solid #fff;
-	border-radius: 10px;
-}
-
-._content::-webkit-scrollbar-thumb:active {
-	background-color: #aaa;
-	border-width: 4px;
 }
 
 ._content-loading:before {

@@ -8,7 +8,7 @@ import {history} from '../../routes';
 // import {isMounted} from '../../utils/react-utils';
 // import {docsArrays} from '../../core/docs';
 import ReactList from '../../utils/react-lists';
-import {ICanExpendedItem, ICanExpendedState, getDefaultState} from './defaultDocList';
+import {ICanExpendedItem, ICanExpendedState, ExpandedDocList} from './ExpandedDocList';
 const { connect } = require('react-redux');
 
 interface ISearchProps {
@@ -18,10 +18,11 @@ interface ISearchProps {
 class DefaultList extends React.Component<any, ICanExpendedState> {
     constructor() {
         super();
-        this.state = getDefaultState();
+        this.state = new ExpandedDocList();
     }
     private onClickItem(stateItem: ICanExpendedItem) {
-        this.setState(this.state.expandItem(stateItem));
+        stateItem.isExpended = !stateItem.isExpended;
+        this.setState(new ExpandedDocList());
         if (stateItem.link) {
             history.push({
                 pathname: 'page',
@@ -40,6 +41,9 @@ class DefaultList extends React.Component<any, ICanExpendedState> {
         if (stateItem.child.length === 0) {
             return (
                 <li key={key} style={{ paddingLeft: stateItem.deep * 8 }}>
+                    <span style={{ paddingLeft: stateItem.deep * 8, display: 'inline' }}>
+                        { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
+                    </span>
                     <Link to="" onClick={event => { event.preventDefault(); this.onClickItem(stateItem); } } >{stateItem.name}</Link>
                 </li>
             );
@@ -47,10 +51,10 @@ class DefaultList extends React.Component<any, ICanExpendedState> {
         return (
             <li key={key} onClick={event => { event.preventDefault(); this.onClickItem(stateItem); } }>
                 <span style={{ paddingLeft: stateItem.deep * 8, display: 'inline' }}>
-                    { stateItem.child.length === 0 ? '' : (stateItem.isExpended ? '-' : '+') }
+                    { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
                 </span>
                 <span>{stateItem.name}</span>
-                <span>{stateItem.child.length === 0 ? '' : '(' + stateItem.child.length + ')'}</span>
+                <span>{stateItem.child.length === 0 ? ' ' : '(' + stateItem.child.length + ')'}</span>
             </li>
         );
     }

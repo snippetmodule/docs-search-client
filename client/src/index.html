@@ -147,6 +147,39 @@
     td > ol:last-child {
       margin-bottom: 0;
     }
+    
+    ::-webkit-scrollbar {
+      -webkit-appearance: none;
+    }
+    
+    ::-webkit-scrollbar:vertical {
+      width: 14px;
+    }
+    
+    ::-webkit-scrollbar:horizontal {
+      height: 14px;
+    }
+    
+    ::-webkit-scrollbar-button {
+      display: none;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #fff;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      min-height: 2rem;
+      background: #d2d2d2;
+      background-clip: padding-box;
+      border: 5px solid #fff;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:active {
+      background-color: #aaa;
+      border-width: 4px;
+    }
   </style>
 </head>
 
