@@ -4,7 +4,7 @@ import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers/';
 import { IReduxState } from './reducers/model';
-const createLogger = require('redux-logger');
+// const createLogger = require('redux-logger');
 import {startInit } from './reducers/init';
 
 export function configureStore(history, initialState?: any): Redux.Store<IReduxState> {
@@ -15,10 +15,10 @@ export function configureStore(history, initialState?: any): Redux.Store<IReduxS
   ];
 
   /** Add Only Dev. Middlewares */
-  if (app.htmlConfig.env !== 'production' && process.env.BROWSER) {
-    const logger = createLogger();
-    middlewares.push(logger);
-  }
+  // if (app.htmlConfig.env !== 'production' && process.env.BROWSER) {
+  //   const logger = createLogger();
+  //   middlewares.push(logger);
+  // }
 
   const finalCreateStore = compose(
     applyMiddleware(...middlewares),
