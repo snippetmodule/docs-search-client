@@ -16,57 +16,109 @@ interface ISearchProps {
 }
 
 class DefaultList extends React.Component<any, ICanExpendedState> {
+    public spanRefs: {
+        [key: string]: (HTMLSpanElement);
+    } = {};
+    private mItemCss = {
+        paddingLeft: 0,
+        width: '100%',
+        display: 'block',
+        position: 'relative',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        wordSrap: 'normal',
+        overflowSrap: 'normal',
+        textOverflow: 'ellipsis',
+        textDecoration: 'none',
+    };
     constructor() {
         super();
         this.state = new ExpandedDocList();
     }
-    private onClickItem(stateItem: ICanExpendedItem) {
-        stateItem.isExpended = !stateItem.isExpended;
-        this.setState(new ExpandedDocList());
+    private onClickItem(stateItem: ICanExpendedItem, isCanExpended: boolean) {
+        if (isCanExpended) {
+            stateItem.isExpended = !stateItem.isExpended;
+            this.setState(new ExpandedDocList());
+        }
         if (stateItem.link) {
-            history.push({
+            history.replace({
                 pathname: 'page',
                 query: { url: stateItem.link },
             });
         } else {
-            history.push({
+            history.replace({
                 pathname: 'page',
                 state: { data: stateItem.child },
             });
         }
 
     }
-    private renderItem(index, key) {
+    private renderEnableItem(index, key) {
         let stateItem = this.state.listItems[index];
-        if (stateItem.child.length === 0) {
-            return (
-                <li key={key} style={{ paddingLeft: stateItem.deep * 8 }}>
-                    <span style={{ paddingLeft: stateItem.deep * 8, display: 'inline' }}>
-                        { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
-                    </span>
-                    <Link to="" onClick={event => { event.preventDefault(); this.onClickItem(stateItem); } } >{stateItem.name}</Link>
-                </li>
-            );
-        }
+        this.mItemCss.paddingLeft = stateItem.deep * 8;
         return (
-            <li key={key} onClick={event => { event.preventDefault(); this.onClickItem(stateItem); } }>
-                <span style={{ paddingLeft: stateItem.deep * 8, display: 'inline' }}>
+            <Link key={key} to="" style={this.mItemCss}
+                onClick={event => { event.preventDefault(); this.onClickItem(stateItem, false); } }>
+                {stateItem.name}
+            </Link>
+        );
+    }
+    private renderDisableItem(index, key) {
+        let stateItem = this.state.listItems[index];
+        let spanEableRef = 'spanEable_' + index + '_' + key;
+        this.mItemCss.paddingLeft = stateItem.deep * 8;
+        return (
+            <Link key={key} to="" style={this.mItemCss}
+                onClick={event => { event.preventDefault(); this.onClickItem(stateItem, false); } }
+                onMouseOver={event => {
+                    let span = this.spanRefs[spanEableRef];
+                    if (!span) { return; }
+                    span.innerText = 'enable';
+                } }
+                onMouseOut={event => {
+                    let span = this.spanRefs[spanEableRef];
+                    if (!span) { return; }
+                    span.innerText = stateItem.docInfo.release || '';
+                } }
+                >
+                <span ref={ref => this.spanRefs[spanEableRef] = ref} style={{ float: 'right', marginLeft: '0' }}>{stateItem.docInfo.release}</span>
+                <span style={{ display: 'block' }}>{stateItem.name}</span>
+            </Link>
+        );
+    }
+    private renderCanExpendedItem(index, key) {
+        let stateItem = this.state.listItems[index];
+        this.mItemCss.paddingLeft = stateItem.deep * 8;
+        return (
+            <div key={key} to="" style={this.mItemCss}
+                onClick={event => { event.preventDefault(); this.onClickItem(stateItem, true); } }>
+                <span>
                     { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
                 </span>
                 <span>{stateItem.name}</span>
                 <span>{stateItem.child.length === 0 ? ' ' : '(' + stateItem.child.length + ')'}</span>
-            </li>
+            </div>
         );
+    }
+    private renderItem(index, key) {
+        let stateItem = this.state.listItems[index];
+        if (stateItem.child.length === 0) {
+            if (stateItem.docInfo.storeValue) {
+                return this.renderEnableItem(index, key);
+            }
+            return this.renderDisableItem(index, key);
+        }
+        return this.renderCanExpendedItem(index, key);
     }
     public render() {
         return (
-            <ul style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden' }}>
+            <div style={{ overflowY: 'scroll', height: '100%', overflowX: 'hidden' ,paddingLeft:'2rem'}}>
                 <ReactList
                     itemRenderer={this.renderItem.bind(this) }
                     length={this.state.listItems.length }
                     type ="uniform"
                     />
-            </ul>
+            </div>
         );
     }
 }

@@ -414,7 +414,6 @@ export default React.createClass<IReactListProp, { from: number, size: number, i
         for (let i = 0; i < size; ++i) { items.push(itemRenderer(from + i, i)); }
         return itemsRenderer(items, c => this.items = c);
     },
-
     render() {
         const {axis, length, type, useTranslate3d} = this.props;
         const {from, itemsPerRow} = this.state;
@@ -422,13 +421,13 @@ export default React.createClass<IReactListProp, { from: number, size: number, i
         const items = this.renderItems();
         if (type === 'simple') { return items; }
 
-        const style = { position: 'relative', overflowX: 'auto' };
+        const style = { position: 'relative' };
         const cache = {};
         const bottom = Math.ceil(length / itemsPerRow) * itemsPerRow;
         const size = this.getSpaceBefore(bottom, cache);
         if (size) {
             style[SIZE_KEYS[axis]] = size;
-            if (axis === 'x') { style.overflowX = 'hidden'; }
+            // if (axis === 'x') { style.overflowX = 'hidden'; }
         }
         const offset = this.getSpaceBefore(from, cache);
         const x = axis === 'x' ? offset : 0;
