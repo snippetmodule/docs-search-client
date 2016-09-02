@@ -1,4 +1,4 @@
-import app  from '../../config' ;
+import app  from '../../config';
 import * as React from 'react';
 import * as Helmet from 'react-helmet';
 import { Header } from '../../components';
@@ -15,9 +15,9 @@ interface IProps {
     state => ({ init: state.init })
 )
 class App extends React.Component<IProps, any> {
+    private s = require('./style.css');
     public render() {
-        const s = require('./style.css');
-        console.log('App ' + this.props.init.isInited);
+        console.log('App .....' + this.props.init.isInited + ' time:' + new Date().getTime());
         if (!this.props.init.isInited) {
             return (
                 <div style={{
@@ -32,22 +32,22 @@ class App extends React.Component<IProps, any> {
             );
         }
         return (
-            <div className={s.rootStyle} >
+            <div className={this.s.rootStyle} >
                 <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head}/>
-                <div className={s.headerStyle}>
+                <div className={this.s.headerStyle}>
                     <Header/>
                 </div>
 
-                <div className={s.contentLayout}>
-                    <div  className={s.leftLayout}>
+                <div className={this.s.contentLayout}>
+                    <div  className={this.s.leftLayout}>
                         <Left />
                     </div>
-                    <div className={s.rightLayout}>
+                    <div className={this.s.rightLayout}>
                         {this.props.children}
                     </div>
                 </div>
 
-                <div className={s.footerStyle}>
+                <div className={this.s.footerStyle}>
                     112131
                 </div>
             </div>

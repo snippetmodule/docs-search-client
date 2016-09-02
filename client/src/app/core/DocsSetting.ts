@@ -31,7 +31,7 @@ class DocsSetting {
     private config = defaultConfig;
 
     constructor() {
-        let setting: DocsSetting = <DocsSetting> Cookies.getJSON('docs_settings');
+        let setting: DocsSetting = <DocsSetting>Cookies.getJSON('docs_settings');
         if (setting) {
             this.isAutoUpdate = setting.isAutoUpdate;
             this.downloadStatusList = setting.downloadStatusList;
@@ -52,6 +52,7 @@ class DocsSetting {
                 let responseString = await res.text();
                 docInfo.storeValue = JSON.parse(responseString);
                 this.config.default_docs.push(docInfo.slug);
+                Cookies.set('docs_settings', this);
                 return localStorage.setItem(docInfo.slug, docInfo);
                 // todo 通知docs类更新
             }
@@ -64,6 +65,7 @@ class DocsSetting {
             let index = this.config.default_docs.indexOf(docInfo.slug);
             let docs = this.config.default_docs;
             this.config.default_docs = docs.splice(index, 1);
+            Cookies.set('docs_settings', this);
             // todo 通知docs类更新
         }
     }

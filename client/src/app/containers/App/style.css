@@ -9,10 +9,11 @@
 }
 
 .leftLayout {
-	width: 20rem;
 	align-items: stretch;
 	min-width: 20rem;
 	flex-basis: 20rem;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 .rightLayout {

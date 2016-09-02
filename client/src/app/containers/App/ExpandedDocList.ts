@@ -15,25 +15,35 @@ export interface ICanExpendedItem {
 
 export interface ICanExpendedState {
     listItems: ICanExpendedItem[];
+    selectedIndex: number;
 }
 
-let enableDocs: ICanExpendedItem[] = [];
-let disableDocs: ICanExpendedItem = {
-    name: 'disable',
-    type: 'disable',
-    isExpended: false,
-    deep: 0,
-    child: [],
-    docInfo: null,
-};
+let enableDocs: ICanExpendedItem[];
+let disableDocs: ICanExpendedItem;
+let _selectedIndex = 0;
 
 export class ExpandedDocList implements ICanExpendedState {
     public listItems: ICanExpendedItem[];
-    constructor() {
-        if (enableDocs.length === 0) { this.init(); }
+    constructor(force: boolean = false) {
+        if (force || !enableDocs) { this.init(); this.selectedIndex = 0; }
         this.listItems = this.generalList();
     }
+    public set selectedIndex(index: number) {
+        _selectedIndex = index;
+    }
+    public get selectedIndex() {
+        return _selectedIndex;
+    }
     private init() {
+        enableDocs = [];
+        disableDocs = {
+            name: 'disable',
+            type: 'disable',
+            isExpended: false,
+            deep: 0,
+            child: [],
+            docInfo: null,
+        };
         for (let docItem of appConfig.default.docs.getDocsInfoArrays) {
             if (docItem.storeValue) {
                 let types: ICanExpendedItem[] = docItem.storeValue.types.map((item: DocsModelTypeType) => {

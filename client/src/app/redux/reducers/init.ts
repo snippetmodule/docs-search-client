@@ -41,13 +41,13 @@ export function startInit(): Redux.Dispatch<IInitAction> {
     return dispatch => {
         dispatch({ type: INIT_REQUEST });
 
-        return app.docs.init()
+        return app.init()
             .then(res => {
+                console.log('startInit:' + ' time:' + new Date().getTime());
                 dispatch({ type: INIT_SUCCESS });
-                console.log('startInit:' + res);
             }).catch(err => {
-                dispatch({ type: INIT_FAILURE });
                 console.log('startInit:' + err.stack);
+                dispatch({ type: INIT_FAILURE });
             });
     };
 }
