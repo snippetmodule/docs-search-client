@@ -1,6 +1,4 @@
 import {Docs} from './core/Docs';
-import {DocsSetting} from './core/DocsSetting';
-import {IDocInfo} from './core/model';
 let _htmlConfig = {
     env: process.env.NODE_ENV || 'development',
     isDevelopment: this.env === 'development' ? true : false,
@@ -24,19 +22,7 @@ let DOCS = require('../../../api-docs/list.js').DOCS;
 
 let app = {
     htmlConfig: _htmlConfig,
-    docSetting: new DocsSetting(),
     docs: new Docs(DOCS),
-    init: async function () {
-        await this.docs.init();
-    },
-    enableDoc: async function (docInfo: IDocInfo) {
-        await this.docSetting.addDoc(docInfo);
-        await this.docs.init();
-    },
-    disableDoc: async function (docInfo: IDocInfo) {
-        await this.docSetting.removeDoc(docInfo);
-        await this.docs.init();
-    },
 };
 
 export default app;

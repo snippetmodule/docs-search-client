@@ -4,11 +4,12 @@ import {history} from '../../routes';
 import ReactList from '../../utils/react-lists';
 import {IDocInfo} from '../../core/model';
 import * as appConfig from '../../config';
-import {ICanExpendedItem, ICanExpendedState, ExpandedDocList} from './ExpandedDocList';
+import {ICanExpendedItem, ICanExpendedState, ExpandedDocList, setSelectionIndex} from './ExpandedDocList';
 
-function getItemCss(paddingLeft: number, isSelected: boolean) {
+function getItemCss(deep: number, isSelected: boolean) {
     return {
-        paddingLeft: paddingLeft,
+        paddingLeft: 0.75 * (deep + 1) + 'rem',
+        paddingRight: '0.75rem',
         background: isSelected ? '#398df0' : '#f9f9f9',
         boxShadow: 'inset -1px 0 #e3e3e3',
         width: '100%',
@@ -23,26 +24,25 @@ function getItemCss(paddingLeft: number, isSelected: boolean) {
     };
 }
 interface IRenderItemProp {
-    _key: number;
-    _index: number;
     _isSelected: boolean;
     stateItem: ICanExpendedItem;
-    onClickItem: () => void;
-    enableDoc: (docInfo: IDocInfo) => void;
-    disableDoc: (docInfo: IDocInfo) => void;
+    onClickItem: (event) => void;
+    enableDoc: (event) => void;
+    disableDoc: (event) => void;
 }
-class DisableDocItem extends React.Component<IRenderItemProp, any>{
+
+class DisableDocItem extends React.Component<IRenderItemProp, any> {
     private spanEnableRef: (HTMLSpanElement);
     public render() {
-        let {_key, _isSelected, stateItem} = this.props;
+        let {_isSelected, stateItem} = this.props;
         return (
-            <Link key={_key} to="" style={getItemCss(stateItem.deep * 8, _isSelected) }
-                onClick={event => { event.preventDefault(); this.props.onClickItem(); } }
+            <Link to="" style={getItemCss(stateItem.deep, _isSelected) }
+                onClick={this.props.onClickItem }
                 onMouseOver={event => { this.spanEnableRef.innerText = 'enable'; } }
                 onMouseOut={event => { this.spanEnableRef.innerText = stateItem.docInfo.release || ''; } }
                 >
                 <span ref={ref => this.spanEnableRef = ref} style={{ float: 'right', marginLeft: '0' }}
-                    onClick={event => this.props.enableDoc(this.props.stateItem.docInfo) }>
+                    onClick={this.props.enableDoc}>
                     {stateItem.docInfo.release}
                 </span>
                 <span style={{ display: 'block' }}>{stateItem.name}</span>
@@ -50,29 +50,45 @@ class DisableDocItem extends React.Component<IRenderItemProp, any>{
         );
     }
 }
-class TopEnableDocItem extends React.Component<IRenderItemProp, any>{
+
+class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
     private spanDisenableRef: (HTMLSpanElement);
     public render() {
-        let {_key, _isSelected, stateItem} = this.props;
-        // console.log('TopEnableDocItem ' + this.props.stateItem.name + ' key:' + _key);
+        let {_isSelected, stateItem} = this.props;
         return (
-            <div key={_key} style={getItemCss(stateItem.deep * 8, _isSelected) }
-                onClick={event => { event.preventDefault(); this.props.onClickItem(); } }
+            <div style={getItemCss(stateItem.deep, _isSelected) }
+                onClick={this.props.onClickItem }
                 onMouseOver={event => { if (this.props.stateItem.isExpended) { this.spanDisenableRef.innerText = 'disable'; } } }
                 onMouseOut={event => { this.spanDisenableRef.innerText = ''; } }
                 >
                 <span ref={ref => this.spanDisenableRef = ref} style={{ float: 'right', marginLeft: '0' }}
-                    onClick={event => this.props.disableDoc(this.props.stateItem.docInfo) }>
+                    onClick={this.props.disableDoc }>
                 </span>
-                <span style={{ display: 'block' }}>{stateItem.name}</span>
+                <span>
+                    { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
+                </span>
+                <span>{stateItem.docInfo.slug}</span>
+            </div>
+        );
+    }
+}
+
+class ExpandDocItem extends React.Component<IRenderItemProp, any> {
+    public render() {
+        let {_isSelected, stateItem} = this.props;
+        return (
+            <div style={getItemCss(stateItem.deep, _isSelected) }
+                onClick={this.props.onClickItem}>
+                <span>
+                    { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
+                </span>
+                <span>{stateItem.name}</span>
+                <span>{stateItem.child.length === 0 ? ' ' : '(' + stateItem.child.length + ')'}</span>
             </div>
         );
     }
 }
 export class DefaultList extends React.Component<any, ICanExpendedState> {
-    public spanEnableRefs: {
-        [key: string]: (HTMLSpanElement);
-    } = {};
     constructor() {
         super();
         this.state = new ExpandedDocList();
@@ -82,6 +98,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
             stateItem.isExpended = !stateItem.isExpended;
         }
         this.state.selectedIndex = index;
+        setSelectionIndex(index);
         this.setState(new ExpandedDocList());
         if (stateItem.link) {
             history.replace({
@@ -97,64 +114,59 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
 
     }
     private enableDoc(docInfo: IDocInfo) {
-        appConfig.default.enableDoc(docInfo).then(() => {
+        appConfig.default.docs.addDoc(docInfo).then((res) => {
             this.setState(new ExpandedDocList(true));
         }).catch(err => console.log('enableDoc:' + docInfo.slug + err.stack));
     }
     private disableDoc(docInfo: IDocInfo) {
-        appConfig.default.disableDoc(docInfo).then(() => {
+        appConfig.default.docs.removeDoc(docInfo).then((res) => {
             this.setState(new ExpandedDocList(true));
         }).catch(err => console.log('enableDoc:' + docInfo.slug + err.stack));
     }
     private renderEnableItem(index, key) {
         let stateItem = this.state.listItems[index];
         return (
-            <Link key={key} to="" style={getItemCss(stateItem.deep * 8, index === this.state.selectedIndex) }
+            <Link key={key} to="" style={getItemCss(stateItem.deep, index === this.state.selectedIndex) }
                 onClick={event => { event.preventDefault(); this.onClickItem(index, stateItem, false); } }>
                 {stateItem.name}
             </Link>
         );
     }
-
-    private renderCanExpendedItem(index, key) {
-        let stateItem = this.state.listItems[index];
-        return (
-            <div key={key} to="" style={getItemCss(stateItem.deep * 8, index === this.state.selectedIndex) }
-                onClick={event => { event.preventDefault(); this.onClickItem(index, stateItem, true); } }>
-                <span>
-                    { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
-                </span>
-                <span>{stateItem.name}</span>
-                <span>{stateItem.child.length === 0 ? ' ' : '(' + stateItem.child.length + ')'}</span>
-            </div>
-        );
-    }
     private renderItem(index, key) {
-        // console.log('DefaultList .....renderItem' + ' time:' + new Date().getTime() + ' index:' + index + 'key' + key);
         let stateItem = this.state.listItems[index];
         if (stateItem.child.length === 0) {
             if (stateItem.docInfo.storeValue) {
                 return this.renderEnableItem(index, key);
             }
-            return (<DisableDocItem _key={key} _index= {index} stateItem= {stateItem} _isSelected={index === this.state.selectedIndex}
-                onClickItem={() => { event.preventDefault(); this.onClickItem(index, stateItem, false); } }
-                enableDoc={this.enableDoc} disableDoc={this.disableDoc} />);
+            return (
+                <DisableDocItem key={key} stateItem= {stateItem} _isSelected={index === this.state.selectedIndex}
+                    onClickItem={() => { event.preventDefault(); event.stopPropagation(); this.onClickItem(index, stateItem, false); } }
+                    enableDoc={ (event) => { event.stopPropagation(); this.enableDoc(stateItem.docInfo); } }
+                    disableDoc={(event) => { event.stopPropagation(); this.disableDoc(stateItem.docInfo); } }  />
+            );
         } else if (stateItem.deep === 0 && stateItem.name !== 'disable') {
-            console.log('DefaultList11111 .....renderItem' + ' time:' + new Date().getTime() + ' index:' + index + 'key' + key);
-            return (<TopEnableDocItem _key={key} _index= {index} stateItem= {stateItem} _isSelected={index === this.state.selectedIndex}
-                onClickItem={() => { event.preventDefault(); this.onClickItem(index, stateItem, true); } }
-                enableDoc={this.enableDoc} disableDoc={this.disableDoc}  />);
+            // console.log('TopEnableDocItem ' + this.state.toString() + stateItem.name + ' index:' + index + ' selectedIndex:' + this.state.selectedIndex);
+            return (
+                <TopEnableDocItem key={key} stateItem= {stateItem} _isSelected={index === this.state.selectedIndex}
+                    onClickItem={(event) => { event.preventDefault(); event.stopPropagation(); this.onClickItem(index, stateItem, true); } }
+                    enableDoc={ (event) => { event.stopPropagation(); this.enableDoc(stateItem.docInfo); } }
+                    disableDoc={(event) => { event.stopPropagation(); this.disableDoc(stateItem.docInfo); } } />
+            );
         }
-        return this.renderCanExpendedItem(index, key);
+        return (
+            <ExpandDocItem key={key} stateItem= {stateItem} _isSelected={index === this.state.selectedIndex}
+                onClickItem={(event) => { event.preventDefault(); event.stopPropagation(); this.onClickItem(index, stateItem, true); } }
+                enableDoc={ (event) => { event.stopPropagation(); this.enableDoc(stateItem.docInfo); } }
+                disableDoc={(event) => { event.stopPropagation(); this.disableDoc(stateItem.docInfo); } } />
+        );
     }
     public render() {
-        // console.log('DefaultList .....render ' + ' time:' + new Date().getTime());
         return (
-            <div style={{ paddingLeft: '2rem', width: '18rem', paddingBottom: '3.5rem' }}>
+            <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
                 <ReactList
                     itemRenderer={this.renderItem.bind(this) }
                     length={this.state.listItems.length }
-                    type ="simple"
+                    type ="uniform"
                     />
             </div>
         );

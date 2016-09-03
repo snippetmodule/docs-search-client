@@ -1,50 +1,101 @@
 import {DocsModelEntriyType, DocsModelTypeType, IDocInfo, ISearchResultItem} from './model';
 import {localStorage } from './storage';
+import * as Cookies from 'js-cookie';
 import {Searcher}from './Searcher';
-import app from '../config';
-// import { getDefaultState } from '../containers/App/defaultDocList';
 
 type SearchType = { name: string, [key: string]: any };
 
+// 根据docsInfoArrays 初始化 mSearcher
+function initSearcher(docsInfoArrays: IDocInfo[]): Searcher<SearchType> {
+    let searchItems: SearchType[] = [];
+    docsInfoArrays.map<{ entries: DocsModelEntriyType[], types: DocsModelTypeType[] }>(
+        (docsItem: IDocInfo) => {
+            if (!docsItem.storeValue) {
+                return { entries: [], types: [] };
+            }
+            let _entries: DocsModelEntriyType[] = docsItem.storeValue.entries;
+            let _types: DocsModelTypeType[] = docsItem.storeValue.types;
+            _entries = _entries.map(item => {
+                item.doc = docsItem;
+                return item;
+            });
+            _types = _types.map((item: DocsModelTypeType) => {
+                item.childs = _entries.filter((entry: DocsModelEntriyType) => {
+                    return entry.type === item.name;
+                });
+                item.doc = docsItem;
+                return item;
+            });
+            docsItem.storeValue.entries = _entries;
+            docsItem.storeValue.types = _types;
+            return { entries: _entries, types: _types };
+        }).map((item: { entries: DocsModelEntriyType[], types: DocsModelTypeType[] }) => {
+            return [...item.entries, ...item.types];
+        }).forEach(item => {
+            searchItems = searchItems.concat(item);
+        });
+    return new Searcher(searchItems, ['name']);
+}
+
+async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[]) {
+    let downloadInfos: IDocInfo[] = downloadDocs.map(item => {
+        for (let docInfo of docsInfoArrays) {
+            if (docInfo.slug === item) {
+                return docInfo;
+            }
+        }
+        return null;
+    });
+    for (let _downloadDocInfo of downloadInfos) {
+        await downloadDoc(_downloadDocInfo);
+    }
+    let keys: string[] = await localStorage.keys();
+    for (let key of keys) {
+        for (let info of docsInfoArrays) {
+            if (info.slug === key) {
+                let value: IDocInfo = <IDocInfo> (await localStorage.getItem(key));
+                if (value) {
+                    info.storeValue = value.storeValue;
+                }
+            }
+        }
+    }
+}
+async function downloadDoc(docInfo: IDocInfo) {
+    let res = await fetch(config.docs_host + docInfo.slug + '&url=index.json', {
+        headers: { Accept: 'application/json' },
+    });
+    if (res && res.ok) {
+        let responseString = await res.text();
+        docInfo.storeValue = JSON.parse(responseString);
+        await localStorage.setItem(docInfo.slug, docInfo);
+    }
+}
+let config = {
+    default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
+    docs_host: 'http://127.0.0.1:8081/docs?docType=',
+    env: 'development',
+    history_cache_size: 10,
+    index_path: '/docs',
+    max_results: 50,
+    production_host: 'www.devdocs.me',
+    search_param: 'q',
+    sentry_dsn: '',
+    version: '1450281649',
+};
+
 class Docs {
+    private isAutoUpdate: boolean;
+    private isDocChangedByUser: boolean;
+
     private mSearcher: Searcher<SearchType>;
     constructor(private docsInfoArrays: Array<IDocInfo> = []) {
+        this.isAutoUpdate = Cookies.get('Docs_IsAutoUpdate') === 'false' ? false : true; // 默认为true
+        this.isDocChangedByUser = Cookies.get('Docs_isDocChangedByUser') === 'true' ? true : false; // 默认为false
     }
-
-    private initSearcher() {
-        let searchItems: SearchType[] = [];
-        this.docsInfoArrays.map<{ entries: DocsModelEntriyType[], types: DocsModelTypeType[] }>(
-            (docsItem: IDocInfo) => {
-                if (!docsItem.storeValue) {
-                    return { entries: [], types: [] };
-                }
-                let _entries: DocsModelEntriyType[] = docsItem.storeValue.entries;
-                let _types: DocsModelTypeType[] = docsItem.storeValue.types;
-                _entries = _entries.map(item => {
-                    item.doc = docsItem;
-                    return item;
-                });
-                _types = _types.map((item: DocsModelTypeType) => {
-                    item.childs = _entries.filter((entry: DocsModelEntriyType) => {
-                        return entry.type === item.name;
-                    });
-                    item.doc = docsItem;
-                    return item;
-                });
-                docsItem.storeValue.entries = _entries;
-                docsItem.storeValue.types = _types;
-                return { entries: _entries, types: _types };
-            }).map((item: { entries: DocsModelEntriyType[], types: DocsModelTypeType[] }) => {
-                return [...item.entries, ...item.types];
-            }).forEach(item => {
-                searchItems = searchItems.concat(item);
-            });
-        this.mSearcher = new Searcher(searchItems, ['name']);
-    }
-
     public async init() {
-        await this.initDocsArray();
-        this.initSearcher();
+        await initDocsArray(this.docsInfoArrays, this.isDocChangedByUser ? [] : config.default_docs);
+        this.mSearcher = initSearcher(this.docsInfoArrays);
         if (this.docsInfoArrays.length === 0) {
             throw new Error('docsArrays is empty');
         }
@@ -54,44 +105,37 @@ class Docs {
         return this.docsInfoArrays;
     }
 
-    private async initDocsArray() {
-        let defaultDocs = app.docSetting.getConfig().default_docs;
-        let docsInfos = this.docsInfoArrays;
-        for (let docs of defaultDocs) {
-            for (let info of docsInfos) {
-                if (info.slug === docs) {
-                    let value: IDocInfo = <IDocInfo> (await localStorage.getItem(info.slug));
-                    if (!value) {
-                        value = await app.docSetting.addDoc(info);
-                    }
-                    if (value) {
-                        info.storeValue = value.storeValue;
-                    }
-                }
-            }
+    public async addDoc(docInfo: IDocInfo): Promise<IDocInfo> {
+        if (!docInfo) {
+            return;
         }
-        // await this.downAndStore('http://devdocs.io/docs/git/index.json?1469993122', 'git');
-        // await this.downAndStore('http://devdocs.io/docs/haxe~java/index.json?1457299146', 'java');
-        // await this.downAndStore('http://devdocs.io/docs/javascript/index.json?1469397360', 'javascript');
+        // 无论localstorage 有无,均下载
+        downloadDoc(docInfo);
+        await this.init();
+        Cookies.set('Docs_isDocChangedByUser', true);
     }
 
-    public async downAndStore(url: string, key: string) {
-        let res: any = await fetch(url, {
-            headers: {
-                Accept: 'application/json',
-            },
-        }).catch(error => console.log('docs test ' + error));
-        if (res.ok) {
-            res = await res.text();
-            res = await localStorage.setItem(key, res);
-        } else {
-            await res.text();
+    public async removeDoc(docInfo: IDocInfo) {
+        if (!docInfo) {
+            return;
         }
+        await localStorage.removeItem(docInfo.slug);
+        for (let doc of this.docsInfoArrays) {
+            if (doc.slug === docInfo.slug) {
+                doc.storeValue = undefined;
+            }
+        }
+        await this.init();
+        Cookies.set('Docs_isDocChangedByUser', true);
     }
-    public storeDocs(key: string, value: any) {
-        localStorage.setItem(key, value).catch(error => console.log('docs store key ' + key + ' ' + error));
-        this.init();
+    public setIsAutoUpdate(isUpdate: boolean = true) {
+        this.isAutoUpdate = isUpdate;
+        Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate, { expires: 1e8, secure: true });
     }
+    public getConfig() {
+        return config;
+    }
+
     public search(input: string): Promise<Array<ISearchResultItem>> {
         return new Promise((resolve, reject) => {
             resolve(this.mSearcher.search(input));

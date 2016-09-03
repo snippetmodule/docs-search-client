@@ -22,17 +22,16 @@ let enableDocs: ICanExpendedItem[];
 let disableDocs: ICanExpendedItem;
 let _selectedIndex = 0;
 
+export function setSelectionIndex(index: number) {
+    _selectedIndex = index;
+}
 export class ExpandedDocList implements ICanExpendedState {
     public listItems: ICanExpendedItem[];
-    constructor(force: boolean = false) {
-        if (force || !enableDocs) { this.init(); this.selectedIndex = 0; }
+    constructor(force: boolean = false, public selectedIndex: number = _selectedIndex) {
+        if (force || !enableDocs) { this.init(); selectedIndex = _selectedIndex = 0; }
         this.listItems = this.generalList();
-    }
-    public set selectedIndex(index: number) {
-        _selectedIndex = index;
-    }
-    public get selectedIndex() {
-        return _selectedIndex;
+        // this.selectedIndex = _selectedIndex;
+        // console.log('ExpandedDocList new ' + force + _selectedIndex);
     }
     private init() {
         enableDocs = [];

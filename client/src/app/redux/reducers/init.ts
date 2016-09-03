@@ -41,7 +41,7 @@ export function startInit(): Redux.Dispatch<IInitAction> {
     return dispatch => {
         dispatch({ type: INIT_REQUEST });
 
-        return app.init()
+        return app.docs.init()
             .then(res => {
                 console.log('startInit:' + ' time:' + new Date().getTime());
                 dispatch({ type: INIT_SUCCESS });
