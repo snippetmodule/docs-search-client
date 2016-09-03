@@ -16,7 +16,10 @@ export default function app(server: restify.Server) {
   server.get(path + '/clearlist', devdocsIO.clearDocsList);
   server.get(path + '/checklist', devdocsIO.checkDocsList);
   // 爬取接口结束－－－－－－－－－－－
-
-  path = 'docs/';
+  path = 'docs'; 
   server.get(path, docs.getDocs);
+  // server.get(path+'/:docType/:url(*)', docs.getDocs);
+  server.get(path+'/:docType/:url1', docs.getDocsByUrl);
+  server.get(path+'/:docType/:url1/:url2', docs.getDocsByUrl);
+  server.get(path+'/:docType/:url1/:url2/:url3', docs.getDocsByUrl);
 }

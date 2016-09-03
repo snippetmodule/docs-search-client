@@ -40,6 +40,15 @@ function init() {
 
 init();
 
+export function getDocsByUrl(req: restify.Request, res: restify.Response, next: restify.Next) {
+    console.log('getDocsByUrl: ' + JSON.stringify(req.params));
+    let urlParams: string[] = [];
+    req.params.url1 && urlParams.push(req.params.url1);
+    req.params.url2 && urlParams.push(req.params.url2);
+    req.params.url3 && urlParams.push(req.params.url3);
+    req.params.url = urlParams.join('/');
+    getDocs(req, res, next);
+}
 export function getDocs(req: restify.Request, res: restify.Response, next: restify.Next) {
     let docType: string = req.params.docType;
     let url: string = req.params.url;
