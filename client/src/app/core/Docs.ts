@@ -62,7 +62,7 @@ async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[])
     }
 }
 async function downloadDoc(docInfo: IDocInfo) {
-    let res = await fetch(config.docs_host + docInfo.slug + '&url=index.json', {
+    let res = await fetch(config.docs_host + docInfo.slug + '/index.json', {
         headers: { Accept: 'application/json' },
     });
     if (res && res.ok) {
@@ -73,7 +73,7 @@ async function downloadDoc(docInfo: IDocInfo) {
 }
 let config = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
-    docs_host: 'http://127.0.0.1:8081/docs?docType=',
+    docs_host: 'http://127.0.0.1:8081/docs/',
     env: 'development',
     history_cache_size: 10,
     index_path: '/docs',

@@ -45,8 +45,6 @@ export function initLinkPageReducer(state: ILinkPageState = { isInited: false, u
 
 /** Async Action Creator */
 export function startRequestPage(dispatch, _url: string): ILinkPageAction {
-    let index = _url.indexOf('/');
-    _url = _url.substr(0, index) + '&url=' + _url.substr(index + 1, _url.length);
     fetch(appConfig.default.docs.getConfig().docs_host + _url, {
         headers: {
             Accept: _url.endsWith('.html') ? 'text/html' : 'application/json',
