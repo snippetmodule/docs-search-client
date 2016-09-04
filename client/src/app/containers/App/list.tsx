@@ -8,6 +8,8 @@ import {ICanExpendedItem, ICanExpendedState, ExpandedDocList, setSelectionIndex}
 
 function getItemCss(deep: number, isSelected: boolean) {
     return {
+        paddingTop: '.25rem',
+        paddingBottom: '.25rem',
         paddingLeft: 0.75 * (deep + 1) + 'rem',
         paddingRight: '0.75rem',
         background: isSelected ? '#398df0' : '#f9f9f9',
@@ -36,17 +38,17 @@ class DisableDocItem extends React.Component<IRenderItemProp, any> {
     public render() {
         let {_isSelected, stateItem} = this.props;
         return (
-            <Link to="" style={getItemCss(stateItem.deep, _isSelected) }
+            <div to="" style={getItemCss(stateItem.deep, _isSelected) }
                 onClick={this.props.onClickItem }
                 onMouseOver={event => { this.spanEnableRef.innerText = 'enable'; } }
                 onMouseOut={event => { this.spanEnableRef.innerText = stateItem.docInfo.release || ''; } }
                 >
-                <span ref={ref => this.spanEnableRef = ref} style={{ float: 'right', marginLeft: '0' }}
+                <span ref={ref => this.spanEnableRef = ref} style={{ float: 'right', marginLeft: '0', fontSize: '.75rem', color: '#888' }}
                     onClick={this.props.enableDoc}>
                     {stateItem.docInfo.release}
                 </span>
                 <span style={{ display: 'block' }}>{stateItem.name}</span>
-            </Link>
+            </div>
         );
     }
 }
@@ -61,7 +63,7 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
                 onMouseOver={event => { if (this.props.stateItem.isExpended) { this.spanDisenableRef.innerText = 'disable'; } } }
                 onMouseOut={event => { this.spanDisenableRef.innerText = ''; } }
                 >
-                <span ref={ref => this.spanDisenableRef = ref} style={{ float: 'right', marginLeft: '0' }}
+                <span ref={ref => this.spanDisenableRef = ref} style={{ float: 'right', marginLeft: '0', fontSize: '.75rem', color: '#888' }}
                     onClick={this.props.disableDoc }>
                 </span>
                 <span>
@@ -79,11 +81,12 @@ class ExpandDocItem extends React.Component<IRenderItemProp, any> {
         return (
             <div style={getItemCss(stateItem.deep, _isSelected) }
                 onClick={this.props.onClickItem}>
-                <span>
-                    { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
+                <span style={{ float: 'right', marginLeft: '0', fontSize: '.75rem', color: '#888' } }>
+                    { stateItem.child.length === 0 ? ' ' : stateItem.child.length}
                 </span>
-                <span>{stateItem.name}</span>
-                <span>{stateItem.child.length === 0 ? ' ' : '(' + stateItem.child.length + ')'}</span>
+                <span style={{ display: 'block' }} >
+                    {stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') + stateItem.name}
+                </span>
             </div>
         );
     }
@@ -126,15 +129,15 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     private renderEnableItem(index, key) {
         let stateItem = this.state.listItems[index];
         return (
-            <Link key={key} to="" style={getItemCss(stateItem.deep, index === this.state.selectedIndex) }
+            <div key={key} to="" style={getItemCss(stateItem.deep, index === this.state.selectedIndex) }
                 onClick={event => { event.preventDefault(); this.onClickItem(index, stateItem, false); } }>
                 {stateItem.name}
-            </Link>
+            </div>
         );
     }
     private renderItem(index, key) {
         let stateItem = this.state.listItems[index];
-        if (stateItem.child.length === 0) {
+        if (stateItem.child.length === 0) { // 叶子节点
             if (stateItem.docInfo.storeValue) {
                 return this.renderEnableItem(index, key);
             }
@@ -162,7 +165,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     }
     public render() {
         return (
-            <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
+            <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
                 <ReactList
                     itemRenderer={this.renderItem.bind(this) }
                     length={this.state.listItems.length }
