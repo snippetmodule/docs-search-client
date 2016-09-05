@@ -53,7 +53,7 @@ async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[])
     for (let key of keys) {
         for (let info of docsInfoArrays) {
             if (info.slug === key) {
-                let value: IDocInfo = <IDocInfo> (await localStorage.getItem(key));
+                let value: IDocInfo = <IDocInfo>(await localStorage.getItem(key));
                 if (value) {
                     info.storeValue = value.storeValue;
                 }
@@ -62,7 +62,7 @@ async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[])
     }
 }
 async function downloadDoc(docInfo: IDocInfo) {
-    let res = await fetch(config.docs_host + docInfo.slug + '/index.json', {
+    let res = await fetch(config.docs_host + '/docs/' + docInfo.slug + '/index.json', {
         headers: { Accept: 'application/json' },
     });
     if (res && res.ok) {
@@ -73,7 +73,7 @@ async function downloadDoc(docInfo: IDocInfo) {
 }
 let config = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
-    docs_host: 'http://127.0.0.1:8081/docs/',
+    docs_host: 'http://127.0.0.1:8081',
     env: 'development',
     history_cache_size: 10,
     index_path: '/docs',
@@ -94,11 +94,13 @@ class Docs {
         this.isDocChangedByUser = Cookies.get('Docs_isDocChangedByUser') === 'true' ? true : false; // 默认为false
     }
     public async init() {
+        console.log('init start :' + new Date().getTime());
         await initDocsArray(this.docsInfoArrays, this.isDocChangedByUser ? [] : config.default_docs);
         this.mSearcher = initSearcher(this.docsInfoArrays);
         if (this.docsInfoArrays.length === 0) {
             throw new Error('docsArrays is empty');
         }
+        console.log('init end:' + new Date().getTime());
     }
 
     public get getDocsInfoArrays() {

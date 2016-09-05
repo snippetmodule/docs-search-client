@@ -47,7 +47,7 @@ export function initLinkPageReducer(state: ILinkPageState = { isInited: false, u
 export function startRequestPage(dispatch, _url: string): ILinkPageAction {
     fetch(appConfig.default.docs.getConfig().docs_host + _url, {
         headers: {
-            Accept: _url.endsWith('.html') ? 'text/html' : 'application/json',
+            Accept: 'text/html',
         },
     }).catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
         .then(res => res.text())

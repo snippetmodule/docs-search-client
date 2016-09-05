@@ -102,18 +102,15 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         this.state.selectedIndex = index;
         setSelectionIndex(index);
         this.setState(new ExpandedDocList());
-        if (stateItem.link) {
-            history.replace({
-                pathname: 'page',
-                query: { url: stateItem.link },
-            });
-        } else {
-            history.replace({
-                pathname: 'page',
-                state: { data: stateItem.child.map(item => { return { name: item.name, link: item.link } ;}) },
-            });
+        if (stateItem.name === 'disable') {
+            return;
         }
-
+        if (!stateItem.isExpended && stateItem.child.length > 0) {
+            return; // 收起时，不再向下走
+        }
+        history.push({
+            pathname: '/docs/' + stateItem.path,
+        });
     }
     private enableDoc(docInfo: IDocInfo) {
         appConfig.default.docs.addDoc(docInfo).then((res) => {

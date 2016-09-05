@@ -1,58 +1,71 @@
 import * as React from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import {ILinkPageState} from '../../redux/reducers/linkpage';
 import {startRequestPage} from '../../redux/reducers/linkpage';
+import {DocsModelEntriyType} from '../../core/model';
+import {getTypesByUrlPath} from '../App/ExpandedDocList';
 const { connect } = require('react-redux');
 
 interface IProps {
     location?: any;
     init?: ILinkPageState;
     startRequestPage?: (url: string) => void;
+    router: any;
+    route: any;
 }
 @connect(
     state => ({ init: state.initLinkPage }),
     dispatch => ({
         startRequestPage: (url: string) => (dispatch(startRequestPage(dispatch, url))),
     }))
-class LinkPage extends React.Component<IProps, void> {
-    public refs: {
-        [key: string]: (HTMLInputElement);
-        rootElem?: HTMLInputElement;
-    } = {};
+class LinkPageImpl extends React.Component<IProps, void> {
+    private rootElem: HTMLElement;
     private nextScroolToElement: string = null;
 
+    private mEntryTypes: DocsModelEntriyType[];
     constructor(props) {
         super(props);
-        if (this.props.location.query.url) {
-            let curUrl: string = this.props.location.query.url || '';
+        let curUrl: string = this.props.location.pathname;
+        this.mEntryTypes = getTypesByUrlPath(curUrl);
+        if (!this.mEntryTypes && curUrl) {
             let indexCurrUrl = curUrl.indexOf('#');
             curUrl = indexCurrUrl === -1 ? curUrl : curUrl.substr(0, indexCurrUrl);
             this.props.startRequestPage(curUrl);
         }
+
+    }
+    public componentWillMount() {
+        // this.props.router.setRouteLeaveHook(
+        //     this.props.route,
+        //     this.routerWillLeave
+        // );
+    }
+    private routerWillLeave() {
+        console.log('routerWillLeave');
+        return false;
     }
     public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
         if (this.nextScroolToElement) {
             let element = document.getElementById(this.nextScroolToElement);
             if (element) {
-                console.log('componentDidUpdate:' + this.refs.rootElem.scrollTop + '   ' + element.offsetTop);
-                this.refs.rootElem.scrollTop = element.offsetTop;
-                console.log('componentDidUpdate:' + this.refs.rootElem.scrollTop);
+                this.rootElem.scrollTop = element.offsetTop;
             }
         } else {
-            this.refs.rootElem.scrollTop = 0;
+            this.rootElem.scrollTop = 0;
         }
     }
     public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
         this.nextScroolToElement = null;
-        if (nextProps.location.state) {
-            return;
-        }
-        let nextUrl: string = nextProps.location.query.url;
-        let curUrl: string = this.props.location.query.url || '';
+        let nextUrl: string = nextProps.location.pathname;
+        let curUrl: string = this.props.location.pathname || '';
         let indexNextUrl = nextUrl.indexOf('#');
         let indexCurrUrl = curUrl.indexOf('#');
         let nextScroolTo: string = indexNextUrl === -1 ? '' : nextUrl.substr(indexNextUrl + 1, nextUrl.length);
 
+        this.mEntryTypes = getTypesByUrlPath(nextUrl);
+        if (this.mEntryTypes) {
+            return;
+        }
         if (!nextScroolTo) { // 不包含＃
             if (nextUrl !== curUrl && nextUrl) {
                 nextProps.startRequestPage(nextUrl);
@@ -74,15 +87,15 @@ class LinkPage extends React.Component<IProps, void> {
     public render() {
         let { init} = this.props;
         const s = require('./style.css');
-        if (this.props.location.state) {
+        if (this.mEntryTypes) {
             return (
-                <div ref="rootElem" className={s._content}>
+                <div ref={ref => this.rootElem = ref} className={s._content}>
                     <h1></h1>
                     <ul>
-                        {this.props.location.state.data.map(item => {
+                        {this.mEntryTypes.map(item => {
                             return (
                                 <li key={item.name}>
-                                    <Link to={{ pathname: 'page', query: { url: item.link } }}>{item.name}</Link>
+                                    <Link to={{ pathname: '/docs/' + item.doc.slug + '/' + item.path }}>{item.name}</Link>
                                 </li >
                             );
                         }) }
@@ -92,16 +105,16 @@ class LinkPage extends React.Component<IProps, void> {
         }
         if (!init.isInited && !init.content) {
             return (
-                <div ref="rootElem" className={s._content}>
+                <div ref={ref => this.rootElem = ref} className={s._content}>
                     加载中
                 </div>);
         }
         return (
-            <div ref="rootElem" className={s._content}>
+            <div ref={ref => this.rootElem = ref} className={s._content}>
                 <div dangerouslySetInnerHTML={{ __html: init.content }}/>
             </div>
         );
     }
 }
-
-export {LinkPage }
+let LinkPage = withRouter(LinkPageImpl);
+export {LinkPage}

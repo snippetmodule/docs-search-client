@@ -4,12 +4,11 @@ import * as appConfig from '../../config';
 
 export interface ICanExpendedItem {
     name: string;
-    type: string;
+    type: string; // 用于文档分类
+    path: string; // LinkPage 中用到的 path
     isExpended: boolean; // 是否已经展开
     child: ICanExpendedItem[];
-    deep?: number; // 此节点在整个树中的的深度
-    link?: string; // 点击链接地址
-    linkParams?: any; // 点击链接参数
+    deep: number; // 此节点在整个树中的的深度
     docInfo: IDocInfo;
 }
 
@@ -25,6 +24,25 @@ let _selectedIndex = 0;
 export function setSelectionIndex(index: number) {
     _selectedIndex = index;
 }
+export function getTypesByUrlPath(pathname: String): DocsModelEntriyType[] {
+    if (!pathname.endsWith('/')) {
+        return null;
+    }
+    pathname = pathname.replace('/docs/', '');
+    let index = pathname.indexOf('/');
+    let docType = pathname.substr(0, index);
+    let typePath = pathname.substr(index + 1, pathname.length - index - 2);
+    for (let doc of enableDocs) {
+        if (doc.docInfo.slug === docType) {
+            for (let type of doc.docInfo.storeValue.types) {
+                if (type.slug === typePath) {
+                    return type.childs;
+                }
+            }
+        }
+    }
+    return null;
+}
 export class ExpandedDocList implements ICanExpendedState {
     public listItems: ICanExpendedItem[];
     constructor(force: boolean = false, public selectedIndex: number = _selectedIndex) {
@@ -39,6 +57,7 @@ export class ExpandedDocList implements ICanExpendedState {
             name: 'disable',
             type: 'disable',
             isExpended: false,
+            path: '',
             deep: 0,
             child: [],
             docInfo: null,
@@ -47,11 +66,11 @@ export class ExpandedDocList implements ICanExpendedState {
             if (docItem.storeValue) {
                 let types: ICanExpendedItem[] = docItem.storeValue.types.map((item: DocsModelTypeType) => {
                     let subChild: ICanExpendedItem[] = item.childs.map((entry: DocsModelEntriyType) => {
-                        return { name: entry.name, type: entry.name, link: docItem.slug + '/' + entry.path + '.html', isExpended: false, child: [], docInfo: docItem };
+                        return { name: entry.name, type: entry.name, path: docItem.slug + '/' + entry.path, isExpended: false, deep: 0, child: [], docInfo: docItem };
                     });
-                    return { name: item.name, type: item.name, isExpended: false, child: subChild, docInfo: docItem };
+                    return { name: item.name, type: item.name, path: docItem.slug + '/' + item.slug + '/', isExpended: false, deep: 0, child: subChild, docInfo: docItem };
                 });
-                enableDocs.push({ name: docItem.name, type: docItem.type, link: docItem.slug + '/index.html', isExpended: false, child: types, docInfo: docItem });
+                enableDocs.push({ name: docItem.name, type: docItem.type, path: docItem.slug + '/index.html', isExpended: false, deep: 0, child: types, docInfo: docItem });
             } else {
                 let disableChilds = disableDocs.child;
                 let isHas = false;
@@ -59,16 +78,16 @@ export class ExpandedDocList implements ICanExpendedState {
                     if (item.type === docItem.type) {
                         let _docInfo = item.docInfo;
                         if (_docInfo) {
-                            item.child.push({ name: _docInfo.name + ' ' + (_docInfo.version || ''), type: _docInfo.type, isExpended: false, link: _docInfo.slug + '/index.html', deep: 1, child: [], docInfo: _docInfo });
+                            item.child.push({ name: _docInfo.name + ' ' + (_docInfo.version || ''), type: _docInfo.type, isExpended: false, path: _docInfo.slug + '/index.html', deep: 1, child: [], docInfo: _docInfo });
                             item.docInfo = null;
                         }
-                        item.child.push({ name: docItem.name + ' ' + (docItem.version || ''), type: docItem.type, isExpended: false, link: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem });
+                        item.child.push({ name: docItem.name + ' ' + (docItem.version || ''), type: docItem.type, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem });
                         isHas = true;
                         continue;
                     }
                 }
                 if (!isHas) {
-                    disableDocs.child.push({ name: docItem.name, type: docItem.type, isExpended: false, link: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem });
+                    disableDocs.child.push({ name: docItem.name, type: docItem.type, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem });
                 }
             }
         }
