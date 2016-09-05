@@ -46,6 +46,9 @@ export function getDocsByUrl(req: restify.Request, res: restify.Response, next: 
     req.params.url1 && urlParams.push(req.params.url1);
     req.params.url2 && urlParams.push(req.params.url2);
     req.params.url3 && urlParams.push(req.params.url3);
+    req.params.url4 && urlParams.push(req.params.url4);
+    req.params.url5 && urlParams.push(req.params.url5);
+    req.params.url6 && urlParams.push(req.params.url6);
     req.params.url = urlParams.join('/');
     getDocs(req, res, next);
 }
