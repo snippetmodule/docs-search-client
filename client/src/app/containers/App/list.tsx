@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Link } from 'react-router';
 import {history} from '../../routes';
 import ReactList from '../../utils/react-lists';
 import {IDocInfo} from '../../core/model';
@@ -111,7 +110,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         } else {
             history.replace({
                 pathname: 'page',
-                state: { data: stateItem.child },
+                state: { data: stateItem.child.map(item => { return { name: item.name, link: item.link } ;}) },
             });
         }
 
