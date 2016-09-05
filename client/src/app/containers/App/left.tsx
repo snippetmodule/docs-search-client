@@ -11,7 +11,7 @@ interface ISearchProps {
     searchState?: ISearchState;
 }
 
-@connect(state => ({ searchState: state.searchDocs }))
+@connect(state => ({ searchState: state.searchDocsReducer }))
 class Left extends React.Component<ISearchProps, void> {
     // public shouldComponentUpdate(nextProps: ISearchProps, nextState: void, nextContext: any): boolean {
     //     return this.props.searchState.input !== nextProps.searchState.input;

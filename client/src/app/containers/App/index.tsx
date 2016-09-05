@@ -12,7 +12,7 @@ interface IProps {
 }
 
 @connect(
-    state => ({ init: state.init })
+    state => ({ init: state.initReducer })
 )
 class App extends React.Component<IProps, any> {
     private s = require('./style.css');

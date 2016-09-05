@@ -4,4 +4,4 @@ export { Home } from './Home';
 export { About } from './About';
 export { Counter } from './Counter';
 export { Stars } from './Stars';
-export { LinkPage } from './LinkPage';
+export { DocPage } from './DocPage';

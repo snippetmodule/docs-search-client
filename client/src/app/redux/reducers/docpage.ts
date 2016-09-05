@@ -4,19 +4,19 @@ export const INIT_REQUEST: string = 'INIT_PAGE_REQUEST';
 export const INIT_SUCCESS: string = 'INIT_PAGE_SUCCESS';
 export const INIT_FAILURE: string = 'INIT_PAGE_FAILURE';
 
-export interface ILinkPageState {
+export interface IDocPageState {
     isInited: boolean;
     url: string;
     content?: string;
 }
-export interface ILinkPageAction {
+export interface IDocPageAction {
     type: string;
     url: string;
     content?: string;
 }
 
 /** Reducer */
-export function initLinkPageReducer(state: ILinkPageState = { isInited: false, url: null }, action: ILinkPageAction): ILinkPageState {
+export function initDocPageReducer(state: IDocPageState = { isInited: false, url: null }, action: IDocPageAction): IDocPageState {
     switch (action.type) {
         case INIT_REQUEST:
             return Object.assign({}, state, {
@@ -44,7 +44,7 @@ export function initLinkPageReducer(state: ILinkPageState = { isInited: false, u
 }
 
 /** Async Action Creator */
-export function startRequestPage(dispatch, _url: string): ILinkPageAction {
+export function startRequestPage(dispatch, _url: string): IDocPageAction {
     fetch(appConfig.default.docs.getConfig().docs_host + _url, {
         headers: {
             Accept: 'text/html',

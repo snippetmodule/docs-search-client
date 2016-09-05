@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { Link, withRouter } from 'react-router';
-import {ILinkPageState} from '../../redux/reducers/linkpage';
-import {startRequestPage} from '../../redux/reducers/linkpage';
+import {IDocPageState} from '../../redux/reducers/docpage';
+import {startRequestPage} from '../../redux/reducers/docpage';
 import {DocsModelEntriyType} from '../../core/model';
 import {getTypesByUrlPath} from '../App/ExpandedDocList';
 const { connect } = require('react-redux');
 
 interface IProps {
     location?: any;
-    init?: ILinkPageState;
+    init?: IDocPageState;
     startRequestPage?: (url: string) => void;
     router: any;
     route: any;
 }
 @connect(
-    state => ({ init: state.initLinkPage }),
+    state => ({ init: state.initDocPageReducer }),
     dispatch => ({
         startRequestPage: (url: string) => (dispatch(startRequestPage(dispatch, url))),
     }))
-class LinkPageImpl extends React.Component<IProps, void> {
+class DocPageImpl extends React.Component<IProps, void> {
     private rootElem: HTMLElement;
     private nextScroolToElement: string = null;
 
@@ -116,5 +116,5 @@ class LinkPageImpl extends React.Component<IProps, void> {
         );
     }
 }
-let LinkPage = withRouter(LinkPageImpl);
-export {LinkPage}
+let DocPage = withRouter(DocPageImpl);
+export {DocPage}
