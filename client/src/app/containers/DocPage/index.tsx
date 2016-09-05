@@ -10,6 +10,11 @@ const { connect } = require('react-redux');
 
 let docs_host_link = appConfig.default.docs.getConfig().docs_host_link;
 
+let onLoactionChangeCallback: (string) => void;
+export function onDocsPageLoactionChangeCallback(callback: (string) => void) {
+    onLoactionChangeCallback = callback;
+}
+
 interface IProps {
     location?: any;
     init?: IDocPageState;
@@ -69,6 +74,9 @@ class DocPage extends React.Component<IProps, void> {
         let nextScroolTo: string = indexNextUrl === -1 ? '' : nextUrl.substr(indexNextUrl + 1, nextUrl.length);
 
         this.mEntryTypes = getTypesByUrlPath(nextUrl);
+        if (onLoactionChangeCallback) {
+            onLoactionChangeCallback(nextUrl);
+        }
         if (this.mEntryTypes) {
             return;
         }

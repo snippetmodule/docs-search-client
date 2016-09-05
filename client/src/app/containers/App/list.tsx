@@ -4,7 +4,7 @@ import ReactList from '../../utils/react-lists';
 import {IDocInfo} from '../../core/model';
 import * as appConfig from '../../config';
 import {ICanExpendedItem, ICanExpendedState, ExpandedDocList, setSelectionIndex} from './ExpandedDocList';
-
+import {onDocsPageLoactionChangeCallback} from '../DocPage/';
 function getItemCss(deep: number, isSelected: boolean) {
     return {
         paddingTop: '.25rem',
@@ -169,5 +169,15 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
                     />
             </div>
         );
+    }
+    public componentWillMount() {
+        onDocsPageLoactionChangeCallback(locationUrl => {
+            if (this.state.setSelectedIndexByUrlPath(locationUrl)) {
+                this.forceUpdate();
+            }
+        });
+    }
+    public componentWillUnmount() {
+        onDocsPageLoactionChangeCallback(null);
     }
 }

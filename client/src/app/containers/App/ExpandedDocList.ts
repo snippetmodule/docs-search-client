@@ -13,6 +13,7 @@ export interface ICanExpendedItem {
 }
 
 export interface ICanExpendedState {
+    setSelectedIndexByUrlPath: (locationUrl: string) => boolean;
     listItems: ICanExpendedItem[];
     selectedIndex: number;
 }
@@ -45,6 +46,7 @@ export function getTypesByUrlPath(pathname: String): DocsModelEntriyType[] {
 }
 export class ExpandedDocList implements ICanExpendedState {
     public listItems: ICanExpendedItem[];
+    public setSelectedIndexByUrlPath: (locationUrl: string) => boolean = this._setSelectedIndexByUrlPath.bind(this);
     constructor(force: boolean = false, public selectedIndex: number = _selectedIndex) {
         if (force || !enableDocs) { this.init(); selectedIndex = _selectedIndex = 0; }
         this.listItems = this.generalList();
@@ -117,7 +119,52 @@ export class ExpandedDocList implements ICanExpendedState {
         } while (firstList.length !== 0 || secondList.length !== 0);
         return deep - 1;
     }
-
+    private getSelectedIndexByPath(path: string): number {
+        if (this.listItems[this.selectedIndex].path === path) {
+            return -1;
+        }
+        for (let index = 0; index < this.listItems.length; index++) {
+            if (this.listItems[index].path === path) {
+                return index;
+            }
+        }
+        return -1;
+    }
+    private _setSelectedIndexByUrlPath(locationUrl: string): boolean {
+        locationUrl = locationUrl.replace('/docs/', '');
+        let index = locationUrl.indexOf('/');
+        let docType = locationUrl.substr(0, index);
+        let typePath = locationUrl.substr(index + 1, locationUrl.length - index - 2);
+        if (this.getSelectedIndexByPath(typePath) !== -1) {
+            return false;
+        }
+        let newIndex = 0;
+        let isFind = false;
+        for (let docItem of enableDocs) {
+            if (docItem.docInfo.slug === docType) {
+                docItem.isExpended = true;
+            }
+        }
+        let lists: ICanExpendedItem[] = [];
+        let temp: ICanExpendedItem[] = [...enableDocs, disableDocs];
+        this.markNodeDeep(enableDocs);
+        this.markNodeDeep([disableDocs]);
+        while (temp.length !== 0) {
+            let item = temp.shift();
+            lists.push(item);
+            if (item.path === typePath) {
+                isFind = true;
+            }
+            if (item.isExpended) {
+                temp.unshift(...item.child);
+            }
+            if (!isFind) { newIndex++; }
+        }
+        this.selectedIndex = newIndex;
+        _selectedIndex = newIndex;
+        this.listItems = lists;
+        return true;
+    }
     private generalList(): ICanExpendedItem[] {
         let lists: ICanExpendedItem[] = [];
         let temp: ICanExpendedItem[] = [...enableDocs, disableDocs];
