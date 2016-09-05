@@ -1,6 +1,5 @@
 
 import * as React from 'react';
-import { Link } from 'react-router';
 import {ISearchResultItem} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
 import ReactList from '../../utils/react-lists';
@@ -33,7 +32,7 @@ function getItemCss(deep: number, isSelected: boolean) {
 
 @connect(state => ({ searchState: state.searchDocsReducer }))
 class Left extends React.Component<ISearchProps, void> {
-    private selectedIndex = 0;
+    private selectedIndex = -1;
 
     private onClickItem(index: number, searchResultItem: ISearchResultItem) {
         this.selectedIndex = index;
@@ -41,6 +40,9 @@ class Left extends React.Component<ISearchProps, void> {
         history.push({
             pathname: '/docs/' + searchResultItem.doc.slug + '/' + (searchResultItem.path ? searchResultItem.path : searchResultItem.slug + '/'),
         });
+    }
+    public componentWillReceiveProps(nextProps: ISearchProps, nextContext: any) {
+        this.selectedIndex = -1;
     }
     private renderItem(index, key) {
         let searchResultItem: ISearchResultItem = this.props.searchState.message[index];
@@ -67,7 +69,7 @@ class Left extends React.Component<ISearchProps, void> {
             return (<div> 未找到搜索结果 </div>);
         }
         return (
-            <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>>
+            <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
                 <ReactList
                     itemRenderer={this.renderItem.bind(this) }
                     length={50}

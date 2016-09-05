@@ -53,7 +53,7 @@ async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[])
     for (let key of keys) {
         for (let info of docsInfoArrays) {
             if (info.slug === key) {
-                let value: IDocInfo = <IDocInfo>(await localStorage.getItem(key));
+                let value: IDocInfo = <IDocInfo> (await localStorage.getItem(key));
                 if (value) {
                     info.storeValue = value.storeValue;
                 }
@@ -74,6 +74,7 @@ async function downloadDoc(docInfo: IDocInfo) {
 let config = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
     docs_host: 'http://127.0.0.1:8081',
+    docs_host_link: 'localhost:8080',
     env: 'development',
     history_cache_size: 10,
     index_path: '/docs',

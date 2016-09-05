@@ -1,24 +1,26 @@
 import * as React from 'react';
-import { Link, withRouter } from 'react-router';
+import { Link} from 'react-router';
 import {IDocPageState} from '../../redux/reducers/docpage';
 import {startRequestPage} from '../../redux/reducers/docpage';
 import {DocsModelEntriyType} from '../../core/model';
 import {getTypesByUrlPath} from '../App/ExpandedDocList';
+import * as appConfig from '../../config';
+import {history} from '../../routes';
 const { connect } = require('react-redux');
+
+let docs_host_link = appConfig.default.docs.getConfig().docs_host_link;
 
 interface IProps {
     location?: any;
     init?: IDocPageState;
     startRequestPage?: (url: string) => void;
-    router: any;
-    route: any;
 }
 @connect(
     state => ({ init: state.initDocPageReducer }),
     dispatch => ({
         startRequestPage: (url: string) => (dispatch(startRequestPage(dispatch, url))),
     }))
-class DocPageImpl extends React.Component<IProps, void> {
+class DocPage extends React.Component<IProps, void> {
     private rootElem: HTMLElement;
     private nextScroolToElement: string = null;
 
@@ -34,17 +36,21 @@ class DocPageImpl extends React.Component<IProps, void> {
         }
 
     }
-    public componentWillMount() {
-        // this.props.router.setRouteLeaveHook(
-        //     this.props.route,
-        //     this.routerWillLeave
-        // );
-    }
-    private routerWillLeave() {
-        console.log('routerWillLeave');
-        return false;
-    }
     public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
+        let links = this.rootElem.getElementsByTagName('a');
+        for (let link of links) {
+            link.onclick = (event: MouseEvent) => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (link.host === docs_host_link) {
+                    history.push({
+                        pathname: link.pathname,
+                    });
+                } else {
+                    window.open(link.href);
+                }
+            };
+        }
         if (this.nextScroolToElement) {
             let element = document.getElementById(this.nextScroolToElement);
             if (element) {
@@ -116,5 +122,4 @@ class DocPageImpl extends React.Component<IProps, void> {
         );
     }
 }
-let DocPage = withRouter(DocPageImpl);
 export {DocPage}
