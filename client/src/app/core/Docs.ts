@@ -68,8 +68,26 @@ async function downloadDoc(docInfo: IDocInfo) {
     if (res && res.ok) {
         let responseString = await res.text();
         docInfo.storeValue = JSON.parse(responseString);
+        docInfo.storeValue.types = sortTyps(docInfo.storeValue.types);
         await localStorage.setItem(docInfo.slug, docInfo);
     }
+}
+let GUIDES_RGX = /(^|[\s\(])(guide|tutorial|reference|getting\ started)/i;
+function _groupFor(type) {
+    if (GUIDES_RGX.test(type.name)) {
+        return 0;
+    } else {
+        return 1;
+    }
+};
+function sortTyps(types: DocsModelTypeType[]): DocsModelTypeType[] {
+    let result = [];
+    let name;
+    for (let i = 0, len = types.length; i < len; i++) {
+        let type = types[i];
+        (result[name = _groupFor(type)] || (result[name] = [])).push(type);
+    }
+    return [...result[0], ...result[1]];
 }
 let config = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
