@@ -172,8 +172,9 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     }
     public componentWillMount() {
         onDocsPageLoactionChangeCallback(locationUrl => {
+            console.log('DefaultList componentWillMount:' + locationUrl);
             if (this.state.setSelectedIndexByUrlPath(locationUrl)) {
-                this.forceUpdate();
+                this.setState(new ExpandedDocList());
             }
         });
     }

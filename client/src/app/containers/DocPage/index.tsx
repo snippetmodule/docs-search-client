@@ -49,7 +49,7 @@ class DocPage extends React.Component<IProps, void> {
                 event.stopPropagation();
                 if (link.host === docs_host_link) {
                     history.push({
-                        pathname: link.pathname,
+                        pathname: link.pathname + link.hash,
                     });
                 } else {
                     window.open(link.href);
@@ -64,6 +64,9 @@ class DocPage extends React.Component<IProps, void> {
         } else {
             this.rootElem.scrollTop = 0;
         }
+        if (onLoactionChangeCallback && (this.mEntryTypes || this.props.init.isInited)) { // 更新完成后再发此回调
+            onLoactionChangeCallback(this.props.location.pathname);
+        }
     }
     public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
         this.nextScroolToElement = null;
@@ -74,9 +77,6 @@ class DocPage extends React.Component<IProps, void> {
         let nextScroolTo: string = indexNextUrl === -1 ? '' : nextUrl.substr(indexNextUrl + 1, nextUrl.length);
 
         this.mEntryTypes = getTypesByUrlPath(nextUrl);
-        if (onLoactionChangeCallback) {
-            onLoactionChangeCallback(nextUrl);
-        }
         if (this.mEntryTypes) {
             return;
         }

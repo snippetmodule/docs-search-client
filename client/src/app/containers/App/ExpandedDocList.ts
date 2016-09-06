@@ -119,30 +119,35 @@ export class ExpandedDocList implements ICanExpendedState {
         } while (firstList.length !== 0 || secondList.length !== 0);
         return deep - 1;
     }
-    private getSelectedIndexByPath(path: string): number {
-        if (this.listItems[this.selectedIndex].path === path) {
-            return -1;
-        }
-        for (let index = 0; index < this.listItems.length; index++) {
-            if (this.listItems[index].path === path) {
-                return index;
-            }
-        }
-        return -1;
-    }
+
     private _setSelectedIndexByUrlPath(locationUrl: string): boolean {
         locationUrl = locationUrl.replace('/docs/', '');
         let index = locationUrl.indexOf('/');
         let docType = locationUrl.substr(0, index);
         let typePath = locationUrl.substr(index + 1, locationUrl.length - index - 2);
-        if (this.getSelectedIndexByPath(typePath) !== -1) {
-            return false;
+        let hashIndex = locationUrl.indexOf('#', locationUrl.lastIndexOf('/'));
+
+        if (hashIndex !== -1) {
+            locationUrl = locationUrl.substr(0, hashIndex);
+        }
+        if (this.selectedIndex < this.listItems.length && this.selectedIndex > 0) {
+            if (this.listItems[this.selectedIndex].path === locationUrl) {
+                return false;  // 不用更新，selectedIndex 未变
+            }
+        }
+        for (let index = 0; index < this.listItems.length; index++) {
+            if (this.listItems[index].path === locationUrl) {
+                this.selectedIndex = index;
+                _selectedIndex = index;
+                return true; // 只须更新 selectedIndex
+            }
         }
         let newIndex = 0;
         let isFind = false;
         for (let docItem of enableDocs) {
             if (docItem.docInfo.slug === docType) {
                 docItem.isExpended = true;
+                break;
             }
         }
         let lists: ICanExpendedItem[] = [];
