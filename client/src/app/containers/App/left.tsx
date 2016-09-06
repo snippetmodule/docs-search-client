@@ -5,6 +5,8 @@ import {ISearchState} from '../../redux/reducers/searchdocs';
 import ReactList from '../../utils/react-lists';
 import {DefaultList} from './list';
 import {history} from '../../routes';
+import {onDocsPageLoactionChangeCallback} from '../DocPage/';
+
 const { connect } = require('react-redux');
 
 interface ISearchProps {
@@ -52,6 +54,17 @@ class Left extends React.Component<ISearchProps, void> {
                 {searchResultItem.name}
             </div>
         );
+    }
+    public componentWillMount() {
+        onDocsPageLoactionChangeCallback('Left', locationUrl => {
+            console.log('Left componentWillMount:' + locationUrl);
+            // if (this.state.setSelectedIndexByUrlPath(locationUrl)) {
+            //     this.setState(new ExpandedDocList());
+            // }
+        });
+    }
+    public componentWillUnmount() {
+        onDocsPageLoactionChangeCallback('Left', null);
     }
     public render() {
         if (!this.props.searchState.input) {

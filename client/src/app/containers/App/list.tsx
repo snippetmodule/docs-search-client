@@ -91,6 +91,7 @@ class ExpandDocItem extends React.Component<IRenderItemProp, any> {
     }
 }
 export class DefaultList extends React.Component<any, ICanExpendedState> {
+    private mListRef: any;
     constructor() {
         super();
         this.state = new ExpandedDocList();
@@ -108,9 +109,11 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         if (!stateItem.isExpended && stateItem.child.length > 0) {
             return; // 收起时，不再向下走
         }
-        history.push({
-            pathname: '/docs/' + stateItem.path,
-        });
+        if (stateItem.path) {
+            history.push({
+                pathname: '/docs/' + stateItem.path,
+            });
+        }
     }
     private enableDoc(docInfo: IDocInfo) {
         appConfig.default.docs.addDoc(docInfo).then((res) => {
@@ -162,7 +165,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     public render() {
         return (
             <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
-                <ReactList
+                <ReactList ref={ref => this.mListRef = ref}
                     itemRenderer={this.renderItem.bind(this) }
                     length={this.state.listItems.length }
                     type ="uniform"
@@ -171,14 +174,20 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         );
     }
     public componentWillMount() {
-        onDocsPageLoactionChangeCallback(locationUrl => {
-            console.log('DefaultList componentWillMount:' + locationUrl);
+        onDocsPageLoactionChangeCallback('DefaultList', locationUrl => {
             if (this.state.setSelectedIndexByUrlPath(locationUrl)) {
                 this.setState(new ExpandedDocList());
             }
         });
     }
     public componentWillUnmount() {
-        onDocsPageLoactionChangeCallback(null);
+        onDocsPageLoactionChangeCallback('DefaultList', null);
+    }
+    public componentDidUpdate(prevProps: any, prevState: void, prevContext: any) {
+        let {from, size} = this.mListRef.state;
+        if (this.state.selectedIndex > from + size || this.state.selectedIndex < from) {
+            this.mListRef.scrollTo(this.state.selectedIndex);
+        }
+        console.log('componentDidUpdate:' + this.state.selectedIndex + this.mListRef);
     }
 }

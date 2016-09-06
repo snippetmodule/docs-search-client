@@ -10,9 +10,11 @@ const { connect } = require('react-redux');
 
 let docs_host_link = appConfig.default.docs.getConfig().docs_host_link;
 
-let onLoactionChangeCallback: (string) => void;
-export function onDocsPageLoactionChangeCallback(callback: (string) => void) {
-    onLoactionChangeCallback = callback;
+let onLoactionChangeCallback: {
+    [key: string]: (string) => void
+} = {};
+export function onDocsPageLoactionChangeCallback(key: string, callback: (string) => void) {
+    onLoactionChangeCallback[key] = callback;
 }
 
 interface IProps {
@@ -65,7 +67,11 @@ class DocPage extends React.Component<IProps, void> {
             this.rootElem.scrollTop = 0;
         }
         if (onLoactionChangeCallback && (this.mEntryTypes || this.props.init.isInited)) { // 更新完成后再发此回调
-            onLoactionChangeCallback(this.props.location.pathname);
+            for (let key in onLoactionChangeCallback) {
+                if (onLoactionChangeCallback[key]) {
+                    onLoactionChangeCallback[key](this.props.location.pathname);
+                }
+            }
         }
     }
     public componentWillReceiveProps(nextProps: IProps, nextContext: any) {

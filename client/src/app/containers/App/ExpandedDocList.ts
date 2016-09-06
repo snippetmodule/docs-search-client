@@ -10,6 +10,7 @@ export interface ICanExpendedItem {
     child: ICanExpendedItem[];
     deep: number; // 此节点在整个树中的的深度
     docInfo: IDocInfo;
+    parent: ICanExpendedItem; // 父节点
 }
 
 export interface ICanExpendedState {
@@ -63,16 +64,19 @@ export class ExpandedDocList implements ICanExpendedState {
             deep: 0,
             child: [],
             docInfo: null,
+            parent: null,
         };
         for (let docItem of appConfig.default.docs.getDocsInfoArrays) {
             if (docItem.storeValue) {
-                let types: ICanExpendedItem[] = docItem.storeValue.types.map((item: DocsModelTypeType) => {
-                    let subChild: ICanExpendedItem[] = item.childs.map((entry: DocsModelEntriyType) => {
-                        return { name: entry.name, type: entry.name, path: docItem.slug + '/' + entry.path, isExpended: false, deep: 0, child: [], docInfo: docItem };
+                let parentItem: ICanExpendedItem = { name: docItem.name, type: docItem.type, path: docItem.slug + '/index.html', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: null };
+                parentItem.child = docItem.storeValue.types.map((item: DocsModelTypeType) => {
+                    let parentTypes: ICanExpendedItem = { name: item.name, type: item.name, path: docItem.slug + '/' + item.slug + '/', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: parentItem };
+                    parentTypes.child = item.childs.map((entry: DocsModelEntriyType) => {
+                        return { name: entry.name, type: entry.name, path: docItem.slug + '/' + entry.path, isExpended: false, deep: 0, child: [], docInfo: docItem, parent: parentTypes };
                     });
-                    return { name: item.name, type: item.name, path: docItem.slug + '/' + item.slug + '/', isExpended: false, deep: 0, child: subChild, docInfo: docItem };
+                    return parentTypes;
                 });
-                enableDocs.push({ name: docItem.name, type: docItem.type, path: docItem.slug + '/index.html', isExpended: false, deep: 0, child: types, docInfo: docItem });
+                enableDocs.push(parentItem);
             } else {
                 let disableChilds = disableDocs.child;
                 let isHas = false;
@@ -80,16 +84,17 @@ export class ExpandedDocList implements ICanExpendedState {
                     if (item.type === docItem.type) {
                         let _docInfo = item.docInfo;
                         if (_docInfo) {
-                            item.child.push({ name: _docInfo.name + ' ' + (_docInfo.version || ''), type: _docInfo.type, isExpended: false, path: _docInfo.slug + '/index.html', deep: 1, child: [], docInfo: _docInfo });
+                            item.child.push({ name: _docInfo.name + ' ' + (_docInfo.version || ''), type: _docInfo.type, isExpended: false, path: _docInfo.slug + '/index.html', deep: 1, child: [], docInfo: _docInfo, parent: item });
+                            item.path = '';
                             item.docInfo = null;
                         }
-                        item.child.push({ name: docItem.name + ' ' + (docItem.version || ''), type: docItem.type, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem });
+                        item.child.push({ name: docItem.name + ' ' + (docItem.version || ''), type: docItem.type, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem, parent: item });
                         isHas = true;
                         continue;
                     }
                 }
                 if (!isHas) {
-                    disableDocs.child.push({ name: docItem.name, type: docItem.type, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem });
+                    disableDocs.child.push({ name: docItem.name, type: docItem.type, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem, parent: disableDocs });
                 }
             }
         }
@@ -122,9 +127,6 @@ export class ExpandedDocList implements ICanExpendedState {
 
     private _setSelectedIndexByUrlPath(locationUrl: string): boolean {
         locationUrl = locationUrl.replace('/docs/', '');
-        let index = locationUrl.indexOf('/');
-        let docType = locationUrl.substr(0, index);
-        let typePath = locationUrl.substr(index + 1, locationUrl.length - index - 2);
         let hashIndex = locationUrl.indexOf('#', locationUrl.lastIndexOf('/'));
 
         if (hashIndex !== -1) {
@@ -142,22 +144,32 @@ export class ExpandedDocList implements ICanExpendedState {
                 return true; // 只须更新 selectedIndex
             }
         }
-        let newIndex = 0;
-        let isFind = false;
-        for (let docItem of enableDocs) {
-            if (docItem.docInfo.slug === docType) {
-                docItem.isExpended = true;
+        // 先找到对应的item　先根，再左右遍历
+        let findedItem: ICanExpendedItem = null;
+        let temp: ICanExpendedItem[] = [...enableDocs];
+        while (temp.length !== 0) {
+            let item = temp.shift();
+            if (item.path === locationUrl) {
+                findedItem = item;
                 break;
             }
+            temp.unshift(...item.child);
         }
+        if (findedItem === null) { return false; }
+        // 展开findedItem　的父节点
+        while (findedItem.parent) {
+            findedItem = findedItem.parent;
+            findedItem.isExpended = true;
+        }
+        // 寻找选中项，并重新生成listItems
         let lists: ICanExpendedItem[] = [];
-        let temp: ICanExpendedItem[] = [...enableDocs, disableDocs];
-        this.markNodeDeep(enableDocs);
-        this.markNodeDeep([disableDocs]);
+        let newIndex = 0;
+        let isFind = false;
+        temp = [...enableDocs, disableDocs];
         while (temp.length !== 0) {
             let item = temp.shift();
             lists.push(item);
-            if (item.path === typePath) {
+            if (item.path === locationUrl) {
                 isFind = true;
             }
             if (item.isExpended) {
