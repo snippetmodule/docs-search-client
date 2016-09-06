@@ -6,37 +6,23 @@ import ReactList from '../../utils/react-lists';
 import {DefaultList} from './list';
 import {history} from '../../routes';
 import {onDocsPageLoactionChangeCallback} from '../DocPage/';
-
 const { connect } = require('react-redux');
+
+let classNames = require('classnames/bind');
+let listCss = require('./list-style.css');
+let cx = classNames.bind(listCss);
 
 interface ISearchProps {
     searchState?: ISearchState;
 }
-function getItemCss(deep: number, isSelected: boolean) {
-    return {
-        paddingTop: '.25rem',
-        paddingBottom: '.25rem',
-        paddingLeft: 0.75 * (deep + 1) + 'rem',
-        paddingRight: '0.75rem',
-        background: isSelected ? '#398df0' : '#f9f9f9',
-        boxShadow: 'inset -1px 0 #e3e3e3',
-        width: '100%',
-        display: 'block',
-        position: 'relative',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        wordSrap: 'normal',
-        overflowSrap: 'normal',
-        textOverflow: 'ellipsis',
-        textDecoration: 'none',
-    };
-}
-
 @connect(state => ({ searchState: state.searchDocsReducer }))
 class Left extends React.Component<ISearchProps, void> {
     private mListRef: any;
     private selectedIndex = -1;
 
+    private mListItemRef: {
+        [key: string]: HTMLElement;
+    } = {};
     private onClickItem(index: number, searchResultItem: ISearchResultItem) {
         this.selectedIndex = index;
         this.forceUpdate();
@@ -49,11 +35,18 @@ class Left extends React.Component<ISearchProps, void> {
     }
     private renderItem(index, key) {
         let searchResultItem: ISearchResultItem = this.props.searchState.message[index];
+        let ltemClass = (index === this.selectedIndex)
+            ? cx('_list-item', '_list-hove', '_list-result', '_icon-' + searchResultItem.doc.slug, 'focus', 'active')
+            : cx('_list-item', '_list-hove', '_list-result', '_icon-' + searchResultItem.doc.slug, index === 0 && this.selectedIndex === -1 ? 'focus' : '');
         return (
-            <div key={key} to="" style={getItemCss(0, index === this.selectedIndex) }
-                onClick={event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }>
-                {searchResultItem.name}
-            </div>
+            <a key={key} href="" className={ltemClass} ref={ref => this.mListItemRef[key] = ref}
+                onClick = { event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }
+                onMouseOver={event => { this.mListItemRef[key].style.textDecoration = 'underline'; } }
+                onMouseOut={event => { this.mListItemRef[key].style.textDecoration = 'none'; } }
+                >
+                <span className={cx('_list-reveal') } data-reset-list="" title="Reveal in list"></span>
+                {searchResultItem.name }
+            </a >
         );
     }
     public render() {

@@ -43,7 +43,7 @@ var config = {
         include: path.resolve('./src/app'),
         loaders: [
           'style-loader',
-          'css-loader?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
+          'css-loader?modules&importLoaders=2&localIdentName=[local]',
           'postcss-loader'
         ]
       },
