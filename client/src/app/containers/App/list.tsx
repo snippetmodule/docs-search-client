@@ -188,6 +188,5 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         if (this.state.selectedIndex > from + size || this.state.selectedIndex < from) {
             this.mListRef.scrollTo(this.state.selectedIndex);
         }
-        console.log('componentDidUpdate:' + this.state.selectedIndex + this.mListRef);
     }
 }

@@ -34,6 +34,7 @@ function getItemCss(deep: number, isSelected: boolean) {
 
 @connect(state => ({ searchState: state.searchDocsReducer }))
 class Left extends React.Component<ISearchProps, void> {
+    private mListRef: any;
     private selectedIndex = -1;
 
     private onClickItem(index: number, searchResultItem: ISearchResultItem) {
@@ -55,18 +56,8 @@ class Left extends React.Component<ISearchProps, void> {
             </div>
         );
     }
-    public componentWillMount() {
-        onDocsPageLoactionChangeCallback('Left', locationUrl => {
-            console.log('Left componentWillMount:' + locationUrl);
-            // if (this.state.setSelectedIndexByUrlPath(locationUrl)) {
-            //     this.setState(new ExpandedDocList());
-            // }
-        });
-    }
-    public componentWillUnmount() {
-        onDocsPageLoactionChangeCallback('Left', null);
-    }
     public render() {
+        this.mListRef = null;
         if (!this.props.searchState.input) {
             return (<DefaultList />);
         }
@@ -83,12 +74,44 @@ class Left extends React.Component<ISearchProps, void> {
         }
         return (
             <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
-                <ReactList
+                <ReactList ref={ref => this.mListRef = ref}
                     itemRenderer={this.renderItem.bind(this) }
                     length={50}
                     type ="uniform"
                     />
             </div>);
+    }
+    public componentWillMount() {
+        onDocsPageLoactionChangeCallback('Left', locationUrl => {
+            if (!this.props.searchState.input) {
+                return;
+            }
+            let {searchState} = this.props;
+            let searchResult = searchState.message;
+            if (searchState.error) {
+                return;
+            }
+            if (!searchResult) {
+                return;
+            }
+            for (let i = 0; i < this.props.searchState.message.length; i++) {
+                let searchResultItem = this.props.searchState.message[i];
+                let pathClick = '/docs/' + searchResultItem.doc.slug + '/' + (searchResultItem.path ? searchResultItem.path : searchResultItem.slug + '/');
+                if (pathClick === locationUrl) {
+                    if (this.selectedIndex !== i) { this.selectedIndex = i; this.forceUpdate(); }
+                }
+            }
+        });
+    }
+    public componentWillUnmount() {
+        onDocsPageLoactionChangeCallback('Left', null);
+    }
+    public componentDidUpdate(prevProps: any, prevState: void, prevContext: any) {
+        if (!this.mListRef) { return; }
+        let {from, size} = this.mListRef.state;
+        if (this.selectedIndex > from + size || this.selectedIndex < from) {
+            this.mListRef.scrollTo(this.selectedIndex);
+        }
     }
 }
 
