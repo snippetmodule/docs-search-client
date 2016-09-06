@@ -57,7 +57,7 @@ export class ExpandedDocList implements ICanExpendedState {
     private init() {
         enableDocs = [];
         disableDocs = {
-            name: 'disable',
+            name: 'Disable',
             type: 'disable',
             isExpended: false,
             path: '',
@@ -127,11 +127,6 @@ export class ExpandedDocList implements ICanExpendedState {
 
     private _setSelectedIndexByUrlPath(locationUrl: string): boolean {
         locationUrl = locationUrl.replace('/docs/', '');
-        let hashIndex = locationUrl.indexOf('#', locationUrl.lastIndexOf('/'));
-
-        if (hashIndex !== -1) {
-            locationUrl = locationUrl.substr(0, hashIndex);
-        }
         if (this.selectedIndex < this.listItems.length && this.selectedIndex > 0) {
             if (this.listItems[this.selectedIndex].path === locationUrl) {
                 return false;  // 不用更新，selectedIndex 未变

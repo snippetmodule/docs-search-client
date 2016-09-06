@@ -68,7 +68,7 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
                 <span>
                     { stateItem.child.length === 0 ? ' ' : (stateItem.isExpended ? '-' : '+') }
                 </span>
-                <span>{stateItem.docInfo.slug}</span>
+                <span>{stateItem.name}</span>
             </div>
         );
     }

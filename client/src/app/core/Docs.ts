@@ -53,7 +53,7 @@ async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[])
     for (let key of keys) {
         for (let info of docsInfoArrays) {
             if (info.slug === key) {
-                let value: IDocInfo = <IDocInfo> (await localStorage.getItem(key));
+                let value: IDocInfo = <IDocInfo>(await localStorage.getItem(key));
                 if (value) {
                     info.storeValue = value.storeValue;
                 }
@@ -87,7 +87,13 @@ function sortTyps(types: DocsModelTypeType[]): DocsModelTypeType[] {
         let type = types[i];
         (result[name = _groupFor(type)] || (result[name] = [])).push(type);
     }
-    return [...result[0], ...result[1]];
+    if (!result[0]) {
+        result[0] = [];
+    }
+    if (!result[1]) {
+        result[1] = [];
+    }
+    return [...(result[0]), ...result[1]];
 }
 let config = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
