@@ -23,7 +23,12 @@ class Searcher<T> {
         this.fuse = new Fuse(this.mList, this.fuseOption);
     }
     public search(input: string): T[] {
-        return this.fuse.search(input);
+        return this.fuse.search(input).filter(item => {
+            if (item) {
+                return true;
+            }
+            return false;
+        });
     }
 }
 export {Searcher}

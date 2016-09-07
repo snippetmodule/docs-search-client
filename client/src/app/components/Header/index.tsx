@@ -14,7 +14,6 @@ let cx = classNames.bind(css);
   })
 )
 class Header extends React.Component<any, void> {
-
   private stripscript(s: string): string {
     let pattern = new RegExp('[`~!@#$^&*()=|{}\:\;,\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：\“。，、？]');
     let rs = '';
@@ -32,14 +31,14 @@ class Header extends React.Component<any, void> {
   }
   public render() {
     return (
-      <div className={cx('content')}>
-         <form className="left _search" role="search">
-            <input type="search" className="_search-input" placeholder="搜索…" onChange={this.handleChange.bind(this) }
-                maxlength="30"  autofocus="autofocus" />
-            <button type="reset" className="_search-clear" title="Clear search">Clear search</button>
-            <div className="_search-tag"></div>
+      <div className={cx('content') }>
+        <form className="left _search" role="search">
+          <input type="search" className="_search-input" placeholder="搜索…" maxLength="30"  autoFocus="autofocus"
+            onChange={this.handleChange.bind(this) } />
+          <button type="reset" className="_search-clear" title="Clear search">Clear search</button>
+          <div className="_search-tag"></div>
         </form>
-        <div style={{padding:'.65rem 0 0 0'}}>
+        <div style={{ padding: '.65rem 0 0 0' }}>
           <a className="homeLink" to= "/" >Docs中文网</a>
         </div>
         <div className="right">

@@ -32,9 +32,13 @@ class Left extends React.Component<ISearchProps, void> {
     }
     public componentWillReceiveProps(nextProps: ISearchProps, nextContext: any) {
         this.selectedIndex = -1;
+        this.mListRef = null;
     }
     private renderItem(index, key) {
         let searchResultItem: ISearchResultItem = this.props.searchState.message[index];
+        if (!searchResultItem) {
+            return (<a key={key} />); // 页面可能 频繁刷新中
+        }
         let iconindex = searchResultItem.doc.slug.indexOf('~');
         let iconClass = '_icon-' + (iconindex === -1 ? searchResultItem.doc.slug : searchResultItem.doc.slug.substr(0, iconindex));
         let ltemClass = (index === this.selectedIndex)
@@ -52,7 +56,6 @@ class Left extends React.Component<ISearchProps, void> {
         );
     }
     public render() {
-        this.mListRef = null;
         if (!this.props.searchState.input) {
             return (<DefaultList />);
         }
@@ -61,10 +64,10 @@ class Left extends React.Component<ISearchProps, void> {
         if (searchState.error) {
             return (<div> {searchState.error} </div>);
         }
-        if (searchState.input.length !== 0 && searchResult.length === 0) {
+        if (searchState.input.length !== 0 && (!searchResult || searchResult.length === 0)) {
             return (
                 <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
-                    <div style={{textAlign:'center'}}>没有搜到.</div>
+                    <div style={{ textAlign: 'center' }}>没有搜到.</div>
                 </div>
             );
         }
