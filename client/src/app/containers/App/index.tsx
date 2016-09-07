@@ -17,7 +17,6 @@ interface IProps {
 class App extends React.Component<IProps, any> {
     private s = require('./style.css');
     public render() {
-        console.log('App .....' + this.props.init.isInited + ' time:' + new Date().getTime());
         if (!this.props.init.isInited) {
             return (
                 <div style={{

@@ -74,7 +74,6 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
                 <ReactList ref={ref => this.mListRef = ref}
                     itemRenderer={this.renderItem.bind(this) }
                     length={this.state.listItems.length }
-                    type ="uniform"
                     />
             </div>
         );

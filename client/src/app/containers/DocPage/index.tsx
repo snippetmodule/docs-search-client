@@ -112,9 +112,9 @@ class DocPage extends React.Component<IProps, void> {
                 <div ref={ref => this.rootElem = ref} className={s._content}>
                     <h1></h1>
                     <ul>
-                        {this.mEntryTypes.map(item => {
+                        {this.mEntryTypes.map((item,index) => {
                             return (
-                                <li key={item.name}>
+                                <li key={index}>
                                     <Link to={{ pathname: '/docs/' + item.doc.slug + '/' + item.path }}>{item.name}</Link>
                                 </li >
                             );

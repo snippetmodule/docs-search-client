@@ -31,7 +31,6 @@ interface IReactListProp {
     pageSize?: number;
     scrollParentGetter?: () => Element | Window;
     threshold?: number;
-    type?: 'simple' | 'variable' | 'uniform';
     useStaticSize?: boolean;
     useTranslate3d?: boolean;
 }
@@ -60,7 +59,6 @@ export default React.createClass<IReactListProp, { from: number, size: number, i
             length: 0,
             pageSize: 10,
             threshold: 100,
-            type: 'simple',
             useStaticSize: false,
             useTranslate3d: false,
         };
@@ -184,8 +182,8 @@ export default React.createClass<IReactListProp, { from: number, size: number, i
         if (useStaticSize && itemSize && itemsPerRow) {
             return { itemSize, itemsPerRow };
         }
-
-        const itemEls = findDOMNode(this.items).childNodes;
+        let itemsEle = findDOMNode(this.items);
+        const itemEls = itemsEle ? itemsEle.childNodes : [];
         if (!itemEls.length) { return { itemSize: 0, itemsPerRow: 0 }; }
 
         const firstEl = itemEls[0];
@@ -215,12 +213,7 @@ export default React.createClass<IReactListProp, { from: number, size: number, i
     updateFrame(cb) {
         this.updateScrollParent();
         if (typeof cb !== 'function') { cb = NOOP; }
-        switch (this.props.type) {
-            case 'simple': return this.updateSimpleFrame(cb);
-            case 'variable': return this.updateVariableFrame(cb);
-            case 'uniform': return this.updateUniformFrame(cb);
-            default: break;
-        }
+        return this.updateSimpleFrame(cb);
     },
 
     updateScrollParent() {
@@ -252,54 +245,6 @@ export default React.createClass<IReactListProp, { from: number, size: number, i
 
         const {pageSize, length} = this.props;
         this.setState({ size: Math.min(this.state.size + pageSize, length) }, cb);
-    },
-
-    updateVariableFrame(cb) {
-        if (!this.props.itemSizeGetter) { this.cacheSizes(); }
-
-        const {start, end} = this.getStartAndEnd();
-        const {length, pageSize} = this.props;
-        let space = 0;
-        let from = 0;
-        let size = 0;
-        const maxFrom = length - 1;
-
-        while (from < maxFrom) {
-            const itemSize = this.getSizeOf(from);
-            if (itemSize == null || space + itemSize > start) { break; }
-            space += itemSize;
-            ++from;
-        }
-
-        const maxSize = length - from;
-
-        while (size < maxSize && space < end) {
-            const itemSize = this.getSizeOf(from + size);
-            if (itemSize == null) {
-                size = Math.min(size + pageSize, maxSize);
-                break;
-            }
-            space += itemSize;
-            ++size;
-        }
-
-        this.setState({ from, size }, cb);
-    },
-
-    updateUniformFrame(cb) {
-        let {itemSize, itemsPerRow} = this.getItemSizeAndItemsPerRow();
-
-        if (!itemSize || !itemsPerRow) { return cb(); }
-
-        const {start, end} = this.getStartAndEnd();
-
-        const {from, size} = this.constrain(
-            Math.floor(start / itemSize) * itemsPerRow,
-            (Math.ceil((end - start) / itemSize) + 1) * itemsPerRow,
-            itemsPerRow, this.props
-        );
-
-        return this.setState({ itemsPerRow, from, itemSize, size }, cb);
     },
 
     getSpaceBefore(index, cache = {}) {
@@ -382,30 +327,6 @@ export default React.createClass<IReactListProp, { from: number, size: number, i
     scrollTo(index) {
         if (index != null) { this.setScroll(this.getSpaceBefore(index)); }
     },
-
-    // private scrollAround(index) {
-    //     const current = this.getScroll();
-    //     const bottom = this.getSpaceBefore(index);
-    //     const top = bottom - this.getViewportSize() + this.getSizeOf(index);
-    //     const min = Math.min(top, bottom);
-    //     const max = Math.max(top, bottom);
-    //     if (current <= min) { return this.setScroll(min); }
-    //     if (current > max) { return this.setScroll(max); }
-    // }
-
-    // private getVisibleRange() {
-    //     const {from, size} = this.state;
-    //     const {start, end} = this.getStartAndEnd(0);
-    //     const cache = {};
-    //     let first, last;
-    //     for (let i = from; i < from + size; ++i) {
-    //         const itemStart = this.getSpaceBefore(i, cache);
-    //         const itemEnd = itemStart + this.getSizeOf(i);
-    //         if (first == null && itemEnd > start) { first = i; }
-    //         if (first != null && itemStart < end) { last = i; }
-    //     }
-    //     return [first, last];
-    // }
 
     renderItems() {
         const {itemRenderer, itemsRenderer} = this.props;

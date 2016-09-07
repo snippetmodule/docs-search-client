@@ -76,7 +76,6 @@ class Left extends React.Component<ISearchProps, void> {
                 <ReactList ref={ref => this.mListRef = ref}
                     itemRenderer={this.renderItem.bind(this) }
                     length={50}
-                    type ="uniform"
                     />
             </div>);
     }

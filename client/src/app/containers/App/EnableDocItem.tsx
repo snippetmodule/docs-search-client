@@ -17,7 +17,7 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
             <a  className={cx('_list-item', iconClass, '_list-dir', openClass, selectClass) }
                 onClick={this.props.onClickItem }
                 onMouseOver={event => {
-                    if (this.props.stateItem.isExpended) {
+                    if (this.props.stateItem.isExpended && _isSelected) {
                         this.spanDisenableRef.innerText = 'disable';
                     }
                 } }
