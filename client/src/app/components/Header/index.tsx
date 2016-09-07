@@ -3,6 +3,10 @@ import { Link } from 'react-router';
 import { getSearchResult } from '../../redux/reducers/searchdocs';
 const { connect } = require('react-redux');
 
+let classNames = require('classnames/bind');
+let css = require('./style.css');
+let cx = classNames.bind(css);
+
 @connect(
   null,
   dispatch => ({
@@ -27,19 +31,22 @@ class Header extends React.Component<any, void> {
     event.preventDefault();
   }
   public render() {
-    const s = require('./style.css');
     return (
-      <div className={s.content}>
-        <form  className={s.left} role="search">
-          <input className={s.searchInput} type="search" onChange={this.handleChange.bind(this) } placeholder="搜索"/>
-          <div></div>
-          <Link className={s.homeLink} to= "/" >DevDocs中文网</Link>
+      <div className={cx('content')}>
+         <form className="left _search" role="search">
+            <input type="search" className="_search-input" placeholder="搜索…" onChange={this.handleChange.bind(this) }
+                maxlength="30"  autofocus="autofocus" />
+            <button type="reset" className="_search-clear" title="Clear search">Clear search</button>
+            <div className="_search-tag"></div>
         </form>
-        <div className={s.right}>
-          <Link className={s.rightA} to= "/" >docs</Link>
-          <Link className={s.rightA} to= "about" >about</Link>
-          <Link className={s.rightA} to= "counter" >counter</Link>
-          <Link className={s.rightA} to= "stars" >stars</Link>
+        <div style={{padding:'.65rem 0 0 0'}}>
+          <Link className="homeLink" to= "/" >DevDocs中文网</Link>
+        </div>
+        <div className="right">
+          <Link className="rightA" to= "/" >docs</Link>
+          <Link className="rightA" to= "about" >about</Link>
+          <Link className="rightA" to= "counter" >counter</Link>
+          <Link className="rightA" to= "stars" >stars</Link>
         </div>
       </div>
     );
