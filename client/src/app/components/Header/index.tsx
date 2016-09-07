@@ -40,7 +40,7 @@ class Header extends React.Component<any, void> {
             <div className="_search-tag"></div>
         </form>
         <div style={{padding:'.65rem 0 0 0'}}>
-          <Link className="homeLink" to= "/" >DevDocs中文网</Link>
+          <a className="homeLink" to= "/" >Docs中文网</a>
         </div>
         <div className="right">
           <Link className="rightA" to= "/" >docs</Link>

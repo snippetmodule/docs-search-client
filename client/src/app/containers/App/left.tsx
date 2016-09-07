@@ -35,9 +35,11 @@ class Left extends React.Component<ISearchProps, void> {
     }
     private renderItem(index, key) {
         let searchResultItem: ISearchResultItem = this.props.searchState.message[index];
+        let iconindex = searchResultItem.doc.slug.indexOf('~');
+        let iconClass = '_icon-' + (iconindex === -1 ? searchResultItem.doc.slug : searchResultItem.doc.slug.substr(0, iconindex));
         let ltemClass = (index === this.selectedIndex)
-            ? cx('_list-item', '_list-hove', '_list-result', '_icon-' + searchResultItem.doc.slug, 'focus', 'active')
-            : cx('_list-item', '_list-hove', '_list-result', '_icon-' + searchResultItem.doc.slug, index === 0 && this.selectedIndex === -1 ? 'focus' : '');
+            ? cx('_list-item', '_list-hove', '_list-result', iconClass, 'focus', 'active')
+            : cx('_list-item', '_list-hove', '_list-result', iconClass, index === 0 && this.selectedIndex === -1 ? 'focus' : '');
         return (
             <a key={key} href="" className={ltemClass} ref={ref => this.mListItemRef[key] = ref}
                 onClick = { event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }
@@ -59,11 +61,12 @@ class Left extends React.Component<ISearchProps, void> {
         if (searchState.error) {
             return (<div> {searchState.error} </div>);
         }
-        if (!searchResult) {
-            return (<div> 空 </div>);
-        }
         if (searchState.input.length !== 0 && searchResult.length === 0) {
-            return (<div> 未找到搜索结果 </div>);
+            return (
+                <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
+                    <div style={{textAlign:'center'}}>没有搜到.</div>
+                </div>
+            );
         }
         return (
             <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
