@@ -4,13 +4,14 @@ import * as appConfig from '../../config';
 
 export interface ICanExpendedItem {
     name: string;
-    type: string; // 用于文档分类
+    slug: string;
     path: string; // LinkPage 中用到的 path
     isExpended: boolean; // 是否已经展开
     child: ICanExpendedItem[];
     deep: number; // 此节点在整个树中的的深度
     docInfo: IDocInfo;
     parent: ICanExpendedItem; // 父节点
+    isEnable: boolean; // 是否当前文档不可用
 }
 
 export interface ICanExpendedState {
@@ -58,43 +59,43 @@ export class ExpandedDocList implements ICanExpendedState {
         enableDocs = [];
         disableDocs = {
             name: 'Disable',
-            type: 'disable',
+            slug: 'disable',
             isExpended: false,
             path: '',
             deep: 0,
             child: [],
             docInfo: null,
             parent: null,
+            isEnable: false,
         };
         for (let docItem of appConfig.default.docs.getDocsInfoArrays) {
             if (docItem.storeValue) {
-                let parentItem: ICanExpendedItem = { name: docItem.name, type: docItem.type, path: docItem.slug + '/index.html', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: null };
+                let parentItem: ICanExpendedItem = { name: docItem.name, slug: docItem.slug, path: docItem.slug + '/index.html', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: null, isEnable: true };
                 parentItem.child = docItem.storeValue.types.map((item: DocsModelTypeType) => {
-                    let parentTypes: ICanExpendedItem = { name: item.name, type: item.name, path: docItem.slug + '/' + item.slug + '/', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: parentItem };
+                    let parentTypes: ICanExpendedItem = { name: item.name, slug: docItem.slug, path: docItem.slug + '/' + item.slug + '/', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: parentItem, isEnable: true };
                     parentTypes.child = item.childs.map((entry: DocsModelEntriyType) => {
-                        return { name: entry.name, type: entry.name, path: docItem.slug + '/' + entry.path, isExpended: false, deep: 0, child: [], docInfo: docItem, parent: parentTypes };
+                        return { name: entry.name, slug: docItem.slug, path: docItem.slug + '/' + entry.path, isExpended: false, deep: 0, child: [], docInfo: docItem, parent: parentTypes, isEnable: true };
                     });
                     return parentTypes;
                 });
                 enableDocs.push(parentItem);
             } else {
-                let disableChilds = disableDocs.child;
-                let isHas = false;
-                for (let item of disableChilds) {
-                    if (item.type === docItem.type) {
-                        let _docInfo = item.docInfo;
-                        if (_docInfo) {
-                            item.child.push({ name: _docInfo.name + ' ' + (_docInfo.version || ''), type: _docInfo.type, isExpended: false, path: _docInfo.slug + '/index.html', deep: 1, child: [], docInfo: _docInfo, parent: item });
-                            item.path = '';
-                            item.docInfo = null;
+                if (docItem.slug.indexOf('~') === -1) {
+                    disableDocs.child.push({ name: docItem.name, slug: docItem.slug, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem, parent: disableDocs, isEnable: false });
+                } else {
+                    let disableChilds = disableDocs.child;
+                    let preSlug = docItem.slug.indexOf('~') === -1 ? docItem.slug : docItem.slug.substr(0, docItem.slug.indexOf('~'));
+                    let parent;
+                    for (let item of disableChilds) {
+                        if (item.slug.startsWith(preSlug)) {
+                            parent = item;
                         }
-                        item.child.push({ name: docItem.name + ' ' + (docItem.version || ''), type: docItem.type, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem, parent: item });
-                        isHas = true;
-                        continue;
                     }
-                }
-                if (!isHas) {
-                    disableDocs.child.push({ name: docItem.name, type: docItem.type, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem, parent: disableDocs });
+                    if (!parent) {
+                        parent = { name: docItem.name, slug: docItem.slug, isExpended: false, path: null, deep: 1, child: [], docInfo: null, parent: disableDocs, isEnable: false };
+                        disableDocs.child.push(parent);
+                    }
+                    parent.child.push({ name: docItem.name, slug: docItem.slug, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem, parent: parent, isEnable: false });
                 }
             }
         }

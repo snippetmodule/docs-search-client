@@ -1,24 +1,26 @@
-._list-link:after,
-._page a[href^="http:"]:after,
-._page a[href^="https:"]:after,
-._search:before,
-._search-clear:before,
-._notif-close:before,
-._list-item:before,
-._list-arrow:before,
-._sidebar-footer-link:before,
-._docs-name:before,
-._pre-clip:before,
-._path-item:first-child:before,
-._path-item + ._path-item:after,
-._home-link:before,
-._menu-link:before {
+._no_before {
+}
+
+._no_before:before {
+	display: none !important;
+}
+
+._list-arrow:before {
 	content: '';
 	display: block;
 	width: 1rem;
 	height: 1rem;
 	background-image: url(./icons.png);
-	background-size: 10rem 10rem;
+	background-size: 4rem 6rem;
+}
+
+._list-item:before {
+	content: '';
+	display: block;
+	width: 1rem;
+	height: 1rem;
+	background-image: url(./docs.png);
+	background-size: 10rem 12rem;
 }
 
 ._list-item {
@@ -130,8 +132,8 @@
 
 .open > ._list-arrow:before,
 .open-title > ._list-arrow:before {
-	-webkit-transform: rotate(90);
-	transform: rotate(90);
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg);
 }
 
 ._list-sub > ._list-item {
@@ -331,7 +333,7 @@
 	background-position: -8rem -1rem;
 }
 
-._icon-angular:before {
+._icon-angularjs:before {
 	background-position: -9rem -1rem;
 }
 
@@ -341,14 +343,6 @@
 
 ._icon-ember:before {
 	background-position: -1rem -2rem;
-}
-
-._menu-link:before {
-	background-position: -2rem -2rem;
-}
-
-._home-link:before {
-	background-position: -3rem -2rem;
 }
 
 ._icon-jqueryui:before {
@@ -409,10 +403,6 @@
 	background-position: -7rem -3rem;
 }
 
-._path-item + ._path-item:after {
-	background-position: -8rem -3rem;
-}
-
 ._icon-yii:before,
 ._icon-yii1:before {
 	background-position: -9rem -3rem;
@@ -470,11 +460,12 @@
 	background-position: -2rem -5rem;
 }
 
-._icon-xpath:before {
+._icon-xslt_xpath:before {
 	background-position: -3rem -5rem;
 }
 
-._icon-nginx:before {
+._icon-nginx:before,
+._icon-nginx_lua_module:before {
 	background-position: -4rem -5rem;
 }
 
@@ -518,11 +509,23 @@
 	background-position: -4rem -6rem;
 }
 
-._sidebar-footer-light:before {
+._icon-fish:before {
+	background-position: -5rem -6rem;
+}
+
+._icon-scikit_image:before {
+	background-position: -6rem -6rem;
+}
+
+._icon-bottle:before {
 	background-position: 0 -7rem;
 }
 
-._icon-iojs:before {
+._icon-docker:before {
+	background-position: -1rem -7rem;
+}
+
+._icon-cakephp:before {
 	background-position: -2rem -7rem;
 }
 
@@ -578,12 +581,20 @@
 	background-position: -5rem -8rem;
 }
 
-._sidebar-footer-layout:before {
+._icon-crystal:before {
 	background-position: -6rem -8rem;
 }
 
-._max-width ._sidebar-footer-layout:before {
+._icon-julia:before {
 	background-position: -7rem -8rem;
+}
+
+._icon-redux:before {
+	background-position: -8rem -8rem;
+}
+
+._icon-bootstrap:before {
+	background-position: -9rem -8rem;
 }
 
 ._icon-react_native:before {
@@ -594,8 +605,12 @@
 	background-position: -1rem -9rem;
 }
 
-._pre-clip:before {
+._icon-matplotlib:before {
 	background-position: -2rem -9rem;
+}
+
+._icon-cmake:before {
+	background-position: -3rem -9rem;
 }
 
 ._icon-elixir:before {
@@ -620,4 +635,84 @@
 
 ._icon-phoenix:before {
 	background-position: -9rem -9rem;
+}
+
+._icon-tcl_tk:before {
+	background-position: 0 -10rem;
+}
+
+._icon-erlang:before {
+	background-position: -1rem -10rem;
+}
+
+._icon-chef:before {
+	background-position: -2rem -10rem;
+}
+
+._icon-ramda:before {
+	background-position: -3rem -10rem;
+}
+
+._icon-codeigniter:before {
+	background-position: -4rem -10rem;
+}
+
+._icon-influxdata:before {
+	background-position: -5rem -10rem;
+}
+
+._icon-tensorflow:before {
+	background-position: -6rem -10rem;
+}
+
+._icon-haxe:before {
+	background-position: -7rem -10rem;
+}
+
+._icon-ansible:before {
+	background-position: -8rem -10rem;
+}
+
+._icon-typescript:before {
+	background-position: -9rem -10rem;
+}
+
+._icon-browser_support_tables:before {
+	background-position: 0rem -11rem;
+}
+
+._icon-gnu_fortran:before {
+	background-position: -1rem -11rem;
+}
+
+._icon-gcc:before {
+	background-position: -2rem -11rem;
+}
+
+._icon-perl:before {
+	background-position: -3rem -11rem;
+}
+
+._icon-apache_pig:before {
+	background-position: -4rem -11rem;
+}
+
+._icon-numpy:before {
+	background-position: -5rem -11rem;
+}
+
+._icon-kotlin:before {
+	background-position: -6rem -11rem;
+}
+
+._icon-padrino:before {
+	background-position: -7rem -11rem;
+}
+
+._icon-angular:before {
+	background-position: -8rem -11rem;
+}
+
+._icon-love:before {
+	background-position: -9rem -11rem;
 }
