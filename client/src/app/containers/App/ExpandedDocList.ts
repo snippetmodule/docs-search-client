@@ -60,7 +60,7 @@ export class ExpandedDocList implements ICanExpendedState {
         disableDocs = {
             name: 'Disable',
             slug: 'disable',
-            isExpended: false,
+            isExpended: true,
             path: '',
             deep: 0,
             child: [],

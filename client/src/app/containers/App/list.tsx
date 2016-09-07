@@ -44,22 +44,22 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     private enableDoc(docInfo: IDocInfo) {
         appConfig.default.docs.addDoc(docInfo).then((res) => {
             this.setState(new ExpandedDocList(true));
-        }).catch(err => console.log('enableDoc:' + docInfo.slug + err.stack));
+        }).catch(err => console.log('enableDoc err:' + docInfo.slug + err.stack));
     }
     private disableDoc(docInfo: IDocInfo) {
         appConfig.default.docs.removeDoc(docInfo).then((res) => {
             this.setState(new ExpandedDocList(true));
-        }).catch(err => console.log('enableDoc:' + docInfo.slug + err.stack));
+        }).catch(err => console.log('disableDoc err:' + docInfo.slug + err.stack));
     }
 
     private renderItem(index, key) {
-        let stateItem = this.state.listItems[index];
+        let stateItem: ICanExpendedItem = this.state.listItems[index];
         let itemProps: IRenderItemProp = {
             stateItem: stateItem,
             _isSelected: index === this.state.selectedIndex,
             onClickItem: (event) => { event.preventDefault(); event.stopPropagation(); this.onClickItem(index, stateItem); },
-            enableDoc: (event) => { event.stopPropagation(); this.enableDoc(stateItem.docInfo); },
-            disableDoc: (event) => { event.stopPropagation(); this.disableDoc(stateItem.docInfo); },
+            enableDoc: (event) => { event.preventDefault(); event.stopPropagation(); this.enableDoc(stateItem.docInfo); },
+            disableDoc: (event) => { event.preventDefault(); event.stopPropagation(); this.disableDoc(stateItem.docInfo); },
         };
         if (!stateItem.isEnable) {
             return (<DisenableDocItem key={key} {...itemProps} />);

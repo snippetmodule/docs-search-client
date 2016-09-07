@@ -119,13 +119,11 @@ class Docs {
         this.isDocChangedByUser = Cookies.get('Docs_isDocChangedByUser') === 'true' ? true : false; // 默认为false
     }
     public async init() {
-        console.log('init start :' + new Date().getTime());
         await initDocsArray(this.docsInfoArrays, this.isDocChangedByUser ? [] : config.default_docs);
         this.mSearcher = initSearcher(this.docsInfoArrays);
         if (this.docsInfoArrays.length === 0) {
             throw new Error('docsArrays is empty');
         }
-        console.log('init end:' + new Date().getTime());
     }
 
     public get getDocsInfoArrays() {
@@ -137,7 +135,7 @@ class Docs {
             return;
         }
         // 无论localstorage 有无,均下载
-        downloadDoc(docInfo);
+        await downloadDoc(docInfo);
         await this.init();
         Cookies.set('Docs_isDocChangedByUser', true);
     }

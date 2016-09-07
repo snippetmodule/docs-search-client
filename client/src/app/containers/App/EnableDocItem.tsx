@@ -16,11 +16,15 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
         return (
             <a  className={cx('_list-item', iconClass, '_list-dir', openClass, selectClass) }
                 onClick={this.props.onClickItem }
-                onMouseOver={event => { if (this.props.stateItem.isExpended) { this.spanDisenableRef.innerText = 'disable'; } } }
+                onMouseOver={event => {
+                    if (this.props.stateItem.isExpended) {
+                        this.spanDisenableRef.innerText = 'disable';
+                    }
+                } }
                 onMouseOut={event => { this.spanDisenableRef.innerText = ''; } }
                 >
                 <span className={cx('_list-arrow') }></span>
-                <span className={cx('_list-count') } ref={ref => this.spanDisenableRef = ref}
+                <span className={cx('_list-enable') } style={{color:'#fff !important',display:'block'}}ref={ref => this.spanDisenableRef = ref}
                     onClick={this.props.disableDoc }></span>
                 {stateItem.name}
             </a>
