@@ -134,33 +134,39 @@ class Docs {
         if (!docInfo) {
             return;
         }
+        this.isDocChangedByUser = true;
+        this.save();
         // 无论localstorage 有无,均下载
         await downloadDoc(docInfo);
         await this.init();
-        Cookies.set('Docs_isDocChangedByUser', true);
     }
 
     public async removeDoc(docInfo: IDocInfo) {
         if (!docInfo) {
             return;
         }
+        this.isDocChangedByUser = true;
+        this.save();
         await localStorage.removeItem(docInfo.slug);
         for (let doc of this.docsInfoArrays) {
             if (doc.slug === docInfo.slug) {
                 doc.storeValue = undefined;
+                break;
             }
         }
         await this.init();
-        Cookies.set('Docs_isDocChangedByUser', true);
     }
     public setIsAutoUpdate(isUpdate: boolean = true) {
         this.isAutoUpdate = isUpdate;
-        Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate, { expires: 1e8, secure: true });
+        this.save();
     }
     public getConfig() {
         return config;
     }
-
+    private save() {
+        Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate, { expires: 1e8, secure: true });
+        Cookies.set('Docs_isDocChangedByUser', this.isDocChangedByUser);
+    }
     public search(input: string): Promise<Array<ISearchResultItem>> {
         return new Promise((resolve, reject) => {
             resolve(this.mSearcher.search(input));
