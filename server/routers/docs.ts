@@ -56,6 +56,9 @@ export function getDocs(req: restify.Request, res: restify.Response, next: resti
     let docType: string = req.params.docType;
     let url: string = req.params.url;
     console.log('getDocs: ' + JSON.stringify(req.params));
+    if (!url) {
+        url = 'index.html';
+    }
     if (url === 'db.json' || url === 'index.html' || url === 'index.json') {
         fs.readFile(rootPath + docType + '/' + url, { encoding: 'utf-8' }, (err, data) => {
             if (err) {
