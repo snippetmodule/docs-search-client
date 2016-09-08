@@ -27,21 +27,23 @@ let _selectedIndex = 0;
 export function setSelectionIndex(index: number) {
     _selectedIndex = index;
 }
-export function getTypesByUrlPath(pathname: String): DocsModelEntriyType[] {
-    if (!pathname.endsWith('/')) {
-        return null;
-    }
+export function getDocInfoByUrlPath(pathname: String): { docInfo: IDocInfo, types: DocsModelEntriyType[] } {
     pathname = pathname.replace('/docs/', '');
     let index = pathname.indexOf('/');
     let docType = pathname.substr(0, index);
     let typePath = pathname.substr(index + 1, pathname.length - index - 2);
+    let resultDocInfo;
     for (let doc of enableDocs) {
         if (doc.docInfo.slug === docType) {
-            for (let type of doc.docInfo.storeValue.types) {
-                if (type.slug === typePath) {
-                    return type.childs;
-                }
-            }
+            resultDocInfo = doc.docInfo;
+        }
+    }
+    if (!pathname.endsWith('/') || !resultDocInfo) {
+        return { docInfo: resultDocInfo, types: null };
+    }
+    for (let type of resultDocInfo.storeValue.types) {
+        if (type.slug === typePath) {
+            return { docInfo: resultDocInfo, types: type.childs };
         }
     }
     return null;

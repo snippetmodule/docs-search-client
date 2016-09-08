@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Link} from 'react-router';
 import {IDocPageState} from '../../redux/reducers/docpage';
 import {startRequestPage} from '../../redux/reducers/docpage';
-import {DocsModelEntriyType} from '../../core/model';
-import {getTypesByUrlPath} from '../App/ExpandedDocList';
+import {DocsModelEntriyType, IDocInfo} from '../../core/model';
+import {getDocInfoByUrlPath} from '../App/ExpandedDocList';
 import * as appConfig from '../../config';
 import {history} from '../../routes';
 const { connect } = require('react-redux');
@@ -22,6 +22,7 @@ interface IProps {
     init?: IDocPageState;
     startRequestPage?: (url: string) => void;
 }
+
 @connect(
     state => ({ init: state.initDocPageReducer }),
     dispatch => ({
@@ -31,17 +32,26 @@ class DocPage extends React.Component<IProps, void> {
     private rootElem: HTMLElement;
     private nextScroolToElement: string = null;
 
+    private mDocInfo: IDocInfo;
     private mEntryTypes: DocsModelEntriyType[];
+
     constructor(props) {
         super(props);
         let curUrl: string = this.props.location.pathname;
-        this.mEntryTypes = getTypesByUrlPath(curUrl);
+        this.initDocInfo(curUrl);
         if (!this.mEntryTypes && curUrl) {
             let indexCurrUrl = curUrl.indexOf('#');
             curUrl = indexCurrUrl === -1 ? curUrl : curUrl.substr(0, indexCurrUrl);
             this.props.startRequestPage(curUrl);
         }
 
+    }
+    private initDocInfo(curUrl: string) {
+        let result = getDocInfoByUrlPath(curUrl);
+        if (result) {
+            this.mDocInfo = result.docInfo;
+            this.mEntryTypes = result.types;
+        }
     }
     public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
         let links = this.rootElem.getElementsByTagName('a');
@@ -82,7 +92,7 @@ class DocPage extends React.Component<IProps, void> {
         let indexCurrUrl = curUrl.indexOf('#');
         let nextScroolTo: string = indexNextUrl === -1 ? '' : nextUrl.substr(indexNextUrl + 1, nextUrl.length);
 
-        this.mEntryTypes = getTypesByUrlPath(nextUrl);
+        this.initDocInfo(nextUrl);
         if (this.mEntryTypes) {
             return;
         }
@@ -104,34 +114,46 @@ class DocPage extends React.Component<IProps, void> {
             }
         }
     }
+
     public render() {
         let { init} = this.props;
-        const s = require('./style.css');
+        let htmlContent = init.content;
+        if (this.mDocInfo && this.mDocInfo.links) {
+            htmlContent = '<p class="_links">' +
+                (this.mDocInfo.links.home ? ('<a href="XXXX" class="_links-link">Homepage</a>'.replace('XXXX', this.mDocInfo.links.home)) : '') +
+                (this.mDocInfo.links.code ? ('<a href="XXXX" class="_links-link">Source code</a>'.replace('XXXX', this.mDocInfo.links.code)) : '') +
+                '</p>' + htmlContent;
+        }
         if (this.mEntryTypes) {
             return (
-                <div ref={ref => this.rootElem = ref} className={s._content}>
-                    <h1></h1>
-                    <ul>
-                        {this.mEntryTypes.map((item,index) => {
-                            return (
-                                <li key={index}>
-                                    <Link to={{ pathname: '/docs/' + item.doc.slug + '/' + item.path }}>{item.name}</Link>
-                                </li >
-                            );
-                        }) }
-                    </ul>
+                <div  ref={ref => this.rootElem = ref} className="_content">
+                    <div className="_page">
+                        <h1>{}</h1>
+                        <ul>
+                            {this.mEntryTypes.map((item, index) => {
+                                return (
+                                    <li key={index}>
+                                        <Link to={{ pathname: '/docs/' + item.doc.slug + '/' + item.path }}>{item.name}</Link>
+                                    </li >
+                                );
+                            }) }
+                        </ul>
+                    </div>
                 </div>
             );
         }
         if (!init.isInited && !init.content) {
             return (
-                <div ref={ref => this.rootElem = ref} className={s._content}>
+                <div ref={ref => this.rootElem = ref} className="_content">
                     加载中
                 </div>);
         }
+
         return (
-            <div ref={ref => this.rootElem = ref} className={s._content}>
-                <div dangerouslySetInnerHTML={{ __html: init.content }}/>
+            <div ref={ref => this.rootElem = ref} className="_content">
+                <div dangerouslySetInnerHTML={{ __html: htmlContent }}
+                    className={'_page ' + (this.mDocInfo ? '_' + this.mDocInfo.type : '') } >
+                </div>
             </div>
         );
     }
