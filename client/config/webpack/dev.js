@@ -48,6 +48,10 @@ var config = {
         ]
       },
       {
+        test:/\.scss$/,
+        loaders:['style', "css?sourceMap", "sass?sourceMap"]
+      },
+      {
         test: /\.eot(\?.*)?$/,
         loader: 'file?name=fonts/[hash].[ext]'
       },

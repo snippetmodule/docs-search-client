@@ -1,0 +1,12 @@
+._apache {
+	@extend %simple;
+
+	.note,
+	.warning {
+		@extend %note;
+	}
+
+	.warning {
+		@extend %note-red;
+	}
+}

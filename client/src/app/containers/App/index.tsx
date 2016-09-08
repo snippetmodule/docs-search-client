@@ -4,13 +4,13 @@ import * as Helmet from 'react-helmet';
 import { Header } from '../../components';
 import {Left} from './left';
 import { IInitState } from '../../redux/reducers/init';
-
 const { connect } = require('react-redux');
+
+require('../../../css/application.css.scss');
 
 interface IProps {
     init: IInitState;
 }
-
 @connect(
     state => ({ init: state.initReducer })
 )

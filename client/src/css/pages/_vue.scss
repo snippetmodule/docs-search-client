@@ -1,0 +1,7 @@
+._vue {
+	@extend %simple;
+
+	p.tip {
+		@extend %note;
+	}
+}

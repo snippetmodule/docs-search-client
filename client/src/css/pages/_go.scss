@@ -1,0 +1,8 @@
+._go {
+	@extend %simple;
+
+	#short-nav,
+	table.dir {
+		margin-left: -1rem;
+	}
+}
