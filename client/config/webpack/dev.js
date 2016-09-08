@@ -48,14 +48,6 @@ var config = {
         ]
       },
       {
-        test: /\.css$/,
-        exclude: path.resolve('./src/app'),
-        loaders: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
-      {
         test: /\.eot(\?.*)?$/,
         loader: 'file?name=fonts/[hash].[ext]'
       },

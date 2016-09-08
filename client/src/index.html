@@ -3,16 +3,34 @@
 
 <head>
   <style type="text/css">
-    *,
-    :after,
-    :before {
-      box-sizing: border-box
+    .header {
+      width: 100%;
+      height: 30px;
+      padding: 0 10px;
+      border-left: 10px solid #a3be8c;
+      font-size: 12px;
+      line-height: 30px;
+      color: #eff1f5;
+      background: #343d46;
+      overflow: hidden
+    }
+    nav div.container {
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: 0;
+      margin-left: 0;
     }
     
     html {
       height: 100%;
       font-size: 100%;
       background: #fafafa;
+    }
+    
+    @media (max-width: 800px) {
+      html {
+        font-size: 93.75%;
+      }
     }
     
     body {
@@ -29,41 +47,172 @@
       -ms-text-size-adjust: 100%;
     }
     
-    .header {
-      width: 100%;
-      height: 30px;
-      padding: 0 10px;
-      border-left: 10px solid #a3be8c;
-      font-size: 12px;
-      line-height: 30px;
-      color: #eff1f5;
-      background: #343d46;
-      overflow: hidden
+    a {
+      color: #0082c6;
+      text-decoration: none;
     }
     
-    #errors {
-      width: 100%;
-      margin: 0;
-      padding: 10px;
-      font-family: monospace;
-      font-size: 14px;
-      line-height: 1.4;
-      color: #eff1f5;
-      background: #bf616a;
-      overflow: auto
+    a:hover {
+      color: #0072c5;
+      text-decoration: underline;
     }
     
-    nav div.container {
-      padding-right: 15px;
-      padding-left: 15px;
-      margin-right: 0;
-      margin-left: 0;
+    img {
+      max-width: 100%;
+      height: auto;
+      border: 0;
     }
     
-    #okness {
-      font-weight: 700
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 1.5em 0 1em;
+      line-height: 1.3;
+      font-weight: bold;
     }
-  
+    
+    h1 {
+      font-size: 1.5em;
+    }
+    
+    h2 {
+      font-size: 1.375em;
+    }
+    
+    h3 {
+      font-size: 1.25em;
+    }
+    
+    h4 {
+      font-size: 1.125em;
+    }
+    
+    h5,
+    h6 {
+      font-size: 1em;
+    }
+    
+    p {
+      margin: 0 0 1em;
+    }
+    
+    p:last-child {
+      margin-bottom: 0;
+    }
+    
+    b,
+    strong {
+      font-weight: bold;
+    }
+    
+    small {
+      font-size: .9em;
+    }
+    
+    ul,
+    ol {
+      margin: 1.5em 0;
+      padding: 0 0 0 2em;
+      list-style: disc outside;
+    }
+    
+    ul ul {
+      list-style-type: circle;
+    }
+    
+    ol {
+      list-style-type: decimal;
+    }
+    
+    ol ol {
+      list-style-type: lower-alpha;
+    }
+    
+    ol ol ol {
+      list-style-type: lower-roman;
+    }
+    
+    li + li {
+      margin-top: .25em;
+    }
+    
+    li > ul,
+    li > ol,
+    dd > ul,
+    dd > ol {
+      margin: .5em 0;
+    }
+    
+    li > p {
+      margin-bottom: .25em;
+    }
+    
+    dl {
+      margin: 1.5em 0;
+    }
+    
+    dt {
+      font-weight: bold;
+    }
+    
+    dd {
+      margin: .375em;
+      padding-left: 1em;
+    }
+    
+    dd + dt {
+      margin-top: 1em;
+    }
+    
+    dfn,
+    var {
+      font-style: normal;
+    }
+    
+    abbr,
+    acronym,
+    dfn {
+      cursor: help;
+      border-bottom: 1px dotted #333;
+    }
+    
+    pre,
+    code,
+    samp,
+    ._redis > .example,
+    ._abbreviations td,
+    ._dojo .functionIcon,
+    ._dojo .parameters,
+    ._haskell .src,
+    ._rfc-pre {
+      font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-weight: normal;
+      font-style: normal;
+      font-size: .9em;
+      color: #333;
+      white-space: pre-wrap;
+      direction: ltr;
+      -moz-tab-size: 2;
+      -o-tab-size: 2;
+      tab-size: 2;
+    }
+    
+    pre,
+    ._redis > .example {
+      position: relative;
+      margin: 1.5em 0;
+      padding: .375rem .625rem;
+      line-height: 1.5;
+      overflow: auto;
+    }
+    
+    a > code {
+      color: inherit;
+    }
+    
     table {
       margin: 1.5em 0;
       background: none;
