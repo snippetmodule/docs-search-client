@@ -11,8 +11,8 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
         let {_isSelected, stateItem} = this.props;
         let openClass = stateItem.isExpended ? 'open' : '';
         let selectClass = _isSelected ? ['focus', 'active'] : '';
-        let index = stateItem.docInfo.slug.indexOf('~');
-        let iconClass = '_icon-' + (index === -1 ? stateItem.docInfo.slug : stateItem.docInfo.slug.substr(0, index));
+        let splits = stateItem.data.docInfo.slug.split('~');
+        let iconClass = '_icon-' + splits[0];
         return (
             <a  className={cx('_list-item', iconClass, '_list-dir', openClass, selectClass) }
                 onClick={this.props.onClickItem }
@@ -24,9 +24,9 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
                 onMouseOut={event => { this.spanDisenableRef.innerText = ''; } }
                 >
                 <span className={cx('_list-arrow') }></span>
-                <span className={cx('_list-enable') } style={{color:'#fff !important',display:'block'}}ref={ref => this.spanDisenableRef = ref}
+                <span className={cx('_list-enable') } style={{ color: '#fff !important', display: 'block' }}ref={ref => this.spanDisenableRef = ref}
                     onClick={this.props.disableDoc }></span>
-                {stateItem.name}
+                {stateItem.data.name}
             </a>
         );
     }
@@ -42,7 +42,7 @@ class ExpandDocItem extends React.Component<IRenderItemProp, any> {
                     onClick={this.props.onClickItem}>
                     <span className={cx('_list-arrow') }></span>
                     <span className={cx('_list-count') }>{ stateItem.child.length === 0 ? ' ' : stateItem.child.length}</span>
-                    {stateItem.name}
+                    {stateItem.data.name}
                 </a>
             </div>
         );
@@ -52,14 +52,14 @@ class ExpandDocItem extends React.Component<IRenderItemProp, any> {
 export class EnableDocItem extends React.Component<IRenderItemProp, any> {
     public render() {
         if (this.props.stateItem.child.length === 0) { // 叶子节点
-            if (this.props.stateItem.docInfo.storeValue) {
+            if (this.props.stateItem.data.docInfo.storeValue) {
                 let selectClass = this.props._isSelected ? ['focus', 'active'] : '';
                 return (
                     <div className={cx('_list', '_list-sub') } >
                         <a className={cx('_list-item', '_list-hover', '_no_before', selectClass) }
                             onClick={this.props.onClickItem}
                             >
-                            {this.props.stateItem.name}
+                            {this.props.stateItem.data.name}
                         </a>
                     </div>
                 );

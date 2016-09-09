@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Link} from 'react-router';
 import {IDocPageState} from '../../redux/reducers/docpage';
 import {startRequestPage} from '../../redux/reducers/docpage';
-import {DocsModelEntriyType, IDocInfo} from '../../core/model';
-import {getDocInfoByUrlPath} from '../App/ExpandedDocList';
+import {getDocInfoByUrlPath, ICanExpendedItem} from '../App/ExpandedDocList';
 import * as appConfig from '../../config';
 import {history} from '../../routes';
 const { connect } = require('react-redux');
@@ -32,27 +31,12 @@ class DocPage extends React.Component<IProps, void> {
     private rootElem: HTMLElement;
     private nextScroolToElement: string = null;
 
-    private mDocInfo: IDocInfo;
-    private mEntryTypes: DocsModelEntriyType[];
-
+    private mCanExpandedItem: ICanExpendedItem;
     constructor(props) {
         super(props);
-        let curUrl: string = this.props.location.pathname;
-        this.initDocInfo(curUrl);
-        if (!this.mEntryTypes && curUrl) {
-            let indexCurrUrl = curUrl.indexOf('#');
-            curUrl = indexCurrUrl === -1 ? curUrl : curUrl.substr(0, indexCurrUrl);
-            this.props.startRequestPage(curUrl);
-        }
+        this.handlerNextProps(this.props, null);
+    }
 
-    }
-    private initDocInfo(curUrl: string) {
-        let result = getDocInfoByUrlPath(curUrl);
-        if (result) {
-            this.mDocInfo = result.docInfo;
-            this.mEntryTypes = result.types;
-        }
-    }
     public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
         let links = this.rootElem.getElementsByTagName('a');
         for (let link of links) {
@@ -76,7 +60,7 @@ class DocPage extends React.Component<IProps, void> {
         } else {
             this.rootElem.scrollTop = 0;
         }
-        if (onLoactionChangeCallback && (this.mEntryTypes || this.props.init.isInited)) { // 更新完成后再发此回调
+        if (onLoactionChangeCallback && (this.props.init.isInited)) { // 更新完成后再发此回调
             for (let key in onLoactionChangeCallback) {
                 if (onLoactionChangeCallback[key]) {
                     onLoactionChangeCallback[key](this.props.location.pathname);
@@ -84,56 +68,56 @@ class DocPage extends React.Component<IProps, void> {
             }
         }
     }
-    public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
-        this.nextScroolToElement = null;
-        let nextUrl: string = nextProps.location.pathname;
-        let curUrl: string = this.props.location.pathname || '';
-        let indexNextUrl = nextUrl.indexOf('#');
-        let indexCurrUrl = curUrl.indexOf('#');
-        let nextScroolTo: string = indexNextUrl === -1 ? '' : nextUrl.substr(indexNextUrl + 1, nextUrl.length);
+    public shouldComponentUpdate(nextProps: IProps, nextState: void, nextContext: any): boolean {
+        if (this.props.init.isInited && this.props.location.pathname === nextProps.location.pathname) {
+            return false;
+        }
+        return true;
+    }
+    private handlerNextProps(nextProps: IProps, curProps: IProps) {
+        let nextUrlParams: string[] = nextProps.location.pathname.split('#');
+        let curUrlParams: string[] = !curProps ? [] : curProps.location.pathname.split('#');
 
-        this.initDocInfo(nextUrl);
-        if (this.mEntryTypes) {
+        this.mCanExpandedItem = getDocInfoByUrlPath(nextUrlParams[0]);
+        if (nextProps.location.state && nextProps.location.state.typeSlug && !nextProps.location.state.entrySlug) { // 显示的为 types 列表
+            this.nextScroolToElement = null;
+            nextProps.init.isInited = true;
             return;
         }
-        if (!nextScroolTo) { // 不包含＃
-            if (nextUrl !== curUrl && nextUrl) {
-                nextProps.startRequestPage(nextUrl);
-                nextProps.init.isInited = false;
-                nextProps.init.content = undefined;
-            }
-        } else {
-            nextUrl = nextUrl.substr(0, indexNextUrl);
-            curUrl = curUrl.substr(0, indexCurrUrl);
-            if (nextUrl !== curUrl) {
-                nextProps.startRequestPage(nextUrl);
-                nextProps.init.isInited = false;
-                nextProps.init.content = undefined;
-            } else {
-                this.nextScroolToElement = nextScroolTo.replace('.html', '');
-            }
+        if (nextUrlParams[0] !== curUrlParams[0]) { // url 不一致 
+            nextProps.startRequestPage(nextUrlParams[0]);
+            nextProps.init.isInited = false;
+            nextProps.init.content = undefined;
         }
+        this.nextScroolToElement = nextUrlParams[1];
+    }
+    public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
+        if (this.props.location.pathname === nextProps.location.pathname) { // 说明不需要处理，之前已经处理过
+            return;
+        }
+        this.handlerNextProps(nextProps, this.props);
     }
 
     public render() {
         let { init} = this.props;
+        let mDocInfo = this.mCanExpandedItem.data.docInfo;
         let htmlContent = init.content;
-        if (this.mDocInfo && this.mDocInfo.links) {
+        if (mDocInfo && mDocInfo.links) {
             htmlContent = '<p class="_links">' +
-                (this.mDocInfo.links.home ? ('<a href="XXXX" class="_links-link">Homepage</a>'.replace('XXXX', this.mDocInfo.links.home)) : '') +
-                (this.mDocInfo.links.code ? ('<a href="XXXX" class="_links-link">Source code</a>'.replace('XXXX', this.mDocInfo.links.code)) : '') +
+                (mDocInfo.links.home ? ('<a href="XXXX" class="_links-link">Homepage</a>'.replace('XXXX', mDocInfo.links.home)) : '') +
+                (mDocInfo.links.code ? ('<a href="XXXX" class="_links-link">Source code</a>'.replace('XXXX', mDocInfo.links.code)) : '') +
                 '</p>' + htmlContent;
         }
-        if (this.mEntryTypes) {
+        if (this.props.location.state && this.props.location.state.typeSlug && !this.props.location.state.entrySlug) {
             return (
                 <div  ref={ref => this.rootElem = ref} className="_content">
                     <div className="_page">
-                        <h1>{}</h1>
+                        <h1>{this.mCanExpandedItem.data.name + ' / ' + this.mCanExpandedItem.parent.data.name}</h1>
                         <ul>
-                            {this.mEntryTypes.map((item, index) => {
+                            {this.mCanExpandedItem.child.map((item, index) => {
                                 return (
                                     <li key={index}>
-                                        <Link to={{ pathname: '/docs/' + item.doc.slug + '/' + item.path }}>{item.name}</Link>
+                                        <Link to={{ pathname: item.data.path }}>{item.data.name}</Link>
                                     </li >
                                 );
                             }) }
@@ -152,7 +136,7 @@ class DocPage extends React.Component<IProps, void> {
         return (
             <div ref={ref => this.rootElem = ref} className="_content">
                 <div dangerouslySetInnerHTML={{ __html: htmlContent }}
-                    className={'_page ' + (this.mDocInfo ? '_' + this.mDocInfo.type : '') } >
+                    className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
                 </div>
             </div>
         );

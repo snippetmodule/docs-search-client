@@ -9,15 +9,15 @@ class DisableDocItem extends React.Component<IRenderItemProp, any> {
     public render() {
         let {_isSelected, stateItem} = this.props;
         let selectClass = _isSelected ? ['focus', 'active'] : '';
-        let index = stateItem.slug.indexOf('~');
-        let iconClass = '_icon-' + (index === -1 ? stateItem.slug : stateItem.slug.substr(0, index));
+        let splits = stateItem.data.docInfo.slug.split('~');
+        let iconClass = '_icon-' + splits[0];
         return (
             <a  className={cx('_list-item', iconClass, '_list-disabled', '_no_before', selectClass) }
                 onClick={this.props.onClickItem}
                 >
                 <span className={cx('_list-enable') } onClick={this.props.enableDoc}>Enable</span>
-                <span className={cx('_list-count') }>{stateItem.docInfo.release}</span>
-                {stateItem.name}
+                <span className={cx('_list-count') }>{stateItem.data.docInfo.release}</span>
+                {stateItem.data.name}
             </a>
         );
     }
@@ -27,14 +27,14 @@ class TopCanExpandDocItem extends React.Component<IRenderItemProp, any> {
         let {_isSelected, stateItem} = this.props;
         let openClass = stateItem.isExpended ? 'open' : '';
         let selectClass = _isSelected ? ['focus', 'active'] : '';
-        let index = stateItem.slug.indexOf('~');
-        let iconClass = '_icon-' + (index === -1 ? stateItem.slug : stateItem.slug.substr(0, index));
+        let splits = stateItem.child[0].data.docInfo.slug.split('~');
+        let iconClass = '_icon-' + splits[0];
         return (
             <a  className={cx('_list-item', '_list-dir', iconClass, '_list-disabled', openClass, selectClass) }
                 onClick={this.props.onClickItem }
                 >
                 <span className={cx('_list-arrow') }></span>
-                {stateItem.name}
+                {stateItem.data.name}
             </a>
         );
     }
@@ -44,15 +44,15 @@ class TopCantExpandDocItem extends React.Component<IRenderItemProp, any> {
     public render() {
         let {_isSelected, stateItem} = this.props;
         let selectClass = _isSelected ? ['focus', 'active'] : '';
-        let index = stateItem.docInfo.slug.indexOf('~');
-        let iconClass = '_icon-' + (index === -1 ? stateItem.docInfo.slug : stateItem.docInfo.slug.substr(0, index));
+        let splits = stateItem.data.docInfo.slug.split('~');
+        let iconClass = '_icon-' + splits[0];
         return (
             <a  className={cx('_list-item', iconClass, '_list-disabled', selectClass) }
                 onClick={this.props.onClickItem }
                 >
                 <span className={cx('_list-enable') } onClick={this.props.enableDoc}>Enable</span>
                 <span className={cx('_list-count') }>2.1.0</span>
-                {stateItem.name}
+                {stateItem.data.name}
             </a>
         );
     }
@@ -61,7 +61,7 @@ class DisenableDocItem extends React.Component<IRenderItemProp, any> {
     public render() {
         let {stateItem, _isSelected, onClickItem} = this.props;
         let selectClass = _isSelected ? ['focus', 'active'] : '';
-        if (stateItem.name === 'Disable') {
+        if (stateItem.data.name === 'Disable') {
             let openClass = stateItem.isExpended ? 'open' : '';
             let count = 0;
             for (let child of stateItem.child) {
@@ -77,7 +77,7 @@ class DisenableDocItem extends React.Component<IRenderItemProp, any> {
                     >
                     <span className={cx('_list-arrow') }></span>
                     <span className={cx('_list-count') }>{ count || ''}</span>
-                    {stateItem.name}
+                    {stateItem.data.name}
                 </a>
             );
         } else if (stateItem.deep === 1) {
