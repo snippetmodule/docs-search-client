@@ -72,7 +72,7 @@ export class ExpandedDocList implements ICanExpendedState {
         };
         for (let docItem of appConfig.default.docs.getDocsInfoArrays) {
             if (docItem.storeValue) {
-                let parentItem: ICanExpendedItem = { name: docItem.name, slug: docItem.slug, path: docItem.slug + '/index.html', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: null, isEnable: true };
+                let parentItem: ICanExpendedItem = { name: docItem.name, slug: docItem.slug, path: docItem.slug + '/', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: null, isEnable: true };
                 parentItem.child = docItem.storeValue.types.map((item: DocsModelTypeType) => {
                     let parentTypes: ICanExpendedItem = { name: item.name, slug: docItem.slug, path: docItem.slug + '/' + item.slug + '/', isExpended: false, deep: 0, child: [], docInfo: docItem, parent: parentItem, isEnable: true };
                     parentTypes.child = item.childs.map((entry: DocsModelEntriyType) => {
@@ -83,7 +83,7 @@ export class ExpandedDocList implements ICanExpendedState {
                 enableDocs.push(parentItem);
             } else {
                 if (docItem.slug.indexOf('~') === -1) {
-                    disableDocs.child.push({ name: docItem.name, slug: docItem.slug, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem, parent: disableDocs, isEnable: false });
+                    disableDocs.child.push({ name: docItem.name, slug: docItem.slug, isExpended: false, path: docItem.slug + '/', deep: 1, child: [], docInfo: docItem, parent: disableDocs, isEnable: false });
                 } else {
                     let disableChilds = disableDocs.child;
                     let preSlug = docItem.slug.indexOf('~') === -1 ? docItem.slug : docItem.slug.substr(0, docItem.slug.indexOf('~'));
@@ -97,7 +97,7 @@ export class ExpandedDocList implements ICanExpendedState {
                         parent = { name: docItem.name, slug: docItem.slug, isExpended: false, path: null, deep: 1, child: [], docInfo: null, parent: disableDocs, isEnable: false };
                         disableDocs.child.push(parent);
                     }
-                    parent.child.push({ name: docItem.name, slug: docItem.slug, isExpended: false, path: docItem.slug + '/index.html', deep: 1, child: [], docInfo: docItem, parent: parent, isEnable: false });
+                    parent.child.push({ name: docItem.name, slug: docItem.slug, isExpended: false, path: docItem.slug + '/', deep: 1, child: [], docInfo: docItem, parent: parent, isEnable: false });
                 }
             }
         }
