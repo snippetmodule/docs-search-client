@@ -3,10 +3,6 @@ import { Link } from 'react-router';
 import { getSearchResult } from '../../redux/reducers/searchdocs';
 const { connect } = require('react-redux');
 
-let classNames = require('classnames/bind');
-let css = require('./style.css');
-let cx = classNames.bind(css);
-
 @connect(
   null,
   dispatch => ({
@@ -31,7 +27,7 @@ class Header extends React.Component<any, void> {
   }
   public render() {
     return (
-      <div className={cx('content') }>
+      <div className="content">
         <form className="left _search" role="search">
           <input type="search" className="_search-input" placeholder="搜索…" maxLength="30"  autoFocus="autofocus"
             onChange={this.handleChange.bind(this) } />

@@ -8,9 +8,7 @@ import {history} from '../../routes';
 import {onDocsPageLoactionChangeCallback} from '../DocPage/';
 const { connect } = require('react-redux');
 
-let classNames = require('classnames/bind');
-let listCss = require('./list-style.css');
-let cx = classNames.bind(listCss);
+let classNames = require('classnames');
 
 interface ISearchProps {
     searchState?: ISearchState;
@@ -42,15 +40,15 @@ class Left extends React.Component<ISearchProps, void> {
         let iconindex = searchResultItem.doc.slug.indexOf('~');
         let iconClass = '_icon-' + (iconindex === -1 ? searchResultItem.doc.slug : searchResultItem.doc.slug.substr(0, iconindex));
         let ltemClass = (index === this.selectedIndex)
-            ? cx('_list-item', '_list-hove', '_list-result', iconClass, 'focus', 'active')
-            : cx('_list-item', '_list-hove', '_list-result', iconClass, index === 0 && this.selectedIndex === -1 ? 'focus' : '');
+            ? classNames('_list-item', '_list-hove', '_list-result', iconClass, 'focus', 'active')
+            : classNames('_list-item', '_list-hove', '_list-result', iconClass, index === 0 && this.selectedIndex === -1 ? 'focus' : '');
         return (
             <a key={key} href="" className={ltemClass} ref={ref => this.mListItemRef[key] = ref}
                 onClick = { event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }
                 onMouseOver={event => { this.mListItemRef[key].style.textDecoration = 'underline'; } }
                 onMouseOut={event => { this.mListItemRef[key].style.textDecoration = 'none'; } }
                 >
-                <span className={cx('_list-reveal') } data-reset-list="" title="Reveal in list"></span>
+                <span className="_list-reveal" data-reset-list="" title="Reveal in list"></span>
                 {searchResultItem.name }
             </a >
         );

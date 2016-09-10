@@ -8,6 +8,8 @@ const { Router } = require('react-router');
 const { ReduxAsyncConnect } = require('redux-connect');
 import {store, history, routeConfig} from './app/routes';
 
+require('./css/application.css.scss');
+
 ReactDOM.render(
   <Provider store={store} key="provider">
     <Router

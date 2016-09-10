@@ -6,8 +6,6 @@ import {Left} from './left';
 import { IInitState } from '../../redux/reducers/init';
 const { connect } = require('react-redux');
 
-require('../../../css/application.css.scss');
-
 interface IProps {
     init: IInitState;
 }
