@@ -48,8 +48,8 @@ var config = {
         ]
       },
       {
-        test:/\.scss$/,
-        loaders:['style', "css?sourceMap", "sass?sourceMap"]
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'postcss', 'sass?sourceMap']
       },
       {
         test: /\.eot(\?.*)?$/,
