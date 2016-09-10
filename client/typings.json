@@ -18,5 +18,8 @@
     "redux-devtools-dock-monitor": "registry:dt/redux-devtools-dock-monitor#1.0.1+20151216103641",
     "redux-devtools-log-monitor": "registry:dt/redux-devtools-log-monitor#1.0.1+20151216103641",
     "redux-thunk": "registry:dt/redux-thunk#2.1.0+20160703120921"
+  },
+  "globalDevDependencies": {
+    "node-sass": "registry:dt/node-sass#0.0.0+20160316155526"
   }
 }

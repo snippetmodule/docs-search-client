@@ -3,6 +3,7 @@
 /// <reference path="globals/isomorphic-fetch/index.d.ts" />
 /// <reference path="globals/js-cookie/index.d.ts" />
 /// <reference path="globals/localforage/index.d.ts" />
+/// <reference path="globals/node-sass/index.d.ts" />
 /// <reference path="globals/node/index.d.ts" />
 /// <reference path="globals/react-dom/index.d.ts" />
 /// <reference path="globals/react-helmet/index.d.ts" />
