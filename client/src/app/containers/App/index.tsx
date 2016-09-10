@@ -13,7 +13,6 @@ interface IProps {
     state => ({ init: state.initReducer })
 )
 class App extends React.Component<IProps, any> {
-    private s = require('./style.css');
     public render() {
         if (!this.props.init.isInited) {
             return (
@@ -29,24 +28,18 @@ class App extends React.Component<IProps, any> {
             );
         }
         return (
-            <div className={this.s.rootStyle} >
+            <div className="_app" >
                 <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head}/>
-                <div className={this.s.headerStyle}>
-                    <Header/>
-                </div>
-
-                <div className={this.s.contentLayout}>
-                    <div  className={this.s.leftLayout}>
-                        <Left />
-                    </div>
-                    <div className={this.s.rightLayout}>
+                <Header/>
+                <section  className="_sidebar" tabIndex="-1" style={{width:'18.6rem'}}>
+                    <Left />
+                </section>
+                <div className="_container" role="document">
+                    <main className ="_content" role="main" tabIndex="-1">
                         {this.props.children}
-                    </div>
+                    </main>
                 </div>
-
-                <div className={this.s.footerStyle}>
-                    112131
-                </div>
+                <div title="Click to toggle sidebar on/off" className="_resizer" draggable="true"></div>
             </div>
         );
     }

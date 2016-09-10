@@ -49,7 +49,7 @@ class TopCantExpandDocItem extends React.Component<IRenderItemProp, any> {
                 onClick={this.props.onClickItem }
                 >
                 <span className={classNames('_list-enable') } onClick={this.props.enableDoc}>Enable</span>
-                <span className={classNames('_list-count') }>2.1.0</span>
+                <span className={classNames('_list-count') }>{stateItem.data.docInfo.release}</span>
                 {stateItem.data.name}
             </a>
         );
