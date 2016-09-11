@@ -1,39 +1,39 @@
-import {DocsModelEntriyType, DocsModelTypeType, IDocInfo, ISearchResultItem} from './model';
+import {DocsModelEntriyType, DocsModelTypeType, IDocInfo, ISearchItem} from './model';
 import {localStorage } from './storage';
 import * as Cookies from 'js-cookie';
 import {Searcher}from './Searcher';
 
-type SearchType = { name: string, [key: string]: any };
-
 // 根据docsInfoArrays 初始化 mSearcher
-function initSearcher(docsInfoArrays: IDocInfo[]): Searcher<SearchType> {
-    let searchItems: SearchType[] = [];
-    docsInfoArrays.map<{ entries: DocsModelEntriyType[], types: DocsModelTypeType[] }>(
+function initSearcher(docsInfoArrays: IDocInfo[]): Searcher<ISearchItem> {
+    let searchItems: ISearchItem[] = [];
+    docsInfoArrays.map<{ entries: ISearchItem[], types: ISearchItem[] }>(
         (docsItem: IDocInfo) => {
             if (!docsItem.storeValue) {
                 return { entries: [], types: [] };
             }
-            let _entries: DocsModelEntriyType[] = docsItem.storeValue.entries;
-            let _types: DocsModelTypeType[] = docsItem.storeValue.types;
-            _entries = _entries.map(item => {
-                item.doc = docsItem;
-                return item;
+            let _entries: ISearchItem[];
+            let _types: ISearchItem[];
+            _entries = docsItem.storeValue.entries.map((item: DocsModelEntriyType) => {
+                return { name: item.name, pathname: item.pathname, slug: docsItem.slug, doc: docsItem };
             });
-            _types = _types.map((item: DocsModelTypeType) => {
-                item.childs = _entries.filter((entry: DocsModelEntriyType) => {
-                    return entry.type === item.name;
-                });
-                item.doc = docsItem;
-                return item;
+            _types = docsItem.storeValue.types.map((item: DocsModelTypeType) => {
+                return { name: item.name, pathname: item.pathname, slug: docsItem.slug, doc: docsItem };
             });
-            docsItem.storeValue.entries = _entries;
-            docsItem.storeValue.types = _types;
             return { entries: _entries, types: _types };
-        }).map((item: { entries: DocsModelEntriyType[], types: DocsModelTypeType[] }) => {
+        }).map((item: { entries: ISearchItem[], types: ISearchItem[] }) => {
             return [...item.entries, ...item.types];
         }).forEach(item => {
             searchItems = searchItems.concat(item);
         });
+
+    searchItems.push(...docsInfoArrays.filter(item => {
+        if (item.storeValue) {
+            return false;
+        }
+        return true;
+    }).map(item => {
+        return { name: item.slug, pathname: item.pathname, slug: item.slug, doc: item };
+    }));
     return new Searcher(searchItems, ['name']);
 }
 
@@ -53,7 +53,7 @@ async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[])
     for (let key of keys) {
         for (let info of docsInfoArrays) {
             if (info.slug === key) {
-                let value: IDocInfo = <IDocInfo> (await localStorage.getItem(key));
+                let value: IDocInfo = <IDocInfo>(await localStorage.getItem(key));
                 if (value) {
                     info.storeValue = value.storeValue;
                 }
@@ -69,6 +69,8 @@ async function downloadDoc(docInfo: IDocInfo) {
         let responseString = await res.text();
         docInfo.storeValue = JSON.parse(responseString);
         docInfo.storeValue.types = sortTyps(docInfo.storeValue.types);
+        docInfo.storeValue.entries.forEach(item => item.pathname = docInfo.pathname + item.path);
+        docInfo.storeValue.types.forEach(item => item.pathname = docInfo.pathname + item.slug + '/');
         await localStorage.setItem(docInfo.slug, docInfo);
     }
 }
@@ -113,8 +115,9 @@ class Docs {
     private isAutoUpdate: boolean;
     private isDocChangedByUser: boolean;
 
-    private mSearcher: Searcher<SearchType>;
+    private mSearcher: Searcher<ISearchItem>;
     constructor(private docsInfoArrays: Array<IDocInfo> = []) {
+        this.docsInfoArrays.forEach(item => item.pathname = '/docs/' + item.slug + '/');
         this.isAutoUpdate = Cookies.get('Docs_IsAutoUpdate') === 'false' ? false : true; // 默认为true
         this.isDocChangedByUser = Cookies.get('Docs_isDocChangedByUser') === 'true' ? true : false; // 默认为false
     }
@@ -167,7 +170,7 @@ class Docs {
         Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate, { expires: 1e8, secure: true });
         Cookies.set('Docs_isDocChangedByUser', this.isDocChangedByUser);
     }
-    public search(input: string): Promise<Array<ISearchResultItem>> {
+    public search(input: string): Promise<Array<ISearchItem>> {
         return new Promise((resolve, reject) => {
             resolve(this.mSearcher.search(input));
         });

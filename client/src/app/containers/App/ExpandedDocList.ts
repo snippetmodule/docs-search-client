@@ -7,7 +7,7 @@ export interface ICanExpendedItem {
     child: ICanExpendedItem[];
     deep: number; // 此节点在整个树中的的深度
     parent: ICanExpendedItem; // 父节点
-    data: { docInfo: IDocInfo, docType: DocsModelTypeType, docEntry: DocsModelEntriyType, path: string, name: string };
+    data: { docInfo: IDocInfo, docType: DocsModelTypeType, docEntry: DocsModelEntriyType, pathname: string, name: string };
 }
 
 export interface ICanExpendedState {
@@ -27,7 +27,7 @@ export function getDocInfoByUrlPath(pathname: String): ICanExpendedItem {
     let temp = [...enableDocs, disableDocs];
     while (temp.length > 0) {
         let item = temp.shift();
-        if (item.data.path === pathname) {
+        if (item.data.pathname === pathname) {
             return item;
         }
         temp.push(...item.child);
@@ -50,24 +50,30 @@ export class ExpandedDocList implements ICanExpendedState {
             isExpended: true,
             deep: 0,
             child: [],
-            data: { name: 'Disable', path: null, docInfo: null, docType: null, docEntry: null },
+            data: { name: 'Disable', pathname: null, docInfo: null, docType: null, docEntry: null },
             parent: null,
         };
         for (let docItem of appConfig.default.docs.getDocsInfoArrays) {
             if (docItem.storeValue) {
                 let parentItem: ICanExpendedItem = {
                     isExpended: false, deep: 0, child: [], parent: null,
-                    data: { name: docItem.name, docInfo: docItem, docType: null, docEntry: null, path: '/docs/' + docItem.slug + '/' },
+                    data: { name: docItem.name, docInfo: docItem, docType: null, docEntry: null, pathname: docItem.pathname },
                 };
                 parentItem.child = docItem.storeValue.types.map((item: DocsModelTypeType) => {
                     let parentTypes: ICanExpendedItem = {
                         isExpended: false, deep: 0, child: [], parent: parentItem,
-                        data: { name: item.name, docInfo: docItem, docType: item, docEntry: null, path: '/docs/' + docItem.slug + '/' + item.slug + '/' },
+                        data: { name: item.name, docInfo: docItem, docType: item, docEntry: null, pathname: item.pathname },
                     };
+                    item.childs = docItem.storeValue.entries.filter(entry => {
+                        if (entry.type === item.name) {
+                            return true;
+                        }
+                        return false;
+                    })
                     parentTypes.child = item.childs.map((entry: DocsModelEntriyType) => {
                         return {
                             isExpended: false, deep: 0, child: [], parent: parentTypes, isEnable: true,
-                            data: { name: entry.name, docInfo: docItem, docType: item, docEntry: entry, path: '/docs/' + docItem.slug + '/' + entry.path },
+                            data: { name: entry.name, docInfo: docItem, docType: item, docEntry: entry, pathname: entry.pathname },
                         };
                     });
                     return parentTypes;
@@ -77,7 +83,7 @@ export class ExpandedDocList implements ICanExpendedState {
                 if (docItem.slug.indexOf('~') === -1) {
                     disableDocs.child.push({
                         isExpended: false, deep: 1, child: [], parent: disableDocs,
-                        data: { name: docItem.name, docInfo: docItem, docType: null, docEntry: null, path: '/docs/' + docItem.slug + '/' },
+                        data: { name: docItem.name, docInfo: docItem, docType: null, docEntry: null, pathname: docItem.pathname },
                     });
                 } else {
                     let disableChilds = disableDocs.child;
@@ -90,13 +96,13 @@ export class ExpandedDocList implements ICanExpendedState {
                     if (!parent) {
                         parent = {
                             isExpended: false, deep: 1, child: [], parent: disableDocs, isEnable: false,
-                            data: { name: docItem.name, docInfo: null, docType: null, docEntry: null, path: null },
+                            data: { name: docItem.name, docInfo: null, docType: null, docEntry: null, pathname: null },
                         };
                         disableDocs.child.push(parent);
                     }
                     parent.child.push({
                         isExpended: false, deep: 1, child: [], parent: parent, isEnable: false,
-                        data: { name: docItem.name, docInfo: docItem, docType: null, docEntry: null, path: '/docs/' + docItem.slug + '/' },
+                        data: { name: docItem.name, docInfo: docItem, docType: null, docEntry: null, pathname: docItem.pathname },
                     });
                 }
             }
@@ -130,12 +136,12 @@ export class ExpandedDocList implements ICanExpendedState {
 
     private _setSelectedIndexByUrlPath(locationUrl: string): boolean {
         if (this.selectedIndex < this.listItems.length && this.selectedIndex > 0) {
-            if (this.listItems[this.selectedIndex].data.path === locationUrl) {
+            if (this.listItems[this.selectedIndex].data.pathname === locationUrl) {
                 return false;  // 不用更新，selectedIndex 未变
             }
         }
         for (let index = 0; index < this.listItems.length; index++) {
-            if (this.listItems[index].data.path === locationUrl) {
+            if (this.listItems[index].data.pathname === locationUrl) {
                 this.selectedIndex = index;
                 _selectedIndex = index;
                 return true; // 只须更新 selectedIndex
@@ -146,7 +152,7 @@ export class ExpandedDocList implements ICanExpendedState {
         let temp: ICanExpendedItem[] = [...enableDocs];
         while (temp.length !== 0) {
             let item = temp.shift();
-            if (item.data.path === locationUrl) {
+            if (item.data.pathname === locationUrl) {
                 findedItem = item;
                 break;
             }
@@ -166,7 +172,7 @@ export class ExpandedDocList implements ICanExpendedState {
         while (temp.length !== 0) {
             let item = temp.shift();
             lists.push(item);
-            if (item.data.path === locationUrl) {
+            if (item.data.pathname === locationUrl) {
                 isFind = true;
             }
             if (item.isExpended) {

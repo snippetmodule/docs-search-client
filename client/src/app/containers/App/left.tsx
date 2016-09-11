@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import {ISearchResultItem} from '../../core/model';
+import {ISearchItem} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
 import ReactList from '../../utils/react-lists';
 import {DefaultList} from './list';
@@ -21,21 +21,40 @@ class Left extends React.Component<ISearchProps, void> {
     private mListItemRef: {
         [key: string]: HTMLElement;
     } = {};
-    private onClickItem(index: number, searchResultItem: ISearchResultItem) {
+    private onClickItem(index: number, searchResultItem: ISearchItem) {
         this.selectedIndex = index;
         this.forceUpdate();
         history.push({
-            pathname: '/docs/' + searchResultItem.doc.slug + '/' + (searchResultItem.path ? searchResultItem.path : searchResultItem.slug + '/'),
+            pathname: searchResultItem.pathname,
         });
     }
     public componentWillReceiveProps(nextProps: ISearchProps, nextContext: any) {
         this.selectedIndex = -1;
         this.mListRef = null;
     }
+    private renderDisableItem(searchResultItem: ISearchItem, index: number, key: string) {
+        let iconClass = '_icon-' + searchResultItem.slug.split('~')[0];
+        let ltemClass = (index === this.selectedIndex)
+            ? classNames('_list-item', '_list-hove', '_list-result', iconClass, 'focus', 'active')
+            : classNames('_list-item', '_list-hove', '_list-result', iconClass, index === 0 && this.selectedIndex === -1 ? 'focus' : '');
+        return (
+            <a key={key} href="" className={ltemClass} ref={ref => this.mListItemRef[key] = ref}
+                onClick = { event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }
+                onMouseOver={event => { this.mListItemRef[key].style.textDecoration = 'underline'; } }
+                onMouseOut={event => { this.mListItemRef[key].style.textDecoration = 'none'; } }
+                >
+                <span className="_list-enable" data-enable={searchResultItem.name}>Enable</span>
+                <span className="_list-text">{searchResultItem.name }</span>
+            </a >
+        );
+    }
     private renderItem(index, key) {
-        let searchResultItem: ISearchResultItem = this.props.searchState.message[index];
+        let searchResultItem: ISearchItem = this.props.searchState.message[index];
         if (!searchResultItem) {
             return (<a key={key} />); // 页面可能 频繁刷新中
+        }
+        if (!searchResultItem.doc.storeValue) {
+            return this.renderDisableItem(searchResultItem, index, key);
         }
         let iconindex = searchResultItem.doc.slug.indexOf('~');
         let iconClass = '_icon-' + (iconindex === -1 ? searchResultItem.doc.slug : searchResultItem.doc.slug.substr(0, iconindex));
@@ -92,8 +111,7 @@ class Left extends React.Component<ISearchProps, void> {
             }
             for (let i = 0; i < this.props.searchState.message.length; i++) {
                 let searchResultItem = this.props.searchState.message[i];
-                let pathClick = '/docs/' + searchResultItem.doc.slug + '/' + (searchResultItem.path ? searchResultItem.path : searchResultItem.slug + '/');
-                if (pathClick === locationUrl) {
+                if (searchResultItem.pathname === locationUrl) {
                     if (this.selectedIndex !== i) { this.selectedIndex = i; this.forceUpdate(); }
                 }
             }

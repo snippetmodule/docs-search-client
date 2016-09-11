@@ -117,7 +117,7 @@ class DocPage extends React.Component<IProps, void> {
                             {this.mCanExpandedItem.child.map((item, index) => {
                                 return (
                                     <li key={index}>
-                                        <Link to={{ pathname: item.data.path }}>{item.data.name}</Link>
+                                        <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
                                     </li >
                                 );
                             }) }
