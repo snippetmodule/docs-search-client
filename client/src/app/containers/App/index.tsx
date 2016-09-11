@@ -35,9 +35,7 @@ class App extends React.Component<IProps, any> {
                     <Left />
                 </section>
                 <div className="_container" role="document">
-                    <main className ="_content" role="main" tabIndex="-1">
-                        {this.props.children}
-                    </main>
+                    {this.props.children}
                 </div>
                 <div title="Click to toggle sidebar on/off" className="_resizer" draggable="true"></div>
             </div>

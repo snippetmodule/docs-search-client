@@ -50,7 +50,10 @@ export function startRequestPage(dispatch, _url: string): IDocPageAction {
             Accept: 'text/html',
         },
     }).catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
-        .then(res => res.text())
+        .then(res => {
+            if(res.ok){ return res.text()};
+            throw new Error('http download error');
+        })
         .catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
         .then(res => dispatch({ type: INIT_SUCCESS, url: _url, content: res }));
     return {

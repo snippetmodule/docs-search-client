@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link} from 'react-router';
+import {PageNotFound} from '../PageNotFound';
 import {IDocPageState} from '../../redux/reducers/docpage';
 import {startRequestPage} from '../../redux/reducers/docpage';
 import {getDocInfoByUrlPath, ICanExpendedItem} from '../App/ExpandedDocList';
@@ -110,8 +111,8 @@ class DocPage extends React.Component<IProps, void> {
         }
         if (this.props.location.state && this.props.location.state.typeSlug && !this.props.location.state.entrySlug) {
             return (
-                <div  ref={ref => this.rootElem = ref} className="_content">
-                    <div className="_page">
+                <main className ="_content" role="main" tabIndex="-1">
+                    <div ref={ref => this.rootElem = ref} className="_page">
                         <h1>{this.mCanExpandedItem.data.name + ' / ' + this.mCanExpandedItem.parent.data.name}</h1>
                         <ul>
                             {this.mCanExpandedItem.child.map((item, index) => {
@@ -123,22 +124,29 @@ class DocPage extends React.Component<IProps, void> {
                             }) }
                         </ul>
                     </div>
-                </div>
+                </main>
             );
         }
-        if (!init.isInited && !init.content) {
+        if (!init.isInited) {
+            if(!init.content){
             return (
-                <div ref={ref => this.rootElem = ref} className="_content">
-                    加载中
-                </div>);
+                <main className ="_content _content-loading" role="main" tabIndex="-1">
+                    <div ref={ref => this.rootElem = ref} className="_page">
+                    </div>
+                </main>
+                );
+            }else{
+              return  <PageNotFound />;
+            }
+
         }
 
         return (
-            <div ref={ref => this.rootElem = ref} className="_content">
-                <div dangerouslySetInnerHTML={{ __html: htmlContent }}
+            <main className ="_content" role="main" tabIndex="-1">
+                <div ref={ref => this.rootElem = ref} dangerouslySetInnerHTML={{ __html: htmlContent }}
                     className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
                 </div>
-            </div>
+             </main>
         );
     }
 }
