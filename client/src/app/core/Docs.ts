@@ -127,6 +127,8 @@ class Docs {
         if (this.docsInfoArrays.length === 0) {
             throw new Error('docsArrays is empty');
         }
+        this.isDocChangedByUser = true;
+        this.save();
     }
 
     public get getDocsInfoArrays() {
@@ -167,7 +169,7 @@ class Docs {
         return config;
     }
     private save() {
-        Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate, { expires: 1e8, secure: true });
+        Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate);
         Cookies.set('Docs_isDocChangedByUser', this.isDocChangedByUser);
     }
     public search(input: string): Promise<Array<ISearchItem>> {
