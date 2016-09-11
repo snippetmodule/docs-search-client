@@ -155,7 +155,11 @@
 		@extend %doc-icon;
 	}
 }
-
+._list-item-no-before{
+	&:before{
+		display: none;
+	}
+}
 ._list-item,
 ._list-text {
 	overflow: hidden;
