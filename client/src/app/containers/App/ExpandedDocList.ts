@@ -69,7 +69,7 @@ export class ExpandedDocList implements ICanExpendedState {
                             return true;
                         }
                         return false;
-                    })
+                    });
                     parentTypes.child = item.childs.map((entry: DocsModelEntriyType) => {
                         return {
                             isExpended: false, deep: 0, child: [], parent: parentTypes, isEnable: true,

@@ -128,15 +128,15 @@ class DocPage extends React.Component<IProps, void> {
             );
         }
         if (!init.isInited) {
-            if(!init.content){
-            return (
-                <main className ="_content _content-loading" role="main" tabIndex="-1">
-                    <div ref={ref => this.rootElem = ref} className="_page">
-                    </div>
-                </main>
+            if (!init.content) {
+                return (
+                    <main className ="_content _content-loading" role="main" tabIndex="-1">
+                        <div ref={ref => this.rootElem = ref} className="_page">
+                        </div>
+                    </main>
                 );
-            }else{
-              return  <PageNotFound />;
+            } else {
+                return <PageNotFound />;
             }
 
         }
@@ -146,7 +146,7 @@ class DocPage extends React.Component<IProps, void> {
                 <div ref={ref => this.rootElem = ref} dangerouslySetInnerHTML={{ __html: htmlContent }}
                     className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
                 </div>
-             </main>
+            </main>
         );
     }
 }

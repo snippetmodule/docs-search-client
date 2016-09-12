@@ -53,7 +53,7 @@ async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[])
     for (let key of keys) {
         for (let info of docsInfoArrays) {
             if (info.slug === key) {
-                let value: IDocInfo = <IDocInfo>(await localStorage.getItem(key));
+                let value: IDocInfo = <IDocInfo> (await localStorage.getItem(key));
                 if (value) {
                     info.storeValue = value.storeValue;
                 }

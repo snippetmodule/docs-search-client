@@ -27,7 +27,7 @@ class Header extends React.Component<any, void> {
     event.preventDefault();
     if (input) {
       this.mCleanBtnRef.style.display = 'block';
-    }else{
+    } else {
       this.mCleanBtnRef.style.display = 'none';
     }
   }
