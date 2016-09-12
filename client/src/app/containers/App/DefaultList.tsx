@@ -18,6 +18,7 @@ export interface IRenderItemProp {
 
 export class DefaultList extends React.Component<any, ICanExpendedState> {
     private mListRef: any;
+    private mParentScroolElement: any;
     constructor() {
         super();
         this.state = new ExpandedDocList();
@@ -65,7 +66,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     }
     public render() {
         return (
-            <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
+            <div >
                 <ReactList ref={ref => this.mListRef = ref}
                     itemRenderer={this.renderItem.bind(this) }
                     length={this.state.listItems.length }
@@ -84,9 +85,14 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         onDocsPageLoactionChangeCallback('DefaultList', null);
     }
     public componentDidUpdate(prevProps: any, prevState: void, prevContext: any) {
-        let {from, size} = this.mListRef.state;
-        if (this.state.selectedIndex > from + size || this.state.selectedIndex < from) {
-            this.mListRef.scrollTo(this.state.selectedIndex);
+        if (!this.mParentScroolElement) {
+            this.mParentScroolElement = document.getElementsByClassName('_sidebar')[0];
+        }
+        if (this.mParentScroolElement) {
+            let scrollToOffset = this.mListRef.items.children[this.state.selectedIndex].offsetTop;
+            if (scrollToOffset - this.mParentScroolElement.offsetTop > this.mParentScroolElement.clientHeight) {
+                this.mParentScroolElement.scrollTop = scrollToOffset - this.mParentScroolElement.clientHeight + 2 * 32;
+            }
         }
     }
 }
