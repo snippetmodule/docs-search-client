@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { getSearchResult } from '../redux/reducers/searchdocs';
+import {getSearchTag} from '../containers/App/left';
+import * as AppConfig from '../config';
 const { connect } = require('react-redux');
 
 @connect(
@@ -11,6 +13,8 @@ const { connect } = require('react-redux');
 )
 class Header extends React.Component<any, void> {
   private mCleanBtnRef: HTMLElement;
+  private mSearchTagRef: HTMLElement;
+  private mInputRef: HTMLInputElement;
   private stripscript(s: string): string {
     let pattern = new RegExp('[`~!@#$^&*()=|{}\:\;,\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：\“。，、？]');
     let rs = '';
@@ -18,6 +22,45 @@ class Header extends React.Component<any, void> {
       rs = rs + s.substr(i, 1).replace(pattern, '');
     }
     return rs;
+  }
+  public componentWillMount() {
+    document.onkeydown = this.handerTabKey.bind(this);
+  }
+  public componentWillUnmount() {
+    document.onkeydown = null;
+  }
+  private handerTabKey(event: KeyboardEvent) {
+    let keyCode = event.keyCode || event.which;
+
+    if (keyCode === 9) {
+      let searchTag = getSearchTag();
+      event.preventDefault();
+      if (searchTag) {
+        this.mSearchTagRef.style.display = 'block';
+        this.mSearchTagRef.innerText = searchTag.name;
+        this.mInputRef.style.paddingLeft = this.mSearchTagRef.clientWidth + 8 + 'px';
+        this.mInputRef.value = '';
+        this.mInputRef.placeholder = '';
+        AppConfig.default.searchFilter = searchTag.slug;
+        AppConfig.default.docs.init(AppConfig.default.searchFilter).then(() => {
+          this.props.getSearchResult('');
+        });
+      }
+    } else if (keyCode === 8 || keyCode === 46) { // backspace 和 delete
+      if (!this.mInputRef.value && this.mSearchTagRef.innerText) {
+        this.mSearchTagRef.innerText = '';
+        this.mInputRef.style.paddingLeft = '1.75rem';
+        this.mInputRef.placeholder = 'Search…';
+        AppConfig.default.searchFilter = '';
+        AppConfig.default.docs.init(AppConfig.default.searchFilter).then(() => {
+          this.props.getSearchResult('');
+        });
+      }
+    }
+  }
+  private handleCleanBtn(event) {
+    this.mInputRef.value = '';
+    this.handleChange(event);
   }
   private handleChange(event) {
     let input: string = event.target.value;
@@ -34,17 +77,13 @@ class Header extends React.Component<any, void> {
   public render() {
     return (
       <header className="_header" role="banner">
-        <button type="button" className="_mobile-btn _back-btn">Back</button>
-        <button type="button" className="_mobile-btn _forward-btn">Forward</button>
-        <button type="button" className="_mobile-btn _menu-btn">Menu</button>
-        <button type="button" className="_mobile-btn _home-btn">Home</button>
         <form className="_search" role="search">
-          <input type="search" className="_search-input" placeholder="Search…"
+          <input ref={ref => this.mInputRef = ref} type="search" className="_search-input" placeholder="Search…"
             autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck="false"
             maxLength="30" aria-label="Search" autoFocus="autofocus"
             onChange={this.handleChange.bind(this) }/>
-          <button ref={ref => this.mCleanBtnRef = ref} type="reset" className="_search-clear" title="Clear search">Clear search</button>
-          <div className="_search-tag"></div>
+          <button ref={ref => this.mCleanBtnRef = ref} onClick={this.handleCleanBtn.bind(this) } type="reset" className="_search-clear" title="Clear search">Clear search</button>
+          <div ref={ref => this.mSearchTagRef = ref} className="_search-tag"></div>
         </form>
         <h1 className="_logo">
           <Link to="/" className="_nav-link" title="Offline API Documentation Browser">Docs中文网</Link>

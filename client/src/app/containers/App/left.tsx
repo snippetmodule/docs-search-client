@@ -3,13 +3,20 @@ import * as React from 'react';
 import {ISearchItem} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
 import ReactList from '../../utils/react-lists';
-import {DefaultList} from './list';
+import {DefaultList} from './DefaultList';
 import {history} from '../../routes';
 import {onDocsPageLoactionChangeCallback} from '../DocPage/';
 const { connect } = require('react-redux');
 
 let classNames = require('classnames');
+let _getSearchTag: () => { name: string, slug: string };
 
+export function getSearchTag(): { name: string, slug: string } {
+    if (_getSearchTag) {
+        return _getSearchTag();
+    }
+    return null;
+};
 interface ISearchProps {
     searchState?: ISearchState;
 }
@@ -119,6 +126,7 @@ class Left extends React.Component<ISearchProps, void> {
     }
     public componentWillUnmount() {
         onDocsPageLoactionChangeCallback('Left', null);
+        _getSearchTag = null;
     }
     public componentDidUpdate(prevProps: any, prevState: void, prevContext: any) {
         if (!this.mListRef) { return; }
@@ -126,6 +134,18 @@ class Left extends React.Component<ISearchProps, void> {
         if (this.selectedIndex > from + size || this.selectedIndex < from) {
             this.mListRef.scrollTo(this.selectedIndex);
         }
+        _getSearchTag = () => {
+            if (!this.props.searchState.message) {
+                return null;
+            }
+            for (let index = this.selectedIndex; index < this.selectedIndex + 5 && index < this.props.searchState.message.length; index++) {
+                let searchItem = this.props.searchState.message[index];
+                if (searchItem && searchItem.doc.storeValue && searchItem.name.toLowerCase().startsWith(this.props.searchState.input.toLowerCase())) {
+                    return { name: searchItem.doc.name, slug: searchItem.doc.slug };
+                }
+            }
+            return null;
+        };
     }
 }
 

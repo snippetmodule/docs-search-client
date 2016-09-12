@@ -121,16 +121,20 @@ class Docs {
         this.isAutoUpdate = Cookies.get('Docs_IsAutoUpdate') === 'false' ? false : true; // 默认为true
         this.isDocChangedByUser = Cookies.get('Docs_isDocChangedByUser') === 'true' ? true : false; // 默认为false
     }
-    public async init() {
+    public async init(searchFilter: string = '') {
         await initDocsArray(this.docsInfoArrays, this.isDocChangedByUser ? [] : config.default_docs);
-        this.mSearcher = initSearcher(this.docsInfoArrays);
+        this.mSearcher = initSearcher(searchFilter ? this.docsInfoArrays.filter(item => {
+            if (item.slug === searchFilter) {
+                return true;
+            }
+            return false;
+        }) : this.docsInfoArrays);
         if (this.docsInfoArrays.length === 0) {
             throw new Error('docsArrays is empty');
         }
         this.isDocChangedByUser = true;
         this.save();
     }
-
     public get getDocsInfoArrays() {
         return this.docsInfoArrays;
     }

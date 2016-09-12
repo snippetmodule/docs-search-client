@@ -190,11 +190,31 @@ export class ExpandedDocList implements ICanExpendedState {
         let temp: ICanExpendedItem[] = [...enableDocs, disableDocs];
         this.markNodeDeep(enableDocs);
         this.markNodeDeep([disableDocs]);
+        if (appConfig.default.searchFilter) {
+            for (let docInfo of enableDocs) {
+                if (docInfo.data.docInfo.slug === appConfig.default.searchFilter) {
+                    docInfo.isExpended = true;
+                    break;
+                }
+            }
+        }
         while (temp.length !== 0) {
             let item = temp.shift();
             lists.push(item);
             if (item.isExpended) {
                 temp.unshift(...item.child);
+            }
+        }
+        if (appConfig.default.searchFilter) {
+            for (let index = 0; index < lists.length; index++) {
+                let item = lists[index];
+                if (item.data.docInfo && item.data.docInfo.storeValue && !item.data.docEntry && !item.data.docType) {
+                    if (item.data.docInfo.slug === appConfig.default.searchFilter) {
+                        this.selectedIndex = index;
+                        _selectedIndex = index;
+                        break;
+                    }
+                }
             }
         }
         return lists;

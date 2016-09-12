@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {IRenderItemProp} from './list';
+import {IRenderItemProp} from './DefaultList';
 let classNames = require('classnames');
 
 class DisableDocItem extends React.Component<IRenderItemProp, any> {
