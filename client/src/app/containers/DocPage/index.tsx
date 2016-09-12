@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Link} from 'react-router';
-import {PageNotFound} from '../PageNotFound';
+import {PageNotFound} from './PageNotFound';
 import {IDocPageState} from '../../redux/reducers/docpage';
 import {startRequestPage} from '../../redux/reducers/docpage';
-import {getDocInfoByUrlPath, ICanExpendedItem} from '../App/ExpandedDocList';
 import * as appConfig from '../../config';
 import {history} from '../../routes';
 const { connect } = require('react-redux');
@@ -19,26 +18,28 @@ export function onDocsPageLoactionChangeCallback(key: string, callback: (string)
 
 interface IProps {
     location?: any;
-    init?: IDocPageState;
+    docPageState?: IDocPageState;
     startRequestPage?: (url: string) => void;
 }
 
 @connect(
-    state => ({ init: state.initDocPageReducer }),
+    state => ({ docPageState: state.initDocPageReducer }),
     dispatch => ({
         startRequestPage: (url: string) => (dispatch(startRequestPage(dispatch, url))),
     }))
 class DocPage extends React.Component<IProps, void> {
     private rootElem: HTMLElement;
-    private nextScroolToElement: string = null;
 
-    private mCanExpandedItem: ICanExpendedItem;
     constructor(props) {
         super(props);
-        this.handlerNextProps(this.props, null);
+        this.props.startRequestPage(this.props.location.pathname.split('#')[0]);
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
+        if (!this.rootElem || !this.rootElem.getElementsByTagName) {
+            return;
+        }
+        let nextScroolToElement: string = null;
         let links = this.rootElem.getElementsByTagName('a');
         for (let link of links) {
             link.onclick = (event: MouseEvent) => {
@@ -53,15 +54,16 @@ class DocPage extends React.Component<IProps, void> {
                 }
             };
         }
-        if (this.nextScroolToElement) {
-            let element = document.getElementById(this.nextScroolToElement);
+        nextScroolToElement = this.props.location.pathname.split('#')[1];
+        if (nextScroolToElement) {
+            let element = document.getElementById(nextScroolToElement);
             if (element) {
                 this.rootElem.scrollTop = element.offsetTop;
             }
         } else {
             this.rootElem.scrollTop = 0;
         }
-        if (onLoactionChangeCallback && (this.props.init.isInited)) { // 更新完成后再发此回调
+        if (onLoactionChangeCallback && (this.props.docPageState.isOk)) { // 更新完成后再发此回调
             for (let key in onLoactionChangeCallback) {
                 if (onLoactionChangeCallback[key]) {
                     onLoactionChangeCallback[key](this.props.location.pathname);
@@ -69,53 +71,52 @@ class DocPage extends React.Component<IProps, void> {
             }
         }
     }
-    public shouldComponentUpdate(nextProps: IProps, nextState: void, nextContext: any): boolean {
-        if (this.props.init.isInited && this.props.location.pathname === nextProps.location.pathname) {
-            return false;
-        }
-        return true;
-    }
-    private handlerNextProps(nextProps: IProps, curProps: IProps) {
-        let nextUrlParams: string[] = nextProps.location.pathname.split('#');
-        let curUrlParams: string[] = !curProps ? [] : curProps.location.pathname.split('#');
-
-        this.mCanExpandedItem = getDocInfoByUrlPath(nextUrlParams[0]);
-        if (nextProps.location.state && nextProps.location.state.typeSlug && !nextProps.location.state.entrySlug) { // 显示的为 types 列表
-            this.nextScroolToElement = null;
-            nextProps.init.isInited = true;
-            return;
-        }
-        if (nextUrlParams[0] !== curUrlParams[0]) { // url 不一致 
-            nextProps.startRequestPage(nextUrlParams[0]);
-            nextProps.init.isInited = false;
-            nextProps.init.content = undefined;
-        }
-        this.nextScroolToElement = nextUrlParams[1];
-    }
     public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
-        if (this.props.location.pathname === nextProps.location.pathname) { // 说明不需要处理，之前已经处理过
+        let nextUrl: string = nextProps.location.pathname.split('#')[0];
+        let curUrl: string = !this.props ? [] : this.props.location.pathname.split('#')[0];
+        if (nextUrl !== curUrl) { // 外部传入地址location发生改变
+            nextProps.startRequestPage(nextUrl);
             return;
         }
-        this.handlerNextProps(nextProps, this.props);
     }
 
     public render() {
-        let { init} = this.props;
-        let mDocInfo = this.mCanExpandedItem.data.docInfo;
-        let htmlContent = init.content;
+        let { docPageState} = this.props;
+        if (!this.props.docPageState.isOk) {
+            return (
+                <main ref={ref => this.rootElem = ref} className ="_content _content-loading" role="main" tabIndex="-1">
+                    <div  className="_page">
+                    </div>
+                </main>
+            );
+        }
+        if (this.props.docPageState.err) {
+            return (
+                <PageNotFound pathname = {this.props.location.pathname} onClickRetry={
+                    (event: Event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        this.props.startRequestPage(this.props.location.pathname);
+                    }
+                }/>
+            );
+        }
+        let clickExpendedItem = this.props.docPageState.clickExpendedItem;
+        let mDocInfo = clickExpendedItem.data.docInfo;
+        let htmlContent = docPageState.htmlResponse;
         if (mDocInfo && mDocInfo.links) {
             htmlContent = '<p class="_links">' +
                 (mDocInfo.links.home ? ('<a href="XXXX" class="_links-link">Homepage</a>'.replace('XXXX', mDocInfo.links.home)) : '') +
                 (mDocInfo.links.code ? ('<a href="XXXX" class="_links-link">Source code</a>'.replace('XXXX', mDocInfo.links.code)) : '') +
                 '</p>' + htmlContent;
         }
-        if (this.props.location.state && this.props.location.state.typeSlug && !this.props.location.state.entrySlug) {
+        if (clickExpendedItem.data.docType && !clickExpendedItem.data.docEntry) {
             return (
-                <main className ="_content" role="main" tabIndex="-1">
-                    <div ref={ref => this.rootElem = ref} className="_page">
-                        <h1>{this.mCanExpandedItem.data.name + ' / ' + this.mCanExpandedItem.parent.data.name}</h1>
+                <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                    <div  className="_page">
+                        <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
                         <ul>
-                            {this.mCanExpandedItem.child.map((item, index) => {
+                            {clickExpendedItem.child.map((item, index) => {
                                 return (
                                     <li key={index}>
                                         <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
@@ -127,23 +128,10 @@ class DocPage extends React.Component<IProps, void> {
                 </main>
             );
         }
-        if (!init.isInited) {
-            if (!init.content) {
-                return (
-                    <main className ="_content _content-loading" role="main" tabIndex="-1">
-                        <div ref={ref => this.rootElem = ref} className="_page">
-                        </div>
-                    </main>
-                );
-            } else {
-                return <PageNotFound />;
-            }
-
-        }
 
         return (
-            <main className ="_content" role="main" tabIndex="-1">
-                <div ref={ref => this.rootElem = ref} dangerouslySetInnerHTML={{ __html: htmlContent }}
+            <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                <div  dangerouslySetInnerHTML={{ __html: htmlContent }}
                     className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
                 </div>
             </main>

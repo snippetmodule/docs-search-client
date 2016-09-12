@@ -1,42 +1,45 @@
 import * as appConfig from '../../config';
+import {getDocInfoByUrlPath, ICanExpendedItem} from '../../containers/App/ExpandedDocList';
 /** Action Types */
 export const INIT_REQUEST: string = 'INIT_PAGE_REQUEST';
 export const INIT_SUCCESS: string = 'INIT_PAGE_SUCCESS';
 export const INIT_FAILURE: string = 'INIT_PAGE_FAILURE';
 
 export interface IDocPageState {
-    isInited: boolean;
+    isOk: boolean;
+    err: Error;
     url: string;
-    content?: string;
+    htmlResponse?: string;
+    clickExpendedItem?: ICanExpendedItem;
 }
 export interface IDocPageAction {
     type: string;
+    err: Error;
     url: string;
-    content?: string;
+    htmlResponse?: string;
+    clickExpendedItem?: ICanExpendedItem;
 }
 
 /** Reducer */
-export function initDocPageReducer(state: IDocPageState = { isInited: false, url: null }, action: IDocPageAction): IDocPageState {
+export function initDocPageReducer(state: IDocPageState = { isOk: false, url: null, err: null }, action: IDocPageAction): IDocPageState {
     switch (action.type) {
         case INIT_REQUEST:
-            return Object.assign({}, state, {
-                isInited: false,
+            return {
+                isOk: false,
+                err: null,
                 url: action.url,
-            });
+                htmlResponse: undefined,
+                clickExpendedItem: action.clickExpendedItem,
+            };
 
         case INIT_SUCCESS:
-            return Object.assign({}, state, {
-                isInited: true,
+            return {
+                isOk: true,
+                err: action.err,
                 url: action.url,
-                content: action.content,
-            });
-
-        case INIT_FAILURE:
-            return Object.assign({}, state, {
-                isInited: false,
-                url: action.url,
-                content: action.content,
-            });
+                htmlResponse: action.htmlResponse,
+                clickExpendedItem: action.clickExpendedItem,
+            };
         default:
             return state;
     }
@@ -45,20 +48,26 @@ export function initDocPageReducer(state: IDocPageState = { isInited: false, url
 
 /** Async Action Creator */
 export function startRequestPage(dispatch, _url: string): IDocPageAction {
+    let clickExpendedItem: ICanExpendedItem = getDocInfoByUrlPath(_url);
+    if (clickExpendedItem && clickExpendedItem.data.docType && !clickExpendedItem.data.docEntry) {
+        return { type: INIT_SUCCESS, url: _url, htmlResponse: null, clickExpendedItem: clickExpendedItem, err: null };
+    }
     fetch(appConfig.default.docs.getConfig().docs_host + _url, {
         headers: {
             Accept: 'text/html',
         },
-    }).catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
-        .then(res => {
-            if (res.ok) { return res.text() ; };
-            throw new Error('http download error');
-        })
-        .catch(err => dispatch({ type: INIT_FAILURE, url: _url, content: err }))
-        .then(res => dispatch({ type: INIT_SUCCESS, url: _url, content: res }));
+    }).then(res => {
+        if (res.ok) { return res.text(); };
+        throw new Error('http download error');
+    }).then(res => {
+        dispatch({ type: INIT_SUCCESS, url: _url, htmlResponse: res, clickExpendedItem: clickExpendedItem, err: null });
+    }).catch(err => {
+        dispatch({ type: INIT_SUCCESS, url: _url, htmlResponse: null, clickExpendedItem: clickExpendedItem, err: err });
+    });
     return {
         type: INIT_REQUEST,
         url: _url,
+        err: null,
+        clickExpendedItem: clickExpendedItem,
     };
-
 }

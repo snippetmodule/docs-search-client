@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IndexRoute, Route } from 'react-router';
-import { App, Home, About, Counter, Stars, DocPage, PageNotFound} from './containers';
+import { App, Home, About, Counter, Stars, DocPage} from './containers';
 const {browserHistory } = require('react-router');
 import { ReactRouterReduxHistory, syncHistoryWithStore } from 'react-router-redux';
 import { configureStore } from './redux/store';
@@ -19,7 +19,6 @@ const routeConfig = (
     <Route path="counter" component={Counter} />
     <Route path="stars" component={Stars} />
     <Route path="docs/*" component={DocPage} />
-    <Route path="*" component={PageNotFound} />
   </Route>
 );
 

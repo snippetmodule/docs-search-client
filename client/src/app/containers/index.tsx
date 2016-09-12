@@ -5,4 +5,3 @@ export { About } from './About';
 export { Counter } from './Counter';
 export { Stars } from './Stars';
 export { DocPage } from './DocPage';
-export { PageNotFound } from './PageNotFound';

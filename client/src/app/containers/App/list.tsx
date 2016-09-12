@@ -33,12 +33,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
             return;
         }
         if (stateItem.data.pathname) {
-            let state = {
-                docSlug: stateItem.data.docInfo ? stateItem.data.docInfo.slug : null,
-                typeSlug: stateItem.data.docType ? stateItem.data.docType.slug : null,
-                entrySlug: stateItem.data.docEntry ? stateItem.data.docEntry.path : null,
-            };
-            history.push({ pathname: stateItem.data.pathname, state: state });
+            history.push({ pathname: stateItem.data.pathname });
         }
     }
     private enableDoc(docInfo: IDocInfo) {
