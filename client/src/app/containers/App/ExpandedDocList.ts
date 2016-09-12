@@ -217,6 +217,7 @@ export class ExpandedDocList implements ICanExpendedState {
                 }
             }
         }
+        appConfig.default.searchFilter = '';
         return lists;
     }
 }
