@@ -24,7 +24,6 @@ interface ISearchProps {
 class Left extends React.Component<ISearchProps, void> {
     private mListRef: any;
     private selectedIndex = -1;
-
     private mListItemRef: {
         [key: string]: HTMLElement;
     } = {};
@@ -96,12 +95,11 @@ class Left extends React.Component<ISearchProps, void> {
             );
         }
         return (
-            <div style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '100%', boxShadow: 'inset -1px 0 #e3e3e3' }}>
-                <ReactList ref={ref => this.mListRef = ref}
-                    itemRenderer={this.renderItem.bind(this) }
-                    length={50}
-                    />
-            </div>);
+            <ReactList ref={ref => this.mListRef = ref}
+                itemRenderer={this.renderItem.bind(this) }
+                length={this.props.searchState.message.length > 100 ? 100 : this.props.searchState.message.length}
+                />
+        );
     }
     public componentWillMount() {
         onDocsPageLoactionChangeCallback('Left', locationUrl => {
@@ -129,10 +127,8 @@ class Left extends React.Component<ISearchProps, void> {
         _getSearchTag = null;
     }
     public componentDidUpdate(prevProps: any, prevState: void, prevContext: any) {
-        if (!this.mListRef) { return; }
-        let {from, size} = this.mListRef.state;
-        if (this.selectedIndex > from + size || this.selectedIndex < from) {
-            this.mListRef.scrollTo(this.selectedIndex);
+        if (this.mListRef) {
+            this.mListRef.scroolToPosition(this.selectedIndex);
         }
         _getSearchTag = () => {
             if (!this.props.searchState.message) {

@@ -17,8 +17,7 @@ export interface IRenderItemProp {
 }
 
 export class DefaultList extends React.Component<any, ICanExpendedState> {
-    private mListRef: any;
-    private mParentScroolElement: any;
+    private mListRef: ReactList;
     constructor() {
         super();
         this.state = new ExpandedDocList();
@@ -57,6 +56,9 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
             enableDoc: (event) => { event.preventDefault(); event.stopPropagation(); this.enableDoc(stateItem.data.docInfo); },
             disableDoc: (event) => { event.preventDefault(); event.stopPropagation(); this.disableDoc(stateItem.data.docInfo); },
         };
+        if (!stateItem) {
+            console.log('1111');
+        }
         if (!stateItem.data.docInfo || !stateItem.data.docInfo.storeValue) {
             return (<DisenableDocItem key={key} {...itemProps} />);
         } else {
@@ -66,12 +68,10 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     }
     public render() {
         return (
-            <div >
-                <ReactList ref={ref => this.mListRef = ref}
-                    itemRenderer={this.renderItem.bind(this) }
-                    length={this.state.listItems.length }
-                    />
-            </div>
+            <ReactList ref={ref => this.mListRef = ref}
+                itemRenderer={this.renderItem.bind(this) }
+                length={this.state.listItems.length }
+                />
         );
     }
     public componentWillMount() {
@@ -85,14 +85,8 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         onDocsPageLoactionChangeCallback('DefaultList', null);
     }
     public componentDidUpdate(prevProps: any, prevState: void, prevContext: any) {
-        if (!this.mParentScroolElement) {
-            this.mParentScroolElement = document.getElementsByClassName('_sidebar')[0];
-        }
-        if (this.mParentScroolElement) {
-            let scrollToOffset = this.mListRef.items.children[this.state.selectedIndex].offsetTop;
-            if (scrollToOffset - this.mParentScroolElement.offsetTop > this.mParentScroolElement.clientHeight) {
-                this.mParentScroolElement.scrollTop = scrollToOffset - this.mParentScroolElement.clientHeight + 2 * 32;
-            }
+        if (this.mListRef) {
+            this.mListRef.scroolToPosition(this.state.selectedIndex);
         }
     }
 }

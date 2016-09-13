@@ -31,9 +31,7 @@ class App extends React.Component<IProps, any> {
             <div className="_app" >
                 <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head}/>
                 <Header/>
-                <section  className="_sidebar" tabIndex="-1" style={{width:'18.6rem'}}>
-                    <Left />
-                </section>
+                <Left />
                 <div className="_container" role="document">
                     {this.props.children}
                 </div>
