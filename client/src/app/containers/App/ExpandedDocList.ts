@@ -190,14 +190,24 @@ export class ExpandedDocList implements ICanExpendedState {
         let temp: ICanExpendedItem[] = [...enableDocs, disableDocs];
         this.markNodeDeep(enableDocs);
         this.markNodeDeep([disableDocs]);
-        if (appConfig.default.searchFilter) {
-            for (let docInfo of enableDocs) {
-                if (docInfo.data.docInfo.slug === appConfig.default.searchFilter) {
-                    docInfo.isExpended = true;
+        if (appConfig.default.selectedPath) {
+            while (temp.length !== 0) {
+                let item = temp.shift();
+                if (item.data.pathname === appConfig.default.selectedPath) {
+                    let currItem = item;
+                    if (currItem.child.length > 0) {
+                        currItem.isExpended = true;
+                    }
+                    while (currItem && currItem.parent) {
+                        currItem.parent.isExpended = true;
+                        currItem = currItem.parent;
+                    }
                     break;
                 }
+                temp.unshift(...item.child);
             }
         }
+        temp = [...enableDocs, disableDocs];
         while (temp.length !== 0) {
             let item = temp.shift();
             lists.push(item);
@@ -205,19 +215,17 @@ export class ExpandedDocList implements ICanExpendedState {
                 temp.unshift(...item.child);
             }
         }
-        if (appConfig.default.searchFilter) {
+        if (appConfig.default.selectedPath) {
             for (let index = 0; index < lists.length; index++) {
                 let item = lists[index];
-                if (item.data.docInfo && item.data.docInfo.storeValue && !item.data.docEntry && !item.data.docType) {
-                    if (item.data.docInfo.slug === appConfig.default.searchFilter) {
-                        this.selectedIndex = index;
-                        _selectedIndex = index;
-                        break;
-                    }
+                if (item.data.pathname === appConfig.default.selectedPath) {
+                    this.selectedIndex = index;
+                    _selectedIndex = index;
+                    break;
                 }
             }
         }
-        appConfig.default.searchFilter = '';
+        appConfig.default.selectedPath = '';
         return lists;
     }
 }

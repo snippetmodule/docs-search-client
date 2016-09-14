@@ -23,7 +23,7 @@ let DOCS = require('../../../api-docs/list.js').DOCS;
 let app = {
     htmlConfig: _htmlConfig,
     docs: new Docs(DOCS),
-    searchFilter: '',
+    selectedPath: '',
 };
 
 export default app;

@@ -20,7 +20,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     private mListRef: ReactList;
     constructor() {
         super();
-        this.state = new ExpandedDocList();
+        this.state = new ExpandedDocList(true);
     }
     private onClickItem(index: number, stateItem: ICanExpendedItem) {
         if (stateItem.child.length > 0) {
@@ -83,6 +83,11 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     }
     public componentWillUnmount() {
         onDocsPageLoactionChangeCallback('DefaultList', null);
+    }
+    public componentDidMount() {
+        if (this.mListRef) {
+            this.mListRef.scroolToPosition(this.state.selectedIndex);
+        }
     }
     public componentDidUpdate(prevProps: any, prevState: void, prevContext: any) {
         if (this.mListRef) {

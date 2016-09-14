@@ -41,8 +41,8 @@ class Header extends React.Component<any, void> {
         this.mInputRef.style.paddingLeft = this.mSearchTagRef.clientWidth + 8 + 'px';
         this.mInputRef.value = '';
         this.mInputRef.placeholder = '';
-        AppConfig.default.searchFilter = searchTag.slug;
-        AppConfig.default.docs.init(AppConfig.default.searchFilter).then(() => {
+        AppConfig.default.selectedPath = '/docs/' + searchTag.slug + '/';
+        AppConfig.default.docs.init(searchTag.slug).then(() => {
           this.props.getSearchResult('');
         });
       }
@@ -51,8 +51,8 @@ class Header extends React.Component<any, void> {
         this.mSearchTagRef.innerText = '';
         this.mInputRef.style.paddingLeft = '1.75rem';
         this.mInputRef.placeholder = 'Search…';
-        AppConfig.default.searchFilter = '';
-        AppConfig.default.docs.init(AppConfig.default.searchFilter).then(() => {
+        AppConfig.default.selectedPath = '';
+        AppConfig.default.docs.init('').then(() => {
           this.props.getSearchResult('');
         });
       }

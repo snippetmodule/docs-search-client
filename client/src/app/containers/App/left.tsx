@@ -5,6 +5,7 @@ import {ISearchState} from '../../redux/reducers/searchdocs';
 import ReactList from '../../utils/react-lists';
 import {DefaultList} from './DefaultList';
 import {history} from '../../routes';
+import * as appConfig from '../../config';
 import {onDocsPageLoactionChangeCallback} from '../DocPage/';
 const { connect } = require('react-redux');
 
@@ -21,7 +22,7 @@ interface ISearchProps {
     searchState?: ISearchState;
 }
 @connect(state => ({ searchState: state.searchDocsReducer }))
-class Left extends React.Component<ISearchProps, void> {
+class Left extends React.Component<ISearchProps, any> {
     private mListRef: any;
     private selectedIndex = -1;
     private mListItemRef: {
@@ -49,7 +50,15 @@ class Left extends React.Component<ISearchProps, void> {
                 onMouseOver={event => { this.mListItemRef[key].style.textDecoration = 'underline'; } }
                 onMouseOut={event => { this.mListItemRef[key].style.textDecoration = 'none'; } }
                 >
-                <span className="_list-enable" data-enable={searchResultItem.name}>Enable</span>
+                <span className="_list-enable" onClick={event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    appConfig.default.selectedPath = searchResultItem.pathname;
+                    appConfig.default.docs.addDoc(searchResultItem.doc).then((res) => {
+                        this.props.searchState.input = '';
+                        this.forceUpdate();
+                    }).catch(err => console.log('enableDoc err:' + searchResultItem.doc.slug + err.stack));
+                } }data-enable={searchResultItem.name}>Enable</span>
                 <span className="_list-text">{searchResultItem.name }</span>
             </a >
         );
@@ -73,7 +82,14 @@ class Left extends React.Component<ISearchProps, void> {
                 onMouseOver={event => { this.mListItemRef[key].style.textDecoration = 'underline'; } }
                 onMouseOut={event => { this.mListItemRef[key].style.textDecoration = 'none'; } }
                 >
-                <span className="_list-reveal" data-reset-list="" title="Reveal in list"></span>
+                <span className="_list-reveal" data-reset-list="" title="Reveal in list"
+                    onClick={event => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        appConfig.default.selectedPath = searchResultItem.pathname;
+                        this.props.searchState.input = '';
+                        this.forceUpdate();
+                    } }></span>
                 {searchResultItem.name }
             </a >
         );
