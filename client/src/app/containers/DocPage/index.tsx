@@ -3,6 +3,7 @@ import { Link} from 'react-router';
 import {PageNotFound} from './PageNotFound';
 import {IDocPageState} from '../../redux/reducers/docpage';
 import {startRequestPage} from '../../redux/reducers/docpage';
+import {ICanExpendedItem} from '../../containers/App/ExpandedDocList';
 import * as appConfig from '../../config';
 import {history} from '../../routes';
 const { connect } = require('react-redux');
@@ -84,21 +85,25 @@ class DocPage extends React.Component<IProps, void> {
         let { docPageState} = this.props;
         if (!this.props.docPageState.isOk) {
             return (
-                <main ref={ref => this.rootElem = ref} className ="_content _content-loading" role="main" tabIndex="-1">
-                    <div  className="_page">
-                    </div>
-                </main>
+                <div className="_container" role="document">
+                    <main ref={ref => this.rootElem = ref} className ="_content _content-loading" role="main" tabIndex="-1">
+                        <div  className="_page">
+                        </div>
+                    </main>
+                </div>
             );
         }
         if (this.props.docPageState.err) {
             return (
-                <PageNotFound pathname = {this.props.location.pathname} onClickRetry={
-                    (event: Event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        this.props.startRequestPage(this.props.location.pathname);
-                    }
-                }/>
+                <div className="_container" role="document">
+                    <PageNotFound pathname = {this.props.location.pathname} onClickRetry={
+                        (event: Event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            this.props.startRequestPage(this.props.location.pathname);
+                        }
+                    }/>
+                </div>
             );
         }
         let clickExpendedItem = this.props.docPageState.clickExpendedItem;
@@ -112,29 +117,50 @@ class DocPage extends React.Component<IProps, void> {
         }
         if (clickExpendedItem.data.docType && !clickExpendedItem.data.docEntry) {
             return (
-                <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
-                    <div  className="_page">
-                        <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
-                        <ul>
-                            {clickExpendedItem.child.map((item, index) => {
-                                return (
-                                    <li key={index}>
-                                        <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
-                                    </li >
-                                );
-                            }) }
-                        </ul>
-                    </div>
-                </main>
+                <div className="_container" role="document">
+                    <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                        <div  className="_page">
+                            <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
+                            <ul>
+                                {clickExpendedItem.child.map((item, index) => {
+                                    return (
+                                        <li key={index}>
+                                            <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
+                                        </li >
+                                    );
+                                }) }
+                            </ul>
+                        </div>
+                    </main>
+                    <BottomMark data = {this.props.docPageState.clickExpendedItem}/>
+                </div>
             );
         }
 
         return (
-            <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
-                <div  dangerouslySetInnerHTML={{ __html: htmlContent }}
-                    className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
-                </div>
-            </main>
+            <div className="_container" role="document">
+                <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                    <div  dangerouslySetInnerHTML={{ __html: htmlContent }}
+                        className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
+                    </div>
+                </main>
+                <BottomMark data = {this.props.docPageState.clickExpendedItem}/>
+            </div>
+        );
+    }
+}
+interface IBottomMarkProps {
+    data: ICanExpendedItem;
+}
+class BottomMark extends React.Component<IBottomMarkProps, any> {
+    public render() {
+        let {docInfo, docType, docEntry} = this.props.data.data;
+        return (
+            <div role="complementary" className="_path">
+                <a href={docInfo.pathname} className={'_path-item _icon-' + docInfo.slug.split('~')[0]}> { docInfo.name + ' ' + (docInfo.version || '') }</a>
+                <a href={docType ? docType.pathname : ''} className="_path-item">{docType ? docType.name : ''}</a>
+                <a className="_path-item">{docEntry ? docEntry.name : ''}</a>
+            </div >
         );
     }
 }

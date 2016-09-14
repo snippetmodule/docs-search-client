@@ -32,9 +32,7 @@ class App extends React.Component<IProps, any> {
                 <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head}/>
                 <Header/>
                 <Left />
-                <div className="_container" role="document">
-                    {this.props.children}
-                </div>
+                {this.props.children}
                 <div title="Click to toggle sidebar on/off" className="_resizer" draggable="true"></div>
             </div>
         );

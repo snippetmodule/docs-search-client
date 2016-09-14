@@ -7,6 +7,7 @@
 	z-index: $contentZ;
 	height: 100%;
 	margin-left: $sidebarWidth;
+	padding-bottom: 2.5rem;
 	pointer-events: none;
 	@extend %border-box;
 

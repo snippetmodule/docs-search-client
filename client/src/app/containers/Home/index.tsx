@@ -4,7 +4,7 @@ const s = require('./style.css');
 class Home extends React.Component<any, any> {
   public render() {
     return (
-      <div>
+      <div className="_container" role="document">
         <div className={s._intro}>
           <div className={s._intromessage}>
             <h2 className={s._introtitle}>欢迎使用DevDocs！</h2>
