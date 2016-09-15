@@ -15,7 +15,7 @@
   .classsynopsis,
   .description > .constructorsynopsis,
   .description > .methodsynopsis,
-  .description > .fieldsynopsis { @extend %note, %note-blue; }
+  .description > .fieldsynopsis { @extend %note;  @extend %note-blue; }
 
   .classsynopsisinfo_comment { color: $textColorLight; }
 
@@ -27,8 +27,8 @@
   blockquote.note { @extend %note; }
   blockquote.note > p { margin-bottom: 0; }
 
-  div.warning { @extend %note, %note-red; }
-  div.tip { @extend %note, %note-green; }
+  div.warning { @extend %note;  @extend %note-red; }
+  div.tip { @extend %note;  @extend %note-green; }
 
   strong > code, dt > code { @extend %label; }
 }

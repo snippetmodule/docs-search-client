@@ -57,7 +57,7 @@
 
 		> li > h3:first-child {
 			margin: 0 0 1em -1rem;
-			@extend %block-label, %label-blue;
+			@extend %block-label;  @extend %label-blue;
 		}
 
 		> li + li {

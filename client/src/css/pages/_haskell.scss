@@ -22,7 +22,7 @@
 	}
 
 	p.src {
-		@extend %block-label, %label-blue;
+		@extend %block-label;  @extend %label-blue;
 	}
 
 	dt.src {

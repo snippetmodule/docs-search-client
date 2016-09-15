@@ -15,7 +15,7 @@
 	transition: opacity .2s;
 	opacity: 0;
 	cursor: default;
-	@extend %border-box, %user-select-none;
+	@extend %border-box;  @extend %user-select-none;
 
 	&._in {
 		opacity: 1;
@@ -61,7 +61,7 @@
 		position: absolute;
 		top: .625rem;
 		left: .625rem;
-		@extend %icon, %icon-close-white;
+		@extend %icon;  @extend %icon-close-white;
 	}
 }
 

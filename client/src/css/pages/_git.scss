@@ -19,7 +19,7 @@
 
 	> .callout,
 	> h1 + .sectionbody {
-		@extend %note, %note-green;
+		@extend %note;  @extend %note-green;
 	}
 
 	code {

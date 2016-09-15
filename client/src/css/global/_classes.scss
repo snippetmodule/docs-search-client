@@ -136,9 +136,9 @@
 		vertical-align: top;
 
 		@if $style == 'dark' {
-			@extend %icon, %icon-link-white;
+			@extend %icon;  @extend %icon-link-white;
 		} @else {
-			@extend %icon, %icon-link;
+			@extend %icon;  @extend %icon-link;
 		}
 	}
 }

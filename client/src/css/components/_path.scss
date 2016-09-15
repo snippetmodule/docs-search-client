@@ -10,18 +10,6 @@
 	background: $pathBackground;
 	box-shadow: inset 0 1px $pathBorder;
 
-	@media #{$mediumScreen} {
-		left: $sidebarMediumWidth;
-	}
-
-	._sidebar-hidden & {
-		left: $sidebarHiddenWidth;
-	}
-
-	~ ._container {
-		padding-bottom: 2rem;
-	}
-
 	a:focus {
 		outline: 0;
 	}
@@ -54,6 +42,6 @@
 		height: 1rem;
 		margin: -.5rem 0 0 0;
 		pointer-events: none;
-		@extend %icon, %icon-path;
+		@extend %icon ;@extend %icon-path;
 	}
 }

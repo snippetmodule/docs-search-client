@@ -112,7 +112,7 @@
 	max-width: 37rem;
 	padding: 1rem 1.25rem;
 	text-align: left;
-	@extend %note, %note-green;
+	@extend %note ;  @extend %note-green;
 }
 
 ._intro-hide {
@@ -447,11 +447,11 @@
 
 	@if $style == 'dark' {
 		&:before {
-			@extend %icon, %icon-clipboard-white;
+			@extend %icon;  @extend %icon-clipboard-white;
 		}
 	} @else {
 		&:before {
-			@extend %icon, %icon-clipboard;
+			@extend %icon;  @extend %icon-clipboard;
 		}
 	}
 

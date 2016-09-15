@@ -30,7 +30,7 @@
 	}
 
 	.text-danger {
-		@extend %label, %label-red;
+		@extend %label;  @extend %label-red;
 	}
 
 	p.bs-example {

@@ -21,7 +21,7 @@
   }
 
   > h2 { @extend %block-heading; }
-  > h3 { @extend %block-label, %label-blue; }
+  > h3 { @extend %block-label;  @extend %label-blue; }
 
   > .note,
   .notice,
@@ -61,7 +61,7 @@
   .htmlelt,
   .cssprop {
     display: table;
-    @extend %note, %note-blue;
+    @extend %note;  @extend %note-blue;
 
     > li {
       display: table-row;

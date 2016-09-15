@@ -7,7 +7,7 @@
 	}
 
 	.warning {
-		@extend %note, %note-red;
+		@extend %note;  @extend %note-red;
 	}
 
 	code {

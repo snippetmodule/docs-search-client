@@ -4,10 +4,10 @@
 	}
 
 	.signature {
-		@extend %note, %note-blue;
+		@extend %note;  @extend %note-blue;
 	}
 
 	span.api-deprecated {
-		@extend %label, %label-red;
+		@extend %label;  @extend %label-red;
 	}
 }

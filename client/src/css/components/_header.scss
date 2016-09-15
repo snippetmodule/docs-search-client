@@ -110,9 +110,9 @@
 		opacity: .4;
 
 		@if $style == 'dark' {
-			@extend %icon, %icon-search-white;
+			@extend %icon;  @extend %icon-search-white;
 		} @else {
-			@extend %icon, %icon-search;
+			@extend %icon;  @extend %icon-search;
 		}
 	}
 }

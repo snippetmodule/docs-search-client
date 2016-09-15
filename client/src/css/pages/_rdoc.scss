@@ -7,13 +7,13 @@
 
   .method-heading {
     font-weight: bold;
-    @extend %block-label, %label-blue;
+    @extend %block-label;  @extend %label-blue;
 
     + .method-heading { margin-top: -.5em; }
   }
 
   > .meta {
-    @extend %note, %note-blue;
+    @extend %note;  @extend %note-blue;
 
     > dd { margin: 0; }
     > dd + dt { margin-top: .5em; }

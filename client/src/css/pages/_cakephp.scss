@@ -31,6 +31,6 @@
 	p > .label,
 	dt > .label,
 	div > .label {
-		@extend %label, %label-yellow;
+		@extend %label;  @extend %label-yellow;
 	}
 }
