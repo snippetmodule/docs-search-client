@@ -102,7 +102,7 @@ export class ExpandedDocList implements ICanExpendedState {
                     }
                     parent.child.push({
                         isExpended: false, deep: 1, child: [], parent: parent, isEnable: false,
-                        data: { name: docItem.name, docInfo: docItem, docType: null, docEntry: null, pathname: docItem.pathname },
+                        data: { name: docItem.name + ' ' + docItem.version, docInfo: docItem, docType: null, docEntry: null, pathname: docItem.pathname },
                     });
                 }
             }

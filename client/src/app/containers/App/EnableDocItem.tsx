@@ -34,7 +34,7 @@ class ExpandDocItem extends React.Component<IRenderItemProp, any> {
         let openClass = stateItem.isExpended ? 'open' : '';
         let selectClass = _isSelected ? ['focus', 'active'] : '';
         return (
-            <div className={classNames('_list', '_list-sub') } >
+            <div className="_list-sub">
                 <a  className={classNames('_list-item', '_list-dir', openClass, selectClass) }
                     onClick={this.props.onClickItem}>
                     <span className="_list-arrow"></span>
@@ -52,7 +52,7 @@ export class EnableDocItem extends React.Component<IRenderItemProp, any> {
             if (this.props.stateItem.data.docInfo.storeValue) {
                 let selectClass = this.props._isSelected ? ['focus', 'active'] : '';
                 return (
-                    <div className={classNames('_list', '_list-sub') } >
+                    <div className= "_list-sub">
                         <a className={classNames('_list-item', '_list-hover', selectClass) }
                             onClick={this.props.onClickItem}
                             >

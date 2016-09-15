@@ -117,33 +117,37 @@ class DocPage extends React.Component<IProps, void> {
         }
         if (clickExpendedItem.data.docType && !clickExpendedItem.data.docEntry) {
             return (
-                <div className="_container" role="document">
-                    <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
-                        <div  className="_page">
-                            <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
-                            <ul>
-                                {clickExpendedItem.child.map((item, index) => {
-                                    return (
-                                        <li key={index}>
-                                            <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
-                                        </li >
-                                    );
-                                }) }
-                            </ul>
-                        </div>
-                    </main>
+                <div style={{ height: '100%' }}>
+                    <div className="_container" role="document">
+                        <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                            <div  className="_page">
+                                <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
+                                <ul>
+                                    {clickExpendedItem.child.map((item, index) => {
+                                        return (
+                                            <li key={index}>
+                                                <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
+                                            </li >
+                                        );
+                                    }) }
+                                </ul>
+                            </div>
+                        </main>
+                    </div>
                     <BottomMark data = {this.props.docPageState.clickExpendedItem}/>
                 </div>
             );
         }
 
         return (
-            <div className="_container" role="document">
-                <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
-                    <div  dangerouslySetInnerHTML={{ __html: htmlContent }}
-                        className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
-                    </div>
-                </main>
+            <div style={{ height: '100%' }}>
+                <div className="_container" role="document">
+                    <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                        <div  dangerouslySetInnerHTML={{ __html: htmlContent }}
+                            className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
+                        </div>
+                    </main>
+                </div>
                 <BottomMark data = {this.props.docPageState.clickExpendedItem}/>
             </div>
         );
@@ -157,9 +161,9 @@ class BottomMark extends React.Component<IBottomMarkProps, any> {
         let {docInfo, docType, docEntry} = this.props.data.data;
         return (
             <div role="complementary" className="_path">
-                <a href={docInfo.pathname} className={'_path-item _icon-' + docInfo.slug.split('~')[0]}> { docInfo.name + ' ' + (docInfo.version || '') }</a>
-                <a href={docType ? docType.pathname : ''} className="_path-item">{docType ? docType.name : ''}</a>
-                <a className="_path-item">{docEntry ? docEntry.name : ''}</a>
+                <Link to={docInfo.pathname} className={'_path-item _icon-' + docInfo.slug.split('~')[0]}> { docInfo.name + ' ' + (docInfo.version || '') }</Link>
+                <Link to={docType ? docType.pathname : ''} className="_path-item">{docType ? docType.name : ''}</Link>
+                <span className="_path-item">{docEntry ? docEntry.name : ''}</span>
             </div >
         );
     }
