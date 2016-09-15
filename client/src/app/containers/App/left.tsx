@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {ISearchItem} from '../../core/model';
 import {ISearchState} from '../../redux/reducers/searchdocs';
-import ReactList from '../../utils/react-lists';
+import ReactList from './ReactList';
 import {DefaultList} from './DefaultList';
 import {history} from '../../routes';
 import * as appConfig from '../../config';

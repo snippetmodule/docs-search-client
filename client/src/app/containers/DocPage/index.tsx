@@ -160,7 +160,7 @@ class BottomMark extends React.Component<IBottomMarkProps, any> {
     public render() {
         let {docInfo, docType, docEntry} = this.props.data.data;
         return (
-            <div role="complementary" className="_path">
+            <div role="complementary" className="_path" style={{ display: !docType && !docEntry ? 'none' : 'block' }}>
                 <Link to={docInfo.pathname} className={'_path-item _icon-' + docInfo.slug.split('~')[0]}> { docInfo.name + ' ' + (docInfo.version || '') }</Link>
                 <Link to={docType ? docType.pathname : ''} className="_path-item">{docType ? docType.name : ''}</Link>
                 <span className="_path-item">{docEntry ? docEntry.name : ''}</span>

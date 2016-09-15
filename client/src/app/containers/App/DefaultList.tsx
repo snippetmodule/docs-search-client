@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {history} from '../../routes';
-import ReactList from '../../utils/react-lists';
+import ReactList from './ReactList';
 import {IDocInfo} from '../../core/model';
 import * as appConfig from '../../config';
 import {ICanExpendedItem, ICanExpendedState, ExpandedDocList, setSelectionIndex} from './ExpandedDocList';

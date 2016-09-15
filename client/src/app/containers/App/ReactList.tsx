@@ -26,6 +26,11 @@ export default class ReactList extends React.Component<IReactListProps, void> {
                 <div role="navigation" className="_list">
                     {items}
                 </div>
+                <div className="_sidebar-footer">
+                    <button type="button" className="_sidebar-footer-link _sidebar-footer-edit" data-pick-docs="">Select documentation</button>
+                    <button type="button" className="_sidebar-footer-link _sidebar-footer-light" title="Toggle light" data-light="">Toggle light</button>
+                    <button type="button" className="_sidebar-footer-link _sidebar-footer-layout" title="Toggle layout" data-layout="">Toggle layout</button>
+                </div>
             </section>
         );
     }
