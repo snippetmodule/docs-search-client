@@ -85,24 +85,28 @@ class DocPage extends React.Component<IProps, void> {
         let { docPageState} = this.props;
         if (!this.props.docPageState.isOk) {
             return (
-                <div className="_container" role="document">
-                    <main ref={ref => this.rootElem = ref} className ="_content _content-loading" role="main" tabIndex="-1">
-                        <div  className="_page">
-                        </div>
-                    </main>
+                <div style={{ height: '100%' }}>
+                    <div className="_container" role="document">
+                        <main ref={ref => this.rootElem = ref} className ="_content _content-loading" role="main" tabIndex="-1">
+                            <div  className="_page">
+                            </div>
+                        </main>
+                    </div>
                 </div>
             );
         }
         if (this.props.docPageState.err) {
             return (
-                <div className="_container" role="document">
-                    <PageNotFound pathname = {this.props.location.pathname} onClickRetry={
-                        (event: Event) => {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            this.props.startRequestPage(this.props.location.pathname);
-                        }
-                    }/>
+                <div style={{ height: '100%' }}>
+                    <div className="_container" role="document">
+                        <PageNotFound pathname = {this.props.location.pathname} onClickRetry={
+                            (event: Event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                this.props.startRequestPage(this.props.location.pathname);
+                            }
+                        }/>
+                    </div>
                 </div>
             );
         }

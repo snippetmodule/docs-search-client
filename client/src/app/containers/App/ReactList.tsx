@@ -23,10 +23,10 @@ export default class ReactList extends React.Component<IReactListProps, void> {
         }
         return (
             <section ref={ref => { this.mListRef = ref; } } className="_sidebar" tabIndex="-1" >
-                <div role="navigation" className="_list">
+                <div role="navigation" className="_list _resizer-left-div">
                     {items}
                 </div>
-                <div className="_sidebar-footer">
+                <div className="_sidebar-footer _resizer-left-div" style={{ display: 'none' }}>
                     <button type="button" className="_sidebar-footer-link _sidebar-footer-edit" data-pick-docs="">Select documentation</button>
                     <button type="button" className="_sidebar-footer-link _sidebar-footer-light" title="Toggle light" data-light="">Toggle light</button>
                     <button type="button" className="_sidebar-footer-link _sidebar-footer-layout" title="Toggle layout" data-layout="">Toggle layout</button>

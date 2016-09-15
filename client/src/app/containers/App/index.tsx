@@ -1,5 +1,6 @@
 import app  from '../../config';
 import * as React from 'react';
+import * as ReadtDom from 'react-dom';
 import * as Helmet from 'react-helmet';
 import { Header } from '../../components';
 import {Left} from './left';
@@ -13,6 +14,20 @@ interface IProps {
     state => ({ init: state.initReducer })
 )
 class App extends React.Component<IProps, any> {
+    private mLeftElements: any[] = [];
+    private mRightElements: Element[] = [];
+    public componentDidUpdate() {
+        this.mLeftElements.splice(0);
+        this.mLeftElements.push(...document.getElementsByClassName('_resizer-left-div'));
+        this.mRightElements.splice(0);
+        this.mRightElements.push(document.getElementsByClassName('_container')[0].parentElement);
+    }
+    private resizer(event) {
+        for (let ele of this.mLeftElements) {
+            ele.style.width = event.clientX;
+        }
+        console.log('resizer:' + event.clientX);
+    }
     public render() {
         if (!this.props.init.isInited) {
             return (
@@ -33,7 +48,8 @@ class App extends React.Component<IProps, any> {
                 <Header/>
                 <Left />
                 {this.props.children}
-                <div title="Click to toggle sidebar on/off" className="_resizer" draggable="true"></div>
+                <div onMouseMove={this.resizer.bind(this) }
+                    title="Click to toggle sidebar on/off" className="_resizer" draggable="true"></div>
             </div>
         );
     }
