@@ -14,19 +14,19 @@ interface IProps {
     state => ({ init: state.initReducer })
 )
 class App extends React.Component<IProps, any> {
-    private mLeftElements: any[] = [];
-    private mRightElements: Element[] = [];
+    // private mLeftElements: any[] = [];
+    // private mRightElements: Element[] = [];
     public componentDidUpdate() {
-        this.mLeftElements.splice(0);
-        this.mLeftElements.push(...document.getElementsByClassName('_resizer-left-div'));
-        this.mRightElements.splice(0);
-        this.mRightElements.push(document.getElementsByClassName('_container')[0].parentElement);
+        // this.mLeftElements.splice(0);
+        // this.mLeftElements.push(...document.getElementsByClassName('_resizer-left-div'));
+        // this.mRightElements.splice(0);
+        // this.mRightElements.push(document.getElementsByClassName('_container')[0].parentElement);
     }
     private resizer(event) {
-        for (let ele of this.mLeftElements) {
-            ele.style.width = event.clientX;
-        }
-        console.log('resizer:' + event.clientX);
+        // for (let ele of this.mLeftElements) {
+        //     ele.style.width = event.clientX;
+        // }
+        // console.log('resizer:' + event.clientX);
     }
     public render() {
         if (!this.props.init.isInited) {

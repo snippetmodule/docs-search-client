@@ -119,7 +119,8 @@ class Left extends React.Component<ISearchProps, any> {
         return (
             <ReactList ref={ref => this.mListRef = ref}
                 itemRenderer={this.renderItem.bind(this) }
-                length={this.props.searchState.message.length > 100 ? 100 : this.props.searchState.message.length}
+                length={this.props.searchState.message.length}
+                itemHeight = {30}
                 />
         );
     }
