@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { getSearchResult } from '../redux/reducers/searchdocs';
-import {getSearchTag} from '../containers/App/left';
+import {getSearchTag, keyEnterHandler} from '../containers/App/left';
 import * as AppConfig from '../config';
 const { connect } = require('react-redux');
 
@@ -55,6 +55,12 @@ class Header extends React.Component<any, void> {
         AppConfig.default.docs.init('').then(() => {
           this.props.getSearchResult('');
         });
+      }
+    } else if (keyCode === 13) { // 回车
+      event.preventDefault();
+      event.stopPropagation();
+      if (document.activeElement.className === this.mInputRef.className) {
+        keyEnterHandler();
       }
     }
   }

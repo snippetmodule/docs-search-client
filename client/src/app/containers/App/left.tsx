@@ -11,6 +11,7 @@ const { connect } = require('react-redux');
 
 let classNames = require('classnames');
 let _getSearchTag: () => { name: string, slug: string };
+let _keyEnterHandler: () => void;
 
 export function getSearchTag(): { name: string, slug: string } {
     if (_getSearchTag) {
@@ -18,6 +19,11 @@ export function getSearchTag(): { name: string, slug: string } {
     }
     return null;
 };
+export function keyEnterHandler() {
+    if (_keyEnterHandler) {
+        _keyEnterHandler();
+    }
+}
 interface ISearchProps {
     searchState?: ISearchState;
 }
@@ -141,6 +147,7 @@ class Left extends React.Component<ISearchProps, any> {
     public componentWillUnmount() {
         onDocsPageLoactionChangeCallback('Left', null);
         _getSearchTag = null;
+        _keyEnterHandler = null;
     }
     public componentDidUpdate(prevProps: any, prevState: void, prevContext: any) {
         if (this.mListRef) {
@@ -157,6 +164,16 @@ class Left extends React.Component<ISearchProps, any> {
                 }
             }
             return null;
+        };
+        _keyEnterHandler = () => {
+            if (!this.props.searchState.message) {
+                return null;
+            }
+            if (this.selectedIndex === -1) {
+                history.push({
+                    pathname: this.props.searchState.message[0].pathname,
+                });
+            }
         };
     }
 }
