@@ -19,7 +19,7 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         this.mCacheLists.splice(0);
     }
     public componentDidUpdate(prevProps: IReactListProps, prevState: IReactListState, prevContext: any): void {
-        this.mListRef.scrollTop = this.props.itemHeight * this.state.from;
+        // this.mListRef.scrollTop = this.props.itemHeight * this.state.from;
     }
     public componentDidMount() {
         this.mListRef.addEventListener('scroll', this.updateScrollPosition.bind(this));

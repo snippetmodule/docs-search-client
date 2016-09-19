@@ -29,14 +29,65 @@ interface IProps {
         startRequestPage: (url: string) => (dispatch(startRequestPage(dispatch, url))),
     }))
 class DocPage extends React.Component<IProps, void> {
-    private rootElem: HTMLElement;
-
     constructor(props) {
         super(props);
-        this.props.startRequestPage(this.props.location.pathname.split('#')[0]);
+        this.props.startRequestPage(this.props.location.pathname);
+    }
+    public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
+        if (onLoactionChangeCallback
+            && this.props.docPageState
+            && this.props.docPageState.url !== prevProps.docPageState.url) {
+            for (let key in onLoactionChangeCallback) {
+                if (onLoactionChangeCallback[key]) {
+                    onLoactionChangeCallback[key](this.props.docPageState.url);
+                }
+            }
+        }
+    }
+    public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
+        if (nextProps.location.pathname !== this.props.location.pathname) {
+            nextProps.startRequestPage(nextProps.location.pathname);
+        }
     }
 
-    public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
+    public render() {
+        if (!this.props.docPageState.isOk) {
+            return (
+                <div style={{ height: '100%' }}>
+                    <div className="_container" role="document">
+                        <main className ="_content _content-loading" role="main" tabIndex="-1">
+                            <div  className="_page">
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            );
+        }
+        if (this.props.docPageState.err) {
+            console.log('DocPage' + this.props.docPageState.err.stack);
+            return (
+                <div style={{ height: '100%' }}>
+                    <div className="_container" role="document">
+                        <PageNotFound pathname = {this.props.location.pathname} onClickRetry={
+                            (event: Event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                this.props.startRequestPage(this.props.location.pathname);
+                            }
+                        }/>
+                    </div>
+                </div>
+            );
+        }
+        return (
+            <DocContentPage {...this.props.docPageState}/>
+        );
+    }
+}
+
+class DocContentPage extends React.Component<IDocPageState, any> {
+    private rootElem: HTMLElement;
+    public componentDidUpdate(prevProps: IDocPageState, prevState: void, prevContext: any) {
         if (!this.rootElem || !this.rootElem.getElementsByTagName) {
             return;
         }
@@ -55,7 +106,7 @@ class DocPage extends React.Component<IProps, void> {
                 }
             };
         }
-        nextScroolToElement = this.props.location.pathname.split('#')[1];
+        nextScroolToElement = this.props.url.split('#')[1];
         if (nextScroolToElement) {
             let element = document.getElementById(nextScroolToElement);
             if (element) {
@@ -64,55 +115,11 @@ class DocPage extends React.Component<IProps, void> {
         } else {
             this.rootElem.scrollTop = 0;
         }
-        if (onLoactionChangeCallback && (this.props.docPageState.isOk)) { // 更新完成后再发此回调
-            for (let key in onLoactionChangeCallback) {
-                if (onLoactionChangeCallback[key]) {
-                    onLoactionChangeCallback[key](this.props.location.pathname);
-                }
-            }
-        }
     }
-    public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
-        let nextUrl: string = nextProps.location.pathname.split('#')[0];
-        let curUrl: string = !this.props ? [] : this.props.location.pathname.split('#')[0];
-        if (nextUrl !== curUrl) { // 外部传入地址location发生改变
-            nextProps.startRequestPage(nextUrl);
-            return;
-        }
-    }
-
     public render() {
-        let { docPageState} = this.props;
-        if (!this.props.docPageState.isOk) {
-            return (
-                <div style={{ height: '100%' }}>
-                    <div className="_container" role="document">
-                        <main ref={ref => this.rootElem = ref} className ="_content _content-loading" role="main" tabIndex="-1">
-                            <div  className="_page">
-                            </div>
-                        </main>
-                    </div>
-                </div>
-            );
-        }
-        if (this.props.docPageState.err) {
-            return (
-                <div style={{ height: '100%' }}>
-                    <div className="_container" role="document">
-                        <PageNotFound pathname = {this.props.location.pathname} onClickRetry={
-                            (event: Event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                this.props.startRequestPage(this.props.location.pathname);
-                            }
-                        }/>
-                    </div>
-                </div>
-            );
-        }
-        let clickExpendedItem = this.props.docPageState.clickExpendedItem;
+        let clickExpendedItem = this.props.clickExpendedItem;
         let mDocInfo = clickExpendedItem.data.docInfo;
-        let htmlContent = docPageState.htmlResponse;
+        let htmlContent = this.props.htmlResponse;
         if (mDocInfo && mDocInfo.links) {
             htmlContent = '<p class="_links">' +
                 (mDocInfo.links.home ? ('<a href="XXXX" class="_links-link">Homepage</a>'.replace('XXXX', mDocInfo.links.home)) : '') +
@@ -138,7 +145,7 @@ class DocPage extends React.Component<IProps, void> {
                             </div>
                         </main>
                     </div>
-                    <BottomMark data = {this.props.docPageState.clickExpendedItem}/>
+                    <BottomMark data = {this.props.clickExpendedItem}/>
                 </div>
             );
         }
@@ -152,7 +159,7 @@ class DocPage extends React.Component<IProps, void> {
                         </div>
                     </main>
                 </div>
-                <BottomMark data = {this.props.docPageState.clickExpendedItem}/>
+                <BottomMark data = {this.props.clickExpendedItem}/>
             </div>
         );
     }

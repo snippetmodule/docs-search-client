@@ -32,6 +32,20 @@ export function getDocInfoByUrlPath(pathname: String): ICanExpendedItem {
         }
         temp.push(...item.child);
     }
+    let slug = pathname.split('/')[3];
+    for (let item of disableDocs.child) {
+        if (item.child.length > 0) {
+            for (let child of item.child) {
+                if (child.data.docInfo.slug === slug) {
+                    return child;
+                }
+            }
+            continue;
+        }
+        if (item.data && item.data.docInfo.slug === slug) {
+            return item;
+        }
+    }
     return null;
 }
 

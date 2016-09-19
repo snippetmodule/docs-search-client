@@ -18,7 +18,7 @@ const routeConfig = (
     <Route path="about" component={About} />
     <Route path="counter" component={Counter} />
     <Route path="stars" component={Stars} />
-    <Route path="docs/*" component={DocPage} />
+    <Route path="*" component={DocPage} />
   </Route>
 );
 
