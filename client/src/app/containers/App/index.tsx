@@ -1,6 +1,6 @@
 import app  from '../../config';
 import * as React from 'react';
-import * as ReadtDom from 'react-dom';
+// import * as ReadtDom from 'react-dom';
 import * as Helmet from 'react-helmet';
 import { Header } from '../../components';
 import {Left} from './left';

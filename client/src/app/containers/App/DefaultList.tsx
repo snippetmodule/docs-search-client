@@ -48,18 +48,18 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     }
 
     private renderItem(index, key) {
-        let stateItem: ICanExpendedItem = this.state.listItems[index];
+        let _stateItem: ICanExpendedItem = this.state.listItems[index];
         let itemProps: IRenderItemProp = {
-            stateItem: stateItem,
+            stateItem: _stateItem,
             _isSelected: index === this.state.selectedIndex,
-            onClickItem: (event) => { event.preventDefault(); event.stopPropagation(); this.onClickItem(index, stateItem); },
-            enableDoc: (event) => { event.preventDefault(); event.stopPropagation(); this.enableDoc(stateItem.data.docInfo); },
-            disableDoc: (event) => { event.preventDefault(); event.stopPropagation(); this.disableDoc(stateItem.data.docInfo); },
+            onClickItem: (event) => { event.preventDefault(); event.stopPropagation(); this.onClickItem(index, _stateItem); },
+            enableDoc: (event) => { event.preventDefault(); event.stopPropagation(); this.enableDoc(_stateItem.data.docInfo); },
+            disableDoc: (event) => { event.preventDefault(); event.stopPropagation(); this.disableDoc(_stateItem.data.docInfo); },
         };
-        if (!stateItem) {
+        if (!_stateItem) {
             console.log('1111');
         }
-        if (!stateItem.data.docInfo || !stateItem.data.docInfo.storeValue) {
+        if (!_stateItem.data.docInfo || !_stateItem.data.docInfo.storeValue) {
             return (<DisenableDocItem key={key} {...itemProps} />);
         } else {
 

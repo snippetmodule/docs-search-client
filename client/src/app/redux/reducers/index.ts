@@ -1,20 +1,20 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { counterReducer } from './counter';
-import { initReducer } from './init';
-import { initDocPageReducer } from './docpage';
-import { searchDocsReducer } from './searchdocs';
+import { initReducer as _initReducer} from './init';
+import { initDocPageReducer as _initDocPageReducer} from './docpage';
+import { searchDocsReducer as _searchDocsReducer} from './searchdocs';
 import { starsReducer } from './stars';
 import {IReduxState } from './model';
 const { reducer } = require('redux-connect');
 
 const rootReducer: Redux.Reducer<IReduxState> = combineReducers({
-  initReducer: initReducer,
-  initDocPageReducer: initDocPageReducer,
+  initReducer: _initReducer,
+  initDocPageReducer: _initDocPageReducer,
   routing: routerReducer,
   counter: counterReducer,
   stars: starsReducer,
-  searchDocsReducer: searchDocsReducer,
+  searchDocsReducer: _searchDocsReducer,
   reduxAsyncConnect: reducer,
 });
 

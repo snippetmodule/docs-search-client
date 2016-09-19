@@ -33,8 +33,8 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
             return;
         }
         let newScrollPosition = Math.ceil(this.mListRef.scrollTop / this.props.itemHeight);
-        let to = newScrollPosition + Math.floor(this.mListRef.clientHeight / this.props.itemHeight);
-        this.setState({ from: newScrollPosition, to: to });
+        let _to = newScrollPosition + Math.floor(this.mListRef.clientHeight / this.props.itemHeight);
+        this.setState({ from: newScrollPosition, to: _to });
     }
     public scroolToPosition(position: number) {
         let nextSeletexItem: any = this.mListRef.childNodes[0].childNodes[position];
@@ -44,9 +44,9 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
             // 在显示区域 已显示,无需做滚动处理
             return;
         }
-        let to = position + Math.ceil(this.mListRef.clientHeight / this.props.itemHeight);
-        to = to > this.props.length ? this.props.length - 1 : to;
-        this.setState({ from: position, to: to });
+        let _to = position + Math.ceil(this.mListRef.clientHeight / this.props.itemHeight);
+        _to = _to > this.props.length ? this.props.length - 1 : _to;
+        this.setState({ from: position, to: _to });
     }
     private getCurrentItems() {
         let { to } = this.state;

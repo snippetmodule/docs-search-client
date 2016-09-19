@@ -101,21 +101,21 @@ export class ExpandedDocList implements ICanExpendedState {
                     });
                 } else {
                     let disableChilds = disableDocs.child;
-                    let parent;
+                    let _parent;
                     for (let item of disableChilds) {
                         if (item.data.name === docItem.name) { // 以name 归类，不再以 docItem.slug 中 ～ 的前缀归类 
-                            parent = item;
+                            _parent = item;
                         }
                     }
-                    if (!parent) {
-                        parent = {
+                    if (!_parent) {
+                        _parent = {
                             isExpended: false, deep: 1, child: [], parent: disableDocs, isEnable: false,
                             data: { name: docItem.name, docInfo: null, docType: null, docEntry: null, pathname: null },
                         };
-                        disableDocs.child.push(parent);
+                        disableDocs.child.push(_parent);
                     }
-                    parent.child.push({
-                        isExpended: false, deep: 1, child: [], parent: parent, isEnable: false,
+                    _parent.child.push({
+                        isExpended: false, deep: 1, child: [], parent: _parent, isEnable: false,
                         data: { name: docItem.name + ' ' + docItem.version, docInfo: docItem, docType: null, docEntry: null, pathname: docItem.pathname },
                     });
                 }

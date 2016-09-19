@@ -48,9 +48,9 @@ export function initDocPageReducer(state: IDocPageState = { isOk: false, url: nu
 
 /** Async Action Creator */
 export function startRequestPage(dispatch, _url: string): IDocPageAction {
-    let clickExpendedItem: ICanExpendedItem = getDocInfoByUrlPath(_url);
-    if (clickExpendedItem && clickExpendedItem.data.docType && !clickExpendedItem.data.docEntry) {
-        return { type: INIT_SUCCESS, url: _url, htmlResponse: null, clickExpendedItem: clickExpendedItem, err: null };
+    let _clickExpendedItem: ICanExpendedItem = getDocInfoByUrlPath(_url);
+    if (_clickExpendedItem && _clickExpendedItem.data.docType && !_clickExpendedItem.data.docEntry) {
+        return { type: INIT_SUCCESS, url: _url, htmlResponse: null, clickExpendedItem: _clickExpendedItem, err: null };
     }
     fetch(appConfig.default.docs.getConfig().docs_host + _url, {
         headers: {
@@ -60,14 +60,14 @@ export function startRequestPage(dispatch, _url: string): IDocPageAction {
         if (res.ok) { return res.text(); };
         throw new Error('http download error');
     }).then(res => {
-        dispatch({ type: INIT_SUCCESS, url: _url, htmlResponse: res, clickExpendedItem: clickExpendedItem, err: null });
-    }).catch(err => {
-        dispatch({ type: INIT_SUCCESS, url: _url, htmlResponse: null, clickExpendedItem: clickExpendedItem, err: err });
+        dispatch({ type: INIT_SUCCESS, url: _url, htmlResponse: res, clickExpendedItem: _clickExpendedItem, err: null });
+    }).catch(_err => {
+        dispatch({ type: INIT_SUCCESS, url: _url, htmlResponse: null, clickExpendedItem: _clickExpendedItem, err: _err });
     });
     return {
         type: INIT_REQUEST,
         url: _url,
         err: null,
-        clickExpendedItem: clickExpendedItem,
+        clickExpendedItem: _clickExpendedItem,
     };
 }
