@@ -10,7 +10,7 @@
     "build": "webpack --config config/webpack/index.js",
     "build:prod": "cross-env NODE_ENV=production npm run build",
     "prestart": "npm run build",
-    "start": "webpack-dev-server --config config/webpack/index.js --content-base ./build --history-api-fallback --no-info --open",
+    "start": "node config/webpack/server.js",
     "start:prod": "cross-env NODE_ENV=production npm start",
     "lint": "node_modules/.bin/tslint \"src/**/**.ts*\""
   },
@@ -70,6 +70,7 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",
+    "connect-history-api-fallback": "^1.3.0",
     "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.10.0"
   },

@@ -32,7 +32,7 @@ export function getDocInfoByUrlPath(pathname: String): ICanExpendedItem {
         }
         temp.push(...item.child);
     }
-    let slug = pathname.split('/')[3];
+    let slug = pathname.split('/')[2];
     for (let item of disableDocs.child) {
         if (item.child.length > 0) {
             for (let child of item.child) {
@@ -172,7 +172,27 @@ export class ExpandedDocList implements ICanExpendedState {
             }
             temp.unshift(...item.child);
         }
-        if (findedItem === null) { return false; }
+        if (findedItem === null) {
+            locationUrl = locationUrl.split('/').slice(0, 3).join('/') + '/';
+            for (let disalbe of disableDocs.child) {
+                if (disalbe.child.length > 0) {
+                    for (let child of disalbe.child) {
+                        if (child.data.pathname === locationUrl) {
+                            findedItem = child;
+                            break;
+                        }
+                    }
+                } else {
+                    if (disalbe.data.docInfo && disalbe.data.pathname === locationUrl) {
+                        findedItem = disalbe;
+                        break;
+                    }
+                }
+            }
+            if (findedItem === null) {
+                return false;
+            }
+        }
         // 展开findedItem　的父节点
         while (findedItem.parent) {
             findedItem = findedItem.parent;

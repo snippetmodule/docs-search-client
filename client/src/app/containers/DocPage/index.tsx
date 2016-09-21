@@ -87,7 +87,8 @@ class DocPage extends React.Component<IProps, void> {
 
 class DocContentPage extends React.Component<IDocPageState, any> {
     private rootElem: HTMLElement;
-    public componentDidUpdate(prevProps: IDocPageState, prevState: void, prevContext: any) {
+
+    public componentDidMount() {
         if (!this.rootElem || !this.rootElem.getElementsByTagName) {
             return;
         }
@@ -116,6 +117,7 @@ class DocContentPage extends React.Component<IDocPageState, any> {
             this.rootElem.scrollTop = 0;
         }
     }
+
     public render() {
         let clickExpendedItem = this.props.clickExpendedItem;
         let mDocInfo = clickExpendedItem.data.docInfo;
