@@ -7,11 +7,12 @@ interface IReactListProps {
 }
 
 interface IReactListState {
+    forceSelectedIndex: number;
     from: number;
     to: number; // 当前列表显示的开始位置,和结束位置 
 }
 export default class ReactList extends React.Component<IReactListProps, IReactListState> {
-    public state = { from: 0, to: 0 };
+    public state = { from: 0, to: 0, forceSelectedIndex: -1 };
     private mListRef: Element;
     private mCacheLists: JSX.Element[] = [];
 
@@ -19,7 +20,9 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         this.mCacheLists.splice(0);
     }
     public componentDidUpdate(prevProps: IReactListProps, prevState: IReactListState, prevContext: any): void {
-        // this.mListRef.scrollTop = this.props.itemHeight * this.state.from;
+        if (this.state.forceSelectedIndex !== -1) {
+            this.mListRef.scrollTop = this.props.itemHeight * this.state.from;
+        }
     }
     public componentDidMount() {
         this.mListRef.addEventListener('scroll', this.updateScrollPosition.bind(this));
@@ -34,7 +37,7 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         }
         let newScrollPosition = Math.ceil(this.mListRef.scrollTop / this.props.itemHeight);
         let _to = newScrollPosition + Math.floor(this.mListRef.clientHeight / this.props.itemHeight);
-        this.setState({ from: newScrollPosition, to: _to });
+        this.setState({ from: newScrollPosition, to: _to, forceSelectedIndex: -1 });
     }
     public scroolToPosition(position: number) {
         let nextSeletexItem: any = this.mListRef.childNodes[0].childNodes[position];
@@ -46,7 +49,7 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         }
         let _to = position + Math.ceil(this.mListRef.clientHeight / this.props.itemHeight);
         _to = _to > this.props.length ? this.props.length - 1 : _to;
-        this.setState({ from: position, to: _to });
+        this.setState({ from: position, to: _to, forceSelectedIndex: position });
     }
     private getCurrentItems() {
         let { to } = this.state;
