@@ -13,7 +13,6 @@ const store: Redux.Store<IReduxState> = configureStore(
 );
 const history: ReactRouterReduxHistory = syncHistoryWithStore(browserHistory, store);
 
-
 const routeConfig = (
   <Router history={history}
     render={(props) =>

@@ -13,16 +13,14 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
         return (
             <a  className={classNames('_list-item', iconClass, '_list-dir', openClass, selectClass) }
                 onClick={this.props.onClickItem }
-                onMouseOver={event => {
-                    if (this.props.stateItem.isExpended && _isSelected) {
-                        this.spanDisenableRef.innerText = 'disable';
-                    }
-                } }
-                onMouseOut={event => { this.spanDisenableRef.innerText = ''; } }
                 >
                 <span className="_list-arrow"></span>
-                <span className="_list-enable" style={{ color: '#fff !important', display: 'block' }}ref={ref => this.spanDisenableRef = ref}
-                    onClick={this.props.disableDoc }></span>
+                <span className="_list-enable"
+                    style={{ color: '#fff !important', display: this.props.stateItem.isExpended && _isSelected ? 'block' : 'none' }}
+                    onClick={this.props.disableDoc}>Disenable</span>
+                <span className="_list-count"
+                    style={{ display: this.props.stateItem.isExpended && _isSelected ? 'none' : 'block' }}
+                    >{stateItem.data.docInfo.release}</span>
                 {stateItem.data.name}
             </a>
         );

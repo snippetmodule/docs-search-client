@@ -120,48 +120,52 @@ class DocContentPage extends React.Component<IDocPageState, any> {
 
     public render() {
         let clickExpendedItem = this.props.clickExpendedItem;
-        let mDocInfo = clickExpendedItem.data.docInfo;
         let htmlContent = this.props.htmlResponse;
-        if (mDocInfo && mDocInfo.links) {
-            htmlContent = '<p class="_links">' +
-                (mDocInfo.links.home ? ('<a href="XXXX" class="_links-link">Homepage</a>'.replace('XXXX', mDocInfo.links.home)) : '') +
-                (mDocInfo.links.code ? ('<a href="XXXX" class="_links-link">Source code</a>'.replace('XXXX', mDocInfo.links.code)) : '') +
-                '</p>' + htmlContent;
-        }
-        if (clickExpendedItem.data.docType && !clickExpendedItem.data.docEntry) {
-            return (
-                <div style={{ height: '100%' }}>
-                    <div className="_container" role="document">
-                        <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
-                            <div  className="_page">
-                                <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
-                                <ul>
-                                    {clickExpendedItem.child.map((item, index) => {
-                                        return (
-                                            <li key={index}>
-                                                <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
-                                            </li >
-                                        );
-                                    }) }
-                                </ul>
-                            </div>
-                        </main>
+        let iconCss = (clickExpendedItem && clickExpendedItem.data.docInfo ? '_' + clickExpendedItem.data.docInfo.type : '');
+        if (clickExpendedItem) {
+            let mDocInfo = clickExpendedItem.data.docInfo;
+            if (mDocInfo && mDocInfo.links) {
+                htmlContent = '<p class="_links">' +
+                    (mDocInfo.links.home ? ('<a href="XXXX" class="_links-link">Homepage</a>'.replace('XXXX', mDocInfo.links.home)) : '') +
+                    (mDocInfo.links.code ? ('<a href="XXXX" class="_links-link">Source code</a>'.replace('XXXX', mDocInfo.links.code)) : '') +
+                    '</p>' + htmlContent;
+            }
+            if (clickExpendedItem.data.docType && !clickExpendedItem.data.docEntry) {
+                return (
+                    <div style={{ height: '100%' }}>
+                        <div className="_container" role="document">
+                            <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                                <div  className="_page">
+                                    <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
+                                    <ul>
+                                        {clickExpendedItem.child.map((item, index) => {
+                                            return (
+                                                <li key={index}>
+                                                    <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
+                                                </li >
+                                            );
+                                        }) }
+                                    </ul>
+                                </div>
+                            </main>
+                        </div>
+                        <BottomMark data = {this.props.clickExpendedItem}/>
                     </div>
-                    <BottomMark data = {this.props.clickExpendedItem}/>
-                </div>
-            );
+                );
+            }
         }
+
 
         return (
             <div style={{ height: '100%' }}>
                 <div className="_container" role="document">
                     <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
                         <div  dangerouslySetInnerHTML={{ __html: htmlContent }}
-                            className={'_page ' + (mDocInfo ? '_' + mDocInfo.type : '') } >
+                            className={'_page ' + iconCss } >
                         </div>
                     </main>
                 </div>
-                <BottomMark data = {this.props.clickExpendedItem}/>
+                {this.props.clickExpendedItem ? <BottomMark data = {this.props.clickExpendedItem}/> : ''}
             </div>
         );
     }
