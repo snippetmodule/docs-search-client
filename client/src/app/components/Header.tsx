@@ -85,8 +85,8 @@ class Header extends React.Component<any, void> {
       <header className="_header" role="banner">
         <form className="_search" role="search">
           <input ref={ref => this.mInputRef = ref} type="search" className="_search-input" placeholder="Search…"
-            autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck="false"
-            maxLength="30" aria-label="Search" autoFocus="autofocus"
+            autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false}
+            maxLength={30} aria-label="Search" autoFocus={true}
             onChange={this.handleChange.bind(this) }/>
           <button ref={ref => this.mCleanBtnRef = ref} onClick={this.handleCleanBtn.bind(this) } type="reset" className="_search-clear" title="Clear search">Clear search</button>
           <div ref={ref => this.mSearchTagRef = ref} className="_search-tag"></div>

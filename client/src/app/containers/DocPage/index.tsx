@@ -55,7 +55,7 @@ class DocPage extends React.Component<IProps, void> {
             return (
                 <div style={{ height: '100%' }}>
                     <div className="_container" role="document">
-                        <main className ="_content _content-loading" role="main" tabIndex="-1">
+                        <main className ="_content _content-loading" role="main" tabIndex={-1}>
                             <div  className="_page">
                             </div>
                         </main>
@@ -134,7 +134,7 @@ class DocContentPage extends React.Component<IDocPageState, any> {
                 return (
                     <div style={{ height: '100%' }}>
                         <div className="_container" role="document">
-                            <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                            <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex={-1}>
                                 <div  className="_page">
                                     <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
                                     <ul>
@@ -158,7 +158,7 @@ class DocContentPage extends React.Component<IDocPageState, any> {
         return (
             <div style={{ height: '100%' }}>
                 <div className="_container" role="document">
-                    <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex="-1">
+                    <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex={-1}>
                         <div  dangerouslySetInnerHTML={{ __html: htmlContent }}
                             className={'_page ' + iconCss } >
                         </div>

@@ -63,7 +63,7 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
     public render() {
         let items = this.getCurrentItems();
         return (
-            <section ref={ref => { this.mListRef = ref; } } className="_sidebar" tabIndex="-1" >
+            <section ref={ref => { this.mListRef = ref; } } className="_sidebar" tabIndex={-1} >
                 <div role="navigation" className="_list _resizer-left-div" style={{ height: this.props.length * this.props.itemHeight }}>
                     {items}
                 </div>

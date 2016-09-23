@@ -49,7 +49,7 @@ class App extends React.Component<IProps, any> {
                 <Left />
                 {this.props.children}
                 <div onMouseMove={this.resizer.bind(this) }
-                    title="Click to toggle sidebar on/off" className="_resizer" draggable="true"></div>
+                    title="Click to toggle sidebar on/off" className="_resizer" draggable={true}></div>
             </div>
         );
     }

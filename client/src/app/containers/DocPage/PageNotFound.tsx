@@ -7,7 +7,7 @@ export interface IPageNotFoundProp {
 class PageNotFound extends React.Component<IPageNotFoundProp, any> {
     public render() {
         return (
-            <main className ="_content" role="main" tabIndex="-1">
+            <main className ="_content" role="main" tabIndex={-1}>
                 <div className="_page _page-error">
                     <div className="_error">
                         <h1 className="_error-title"> The page failed to load.</h1>
