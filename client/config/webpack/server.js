@@ -5,13 +5,14 @@ var config = require('./dev.js');
 
 //------webpack - dev - server------------------
 var server = new WebpackDevServer(webpack(config), {
-    quiet: true,
+    hot: true,
+    quiet: false,
     noInfo: true,
     watchOptions: {
         aggregateTimeout: 300,
         poll: 1000
     },
-    contentBase:'build/',
+    contentBase: 'build/',
     publicPath: "/build/",
     stats: {
         colors: true

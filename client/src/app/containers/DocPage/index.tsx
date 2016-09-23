@@ -155,7 +155,6 @@ class DocContentPage extends React.Component<IDocPageState, any> {
             }
         }
 
-
         return (
             <div style={{ height: '100%' }}>
                 <div className="_container" role="document">

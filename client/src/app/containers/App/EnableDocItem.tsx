@@ -3,7 +3,6 @@ import {IRenderItemProp} from './DefaultList';
 
 let classNames = require('classnames');
 class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
-    private spanDisenableRef: (HTMLSpanElement);
     public render() {
         let {_isSelected, stateItem} = this.props;
         let openClass = stateItem.isExpended ? 'open' : '';
