@@ -16,7 +16,7 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
                 <span className="_list-arrow"></span>
                 <span className="_list-enable"
                     style={{ color: '#fff !important', display: this.props.stateItem.isExpended && _isSelected ? 'block' : 'none' }}
-                    onClick={this.props.disableDoc}>Disenable</span>
+                    onClick={this.props.disableDoc}>Disable</span>
                 <span className="_list-count"
                     style={{ display: this.props.stateItem.isExpended && _isSelected ? 'none' : 'block' }}
                     >{stateItem.data.docInfo.release}</span>
