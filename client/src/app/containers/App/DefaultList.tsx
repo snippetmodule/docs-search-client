@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {history} from '../../routes';
+import { history } from '../../routes';
 import ReactList from './ReactList';
-import {IDocInfo} from '../../core/model';
+import { IDocInfo } from '../../core/model';
 import * as appConfig from '../../config';
-import {ICanExpendedItem, ICanExpendedState, ExpandedDocList, setSelectionIndex} from './ExpandedDocList';
-import {onDocsPageLoactionChangeCallback} from '../DocPage/';
-import {EnableDocItem } from './EnableDocItem';
-import {DisenableDocItem } from './DisenableDocItem';
+import { ICanExpendedItem, ICanExpendedState, ExpandedDocList, setSelectionIndex } from './ExpandedDocList';
+import { onDocsPageLoactionChangeCallback } from '../DocPage/';
+import { EnableDocItem } from './EnableDocItem';
+import { DisenableDocItem } from './DisenableDocItem';
 
 export interface IRenderItemProp {
     _isSelected: boolean;
@@ -69,9 +69,9 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     public render() {
         return (
             <ReactList ref={ref => this.mListRef = ref}
-                itemRenderer={this.renderItem.bind(this) }
-                length={this.state.listItems.length }
-                itemHeight = {30}
+                itemRenderer={this.renderItem.bind(this)}
+                length={this.state.listItems.length}
+                itemHeight={30}
                 />
         );
     }

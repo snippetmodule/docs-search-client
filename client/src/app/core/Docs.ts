@@ -1,7 +1,7 @@
-import {DocsModelEntriyType, DocsModelTypeType, IDocInfo, ISearchItem} from './model';
-import {localStorage } from './storage';
+import { DocsModelEntriyType, DocsModelTypeType, IDocInfo, ISearchItem } from './model';
+import { localStorage } from './storage';
 import * as Cookies from 'js-cookie';
-import {Searcher}from './Searcher';
+import { Searcher } from './Searcher';
 
 // 根据docsInfoArrays 初始化 mSearcher
 function initSearcher(docsInfoArrays: IDocInfo[]): Searcher<ISearchItem> {
@@ -183,4 +183,4 @@ class Docs {
     }
 }
 
-export {Docs}
+export { Docs }

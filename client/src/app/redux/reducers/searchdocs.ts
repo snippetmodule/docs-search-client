@@ -1,4 +1,4 @@
-import app  from '../../config';
+import app from '../../config';
 import { ISearchItem } from '../../core/model';
 /** Action Types */
 export const SEARCH_REQUEST: string = 'SEARCH_REQUEST';

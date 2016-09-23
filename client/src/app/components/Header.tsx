@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { getSearchResult } from '../redux/reducers/searchdocs';
-import {getSearchTag, keyEnterHandler} from '../containers/App/left';
+import { getSearchTag, keyEnterHandler } from '../containers/App/left';
 import * as AppConfig from '../config';
 const { connect } = require('react-redux');
 
@@ -87,8 +87,8 @@ class Header extends React.Component<any, void> {
           <input ref={ref => this.mInputRef = ref} type="search" className="_search-input" placeholder="Search…"
             autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false}
             maxLength={30} aria-label="Search" autoFocus={true}
-            onChange={this.handleChange.bind(this) }/>
-          <button ref={ref => this.mCleanBtnRef = ref} onClick={this.handleCleanBtn.bind(this) } type="reset" className="_search-clear" title="Clear search">Clear search</button>
+            onChange={this.handleChange.bind(this)} />
+          <button ref={ref => this.mCleanBtnRef = ref} onClick={this.handleCleanBtn.bind(this)} type="reset" className="_search-clear" title="Clear search">Clear search</button>
           <div ref={ref => this.mSearchTagRef = ref} className="_search-tag"></div>
         </form>
         <h1 className="_logo">
@@ -105,4 +105,4 @@ class Header extends React.Component<any, void> {
   }
 }
 
-export { Header }
+export {  Header }

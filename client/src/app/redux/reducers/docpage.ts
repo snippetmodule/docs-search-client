@@ -1,5 +1,5 @@
 import * as appConfig from '../../config';
-import {getDocInfoByUrlPath, ICanExpendedItem} from '../../containers/App/ExpandedDocList';
+import { getDocInfoByUrlPath, ICanExpendedItem } from '../../containers/App/ExpandedDocList';
 /** Action Types */
 export const INIT_REQUEST: string = 'INIT_PAGE_REQUEST';
 export const INIT_SUCCESS: string = 'INIT_PAGE_SUCCESS';

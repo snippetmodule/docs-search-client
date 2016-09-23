@@ -1,19 +1,27 @@
-import app  from '../../config';
+import app from '../../config';
 import * as React from 'react';
 // import * as ReadtDom from 'react-dom';
 import * as Helmet from 'react-helmet';
 import { Header } from '../../components';
-import {Left} from './left';
-import { IInitState } from '../../redux/reducers/init';
+import { Left } from './left';
+import { startInit, IInitState, IInitAction } from '../../redux/reducers/init';
 const { connect } = require('react-redux');
 
 interface IProps {
     init: IInitState;
+    startInit: Redux.ActionCreator<IInitAction>;
 }
 @connect(
-    state => ({ init: state.initReducer })
+    state => ({ init: state.initReducer }),
+    dispatch => ({
+        startInit: () => dispatch(startInit(dispatch)),
+    })
 )
 class App extends React.Component<IProps, any> {
+    constructor(props) {
+        super(props);
+        this.props.startInit();
+    }
     // private mLeftElements: any[] = [];
     // private mRightElements: Element[] = [];
     public componentDidUpdate() {
@@ -44,15 +52,15 @@ class App extends React.Component<IProps, any> {
         }
         return (
             <div className="_app" >
-                <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head}/>
-                <Header/>
+                <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head} />
+                <Header />
                 <Left />
                 {this.props.children}
-                <div onMouseMove={this.resizer.bind(this) }
+                <div onMouseMove={this.resizer.bind(this)}
                     title="Click to toggle sidebar on/off" className="_resizer" draggable={true}></div>
             </div>
         );
     }
 }
 
-export { App }
+export { App }

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { IndexRoute, Route } from 'react-router';
-import { App, Home, About, Counter, Stars, DocPage} from './containers';
+import { App, Home, About, Counter, Stars, DocPage } from './containers';
 const {browserHistory } = require('react-router');
 import { ReactRouterReduxHistory, syncHistoryWithStore } from 'react-router-redux';
 import { configureStore } from './redux/store';
-import {IReduxState } from './redux/reducers/model';
+import { IReduxState } from './redux/reducers/model';
 const { Router } = require('react-router');
 const { ReduxAsyncConnect } = require('redux-connect');
 const store: Redux.Store<IReduxState> = configureStore(
@@ -28,4 +28,4 @@ const routeConfig = (
   </Router>
 );
 
-export {store, history, routeConfig}
+export { store, history, routeConfig }

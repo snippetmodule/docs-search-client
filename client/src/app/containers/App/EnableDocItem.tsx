@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {IRenderItemProp} from './DefaultList';
+import { IRenderItemProp } from './DefaultList';
 
 let classNames = require('classnames');
 class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
@@ -10,8 +10,8 @@ class TopEnableDocItem extends React.Component<IRenderItemProp, any> {
         let splits = stateItem.data.docInfo.slug.split('~');
         let iconClass = '_icon-' + splits[0];
         return (
-            <a  className={classNames('_list-item', iconClass, '_list-dir', openClass, selectClass) }
-                onClick={this.props.onClickItem }
+            <a className={classNames('_list-item', iconClass, '_list-dir', openClass, selectClass)}
+                onClick={this.props.onClickItem}
                 >
                 <span className="_list-arrow"></span>
                 <span className="_list-enable"
@@ -32,10 +32,10 @@ class ExpandDocItem extends React.Component<IRenderItemProp, any> {
         let selectClass = _isSelected ? ['focus', 'active'] : '';
         return (
             <div className="_list-sub">
-                <a  className={classNames('_list-item', '_list-dir', openClass, selectClass) }
+                <a className={classNames('_list-item', '_list-dir', openClass, selectClass)}
                     onClick={this.props.onClickItem}>
                     <span className="_list-arrow"></span>
-                    <span className="_list-count">{ stateItem.child.length === 0 ? ' ' : stateItem.child.length}</span>
+                    <span className="_list-count">{stateItem.child.length === 0 ? ' ' : stateItem.child.length}</span>
                     {stateItem.data.name}
                 </a>
             </div>
@@ -49,8 +49,8 @@ export class EnableDocItem extends React.Component<IRenderItemProp, any> {
             if (this.props.stateItem.data.docInfo.storeValue) {
                 let selectClass = this.props._isSelected ? ['focus', 'active'] : '';
                 return (
-                    <div className= "_list-sub">
-                        <a className={classNames('_list-item', '_list-hover', selectClass) }
+                    <div className="_list-sub">
+                        <a className={classNames('_list-item', '_list-hover', selectClass)}
                             onClick={this.props.onClickItem}
                             >
                             {this.props.stateItem.data.name}

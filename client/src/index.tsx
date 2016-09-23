@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import {store, routeConfig} from './app/routes';
+import { store, routeConfig } from './app/routes';
 
 require('./css/application.css.scss');
 

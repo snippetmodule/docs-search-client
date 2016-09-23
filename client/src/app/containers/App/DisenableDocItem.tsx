@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {IRenderItemProp} from './DefaultList';
+import { IRenderItemProp } from './DefaultList';
 let classNames = require('classnames');
 
 class DisableDocItem extends React.Component<IRenderItemProp, any> {
@@ -9,7 +9,7 @@ class DisableDocItem extends React.Component<IRenderItemProp, any> {
         let splits = stateItem.data.docInfo.slug.split('~');
         let iconClass = '_icon-' + splits[0];
         return (
-            <a  className={classNames('_list-item', iconClass, '_list-disabled', selectClass) }
+            <a className={classNames('_list-item', iconClass, '_list-disabled', selectClass)}
                 onClick={this.props.onClickItem}
                 >
                 <span className="_list-enable" onClick={this.props.enableDoc}>Enable</span>
@@ -27,8 +27,8 @@ class TopCanExpandDocItem extends React.Component<IRenderItemProp, any> {
         let splits = stateItem.child[0].data.docInfo.slug.split('~');
         let iconClass = '_icon-' + splits[0];
         return (
-            <a  className={classNames('_list-item', '_list-dir', iconClass, '_list-disabled', openClass, selectClass) }
-                onClick={this.props.onClickItem }
+            <a className={classNames('_list-item', '_list-dir', iconClass, '_list-disabled', openClass, selectClass)}
+                onClick={this.props.onClickItem}
                 >
                 <span className="_list-arrow"></span>
                 {stateItem.data.name}
@@ -44,8 +44,8 @@ class TopCantExpandDocItem extends React.Component<IRenderItemProp, any> {
         let splits = stateItem.data.docInfo.slug.split('~');
         let iconClass = '_icon-' + splits[0];
         return (
-            <a  className={classNames('_list-item', iconClass, '_list-disabled', selectClass) }
-                onClick={this.props.onClickItem }
+            <a className={classNames('_list-item', iconClass, '_list-disabled', selectClass)}
+                onClick={this.props.onClickItem}
                 >
                 <span className="_list-enable" onClick={this.props.enableDoc}>Enable</span>
                 <span className="_list-count">{stateItem.data.docInfo.release}</span>
@@ -69,11 +69,11 @@ class DisenableDocItem extends React.Component<IRenderItemProp, any> {
                 }
             }
             return (
-                <a  className={classNames('_list-item', '_list-dir', '_list-item-no-before', openClass, selectClass) }
+                <a className={classNames('_list-item', '_list-dir', '_list-item-no-before', openClass, selectClass)}
                     onClick={onClickItem}
                     >
                     <span className="_list-arrow"></span>
-                    <span className="_list-count">{ count || ''}</span>
+                    <span className="_list-count">{count || ''}</span>
                     {stateItem.data.name}
                 </a>
             );
@@ -93,4 +93,4 @@ class DisenableDocItem extends React.Component<IRenderItemProp, any> {
         }
     }
 }
-export {DisenableDocItem}
+export { DisenableDocItem }

@@ -31,4 +31,4 @@ class Searcher<T> {
         });
     }
 }
-export {Searcher}
+export { Searcher }

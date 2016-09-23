@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Link} from 'react-router';
-import {PageNotFound} from './PageNotFound';
-import {IDocPageState} from '../../redux/reducers/docpage';
-import {startRequestPage} from '../../redux/reducers/docpage';
-import {ICanExpendedItem} from '../../containers/App/ExpandedDocList';
+import { Link } from 'react-router';
+import { PageNotFound } from './PageNotFound';
+import { IDocPageState } from '../../redux/reducers/docpage';
+import { startRequestPage } from '../../redux/reducers/docpage';
+import { ICanExpendedItem } from '../../containers/App/ExpandedDocList';
 import * as appConfig from '../../config';
-import {history} from '../../routes';
+import { history } from '../../routes';
 const { connect } = require('react-redux');
 
 let docs_host_link = appConfig.default.docs.getConfig().docs_host_link;
@@ -55,8 +55,8 @@ class DocPage extends React.Component<IProps, void> {
             return (
                 <div style={{ height: '100%' }}>
                     <div className="_container" role="document">
-                        <main className ="_content _content-loading" role="main" tabIndex={-1}>
-                            <div  className="_page">
+                        <main className="_content _content-loading" role="main" tabIndex={-1}>
+                            <div className="_page">
                             </div>
                         </main>
                     </div>
@@ -68,19 +68,19 @@ class DocPage extends React.Component<IProps, void> {
             return (
                 <div style={{ height: '100%' }}>
                     <div className="_container" role="document">
-                        <PageNotFound pathname = {this.props.location.pathname} onClickRetry={
+                        <PageNotFound pathname={this.props.location.pathname} onClickRetry={
                             (event: Event) => {
                                 event.preventDefault();
                                 event.stopPropagation();
                                 this.props.startRequestPage(this.props.location.pathname);
                             }
-                        }/>
+                        } />
                     </div>
                 </div>
             );
         }
         return (
-            <DocContentPage {...this.props.docPageState}/>
+            <DocContentPage {...this.props.docPageState} />
         );
     }
 }
@@ -94,7 +94,8 @@ class DocContentPage extends React.Component<IDocPageState, any> {
         }
         let nextScroolToElement: string = null;
         let links = this.rootElem.getElementsByTagName('a');
-        for (let link of links) {
+        for (let i = 0; i < links.length; i++) {
+            let link = links[i];
             link.onclick = (event: MouseEvent) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -134,8 +135,8 @@ class DocContentPage extends React.Component<IDocPageState, any> {
                 return (
                     <div style={{ height: '100%' }}>
                         <div className="_container" role="document">
-                            <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex={-1}>
-                                <div  className="_page">
+                            <main ref={ref => this.rootElem = ref} className="_content" role="main" tabIndex={-1}>
+                                <div className="_page">
                                     <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
                                     <ul>
                                         {clickExpendedItem.child.map((item, index) => {
@@ -144,12 +145,12 @@ class DocContentPage extends React.Component<IDocPageState, any> {
                                                     <Link to={{ pathname: item.data.pathname }}>{item.data.name}</Link>
                                                 </li >
                                             );
-                                        }) }
+                                        })}
                                     </ul>
                                 </div>
                             </main>
                         </div>
-                        <BottomMark data = {this.props.clickExpendedItem}/>
+                        <BottomMark data={this.props.clickExpendedItem} />
                     </div>
                 );
             }
@@ -158,13 +159,13 @@ class DocContentPage extends React.Component<IDocPageState, any> {
         return (
             <div style={{ height: '100%' }}>
                 <div className="_container" role="document">
-                    <main ref={ref => this.rootElem = ref} className ="_content" role="main" tabIndex={-1}>
-                        <div  dangerouslySetInnerHTML={{ __html: htmlContent }}
-                            className={'_page ' + iconCss } >
+                    <main ref={ref => this.rootElem = ref} className="_content" role="main" tabIndex={-1}>
+                        <div dangerouslySetInnerHTML={{ __html: htmlContent }}
+                            className={'_page ' + iconCss} >
                         </div>
                     </main>
                 </div>
-                {this.props.clickExpendedItem ? <BottomMark data = {this.props.clickExpendedItem}/> : ''}
+                {this.props.clickExpendedItem ? <BottomMark data={this.props.clickExpendedItem} /> : ''}
             </div>
         );
     }
@@ -177,11 +178,11 @@ class BottomMark extends React.Component<IBottomMarkProps, any> {
         let {docInfo, docType, docEntry} = this.props.data.data;
         return (
             <div role="complementary" className="_path" style={{ display: !docType && !docEntry ? 'none' : 'block' }}>
-                <Link to={docInfo.pathname} className={'_path-item _icon-' + docInfo.slug.split('~')[0]}> { docInfo.name + ' ' + (docInfo.version || '') }</Link>
+                <Link to={docInfo.pathname} className={'_path-item _icon-' + docInfo.slug.split('~')[0]}> {docInfo.name + ' ' + (docInfo.version || '')}</Link>
                 <Link to={docType ? docType.pathname : ''} className="_path-item">{docType ? docType.name : ''}</Link>
                 <span className="_path-item">{docEntry ? docEntry.name : ''}</span>
             </div >
         );
     }
 }
-export {DocPage}
+export { DocPage }

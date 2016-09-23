@@ -1,4 +1,4 @@
-import { IStars, IStarsAction } from './stars.model';
+import {  IStars, IStarsAction } from './stars.model';
 import { IReduxAction } from './model';
 /** Action Types */
 export const STARS_REQUEST: string = 'STARS_REQUEST';

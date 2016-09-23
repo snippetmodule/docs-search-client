@@ -1,5 +1,5 @@
 
-import {DocsModelEntriyType, DocsModelTypeType, IDocInfo} from '../../core/model';
+import { DocsModelEntriyType, DocsModelTypeType, IDocInfo } from '../../core/model';
 import * as appConfig from '../../config';
 
 export interface ICanExpendedItem {

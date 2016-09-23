@@ -1,4 +1,4 @@
-import app  from '../../config';
+import app from '../../config';
 /** Action Types */
 export const INIT_REQUEST: string = 'INIT_REQUEST';
 export const INIT_SUCCESS: string = 'INIT_SUCCESS';
@@ -37,7 +37,7 @@ export function initReducer(state = { isInited: false }, action: IInitAction) {
 }
 
 /** Async Action Creator */
-export function startInit(): Redux.Dispatch<IInitAction> {
+export function startInit(dispatch): Redux.Dispatch<IInitAction> {
     return dispatch => {
         dispatch({ type: INIT_REQUEST });
 

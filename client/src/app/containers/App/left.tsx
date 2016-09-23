@@ -1,12 +1,12 @@
 
 import * as React from 'react';
-import {ISearchItem} from '../../core/model';
-import {ISearchState} from '../../redux/reducers/searchdocs';
+import { ISearchItem } from '../../core/model';
+import { ISearchState } from '../../redux/reducers/searchdocs';
 import ReactList from './ReactList';
-import {DefaultList} from './DefaultList';
-import {history} from '../../routes';
+import { DefaultList } from './DefaultList';
+import { history } from '../../routes';
 import * as appConfig from '../../config';
-import {onDocsPageLoactionChangeCallback} from '../DocPage/';
+import { onDocsPageLoactionChangeCallback } from '../DocPage/';
 const { connect } = require('react-redux');
 
 let classNames = require('classnames');
@@ -52,7 +52,7 @@ class Left extends React.Component<ISearchProps, any> {
             : classNames('_list-item', '_list-hove', '_list-result', iconClass, index === 0 && this.selectedIndex === -1 ? 'focus' : '');
         return (
             <a key={key} href="" className={ltemClass} ref={ref => this.mListItemRef[key] = ref}
-                onClick = { event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }
+                onClick={event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }
                 onMouseOver={event => { this.mListItemRef[key].style.textDecoration = 'underline'; } }
                 onMouseOut={event => { this.mListItemRef[key].style.textDecoration = 'none'; } }
                 >
@@ -64,8 +64,8 @@ class Left extends React.Component<ISearchProps, any> {
                         this.props.searchState.input = '';
                         this.forceUpdate();
                     }).catch(err => console.log('enableDoc err:' + searchResultItem.doc.slug + err.stack));
-                } }data-enable={searchResultItem.name}>Enable</span>
-                <span className="_list-text">{searchResultItem.name }</span>
+                } } data-enable={searchResultItem.name}>Enable</span>
+                <span className="_list-text">{searchResultItem.name}</span>
             </a >
         );
     }
@@ -84,7 +84,7 @@ class Left extends React.Component<ISearchProps, any> {
             : classNames('_list-item', '_list-hove', '_list-result', iconClass, index === 0 && this.selectedIndex === -1 ? 'focus' : '');
         return (
             <a key={key} href="" className={ltemClass} ref={ref => this.mListItemRef[key] = ref}
-                onClick = { event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }
+                onClick={event => { event.preventDefault(); this.onClickItem(index, searchResultItem); } }
                 onMouseOver={event => { this.mListItemRef[key].style.textDecoration = 'underline'; } }
                 onMouseOut={event => { this.mListItemRef[key].style.textDecoration = 'none'; } }
                 >
@@ -96,7 +96,7 @@ class Left extends React.Component<ISearchProps, any> {
                         this.props.searchState.input = '';
                         this.forceUpdate();
                     } }></span>
-                {searchResultItem.name }
+                {searchResultItem.name}
             </a >
         );
     }
@@ -118,9 +118,9 @@ class Left extends React.Component<ISearchProps, any> {
         }
         return (
             <ReactList ref={ref => this.mListRef = ref}
-                itemRenderer={this.renderItem.bind(this) }
+                itemRenderer={this.renderItem.bind(this)}
                 length={this.props.searchState.message.length}
-                itemHeight = {30}
+                itemHeight={30}
                 />
         );
     }
