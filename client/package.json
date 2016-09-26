@@ -26,11 +26,7 @@
     "react",
     "redux",
     "typescript",
-    "webpack",
-    "isomorphic",
-    "kit",
-    "hot reload",
-    "react-hot-loader"
+    "webpack"
   ],
   "license": "MIT",
   "devDependencies": {
@@ -46,7 +42,6 @@
     "@types/react-router-redux": "^4.0.33",
     "@types/redux": "^3.5.30",
     "@types/redux-thunk": "^2.1.31",
-    "chalk": "^1.1.3",
     "classnames": "^2.2.4",
     "compression": "^1.6.1",
     "cross-env": "^2.0.0",
@@ -54,8 +49,6 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "html-webpack-plugin": "^2.22.0",
-    "isomorphic-style-loader": "^1.0.0",
-    "istanbul-instrumenter-loader": "^0.2.0",
     "json-loader": "^0.5.4",
     "node-sass": "^3.9.3",
     "phantomjs-prebuilt": "^2.1.7",
