@@ -1,4 +1,4 @@
-# Vortigern
+# Doc API Search
 [![Build Status](https://travis-ci.org/barbar/vortigern.svg?branch=master)](https://travis-ci.org/barbar/vortigern)
 [![Dependency Status](https://david-dm.org/barbar/vortigern.svg)]()
 [![devDependency Status](https://david-dm.org/barbar/vortigern/dev-status.svg)]()
@@ -9,7 +9,7 @@ ___
 
 <img src="https://barbaruploads.s3.amazonaws.com/bicoz/vortigern.png" width="100%" />
 
-**Vortigern** is our opinionated boilerplate for crafting universal web applications by using modern technologies like TypeScript, React and Redux.
+**Doc API Search** is our opinionated boilerplate for crafting universal web applications by using modern technologies like TypeScript, React and Redux.
 
 [![TypeScript](https://barbaruploads.s3.amazonaws.com/bicoz/typescript.png)](https://www.typescriptlang.org/) 
 [![React](https://barbaruploads.s3.amazonaws.com/bicoz/react.png)](https://github.com/facebook/react) 
@@ -39,7 +39,6 @@ Vortigern uses the following libraries and tools:
   - [TypeScript Loader](https://github.com/andreypopp/typescript-loader) as ts loader.
   - [Babel Loader](https://github.com/babel/babel-loader) as js loader.
   - [React Hot Loader](https://github.com/gaearon/react-hot-loader) for providing hot reload capability to our development server
-  - [Isomorphic Style Loader](https://github.com/kriasoft/isomorphic-style-loader) for loading styles on server-side.
   - [Style Loader](https://github.com/webpack/style-loader)
   - [CSS Loader](https://github.com/webpack/css-loader)
   - [PostCSS Loader](https://github.com/postcss/postcss)
@@ -59,7 +58,6 @@ Vortigern uses the following libraries and tools:
 - [Webpack Dev Server](https://github.com/webpack/webpack-dev-server)
   - [Webpack Dev Middleware](https://github.com/webpack/webpack-dev-middleware)
   - [Webpack Hot Middleware](https://github.com/webpack/webpack-hot-middleware)
-- [Express](https://github.com/expressjs/express) for running server both on client and server side.
 - [Compression](https://github.com/expressjs/compression) for gzip compression
 - [Serve Favicon](https://github.com/expressjs/serve-favicon) for serving favicon.
 
@@ -69,63 +67,40 @@ Vortigern uses the following libraries and tools:
 - [stylelint](https://github.com/stylelint/stylelint) for linting styles.
 - [Redux Logger](https://github.com/theaqua/redux-logger)
 - [Redux DevTools](https://github.com/gaearon/redux-devtools)
-- [Chalk](https://github.com/chalk/chalk) for colored terminal logs.
 
-#### Testing
-- [Karma](https://github.com/karma-runner/karma) as test runner with following plugins
-  - [Karma-Webpack](https://github.com/webpack/karma-webpack)
-  - [Karma-Mocha](https://github.com/karma-runner/karma-mocha)
-  - [Karma-Chai](https://github.com/xdissent/karma-chai)
-  - [Karma-Coverage](https://github.com/karma-runner/karma-coverage)
-  - [Karma-PhantomJS Launcher](https://github.com/karma-runner/karma-phantomjs-launcher)
-- [Mocha](https://github.com/mochajs/mocha) as testing framework.
-- [Chai](https://github.com/chaijs/chai) as assertion library.
-- [Enzyme](https://github.com/jquery/jquery) for rendering React Components.
-- [Fetch Mock](https://github.com/wheresrhys/fetch-mock) for testing async actions.
-- [Redux Mock Store](https://github.com/arnaudbenard/redux-mock-store) for creating mock stores.
 
 ## Directory Structure
 ```bash
 .
 ├── build                       # Built, ready to serve app.
 ├── config                      # Root folder for configurations.
-│   ├── test                    # Test configurations.
-│   ├── types                   # Global type definitions, written by us.
 │   ├── webpack                 # Webpack configurations.
 │   └── main.ts                 # Generic App configurations.
 ├── node_modules                # Node Packages.
 ├── src                         # Source code.
 │   ├── app                     # App folder.
-│   │ ├── components            # React Components.
 │   │ ├── containers            # React/Redux Containers.
-│   │ ├── helpers               # Helper Functions & Components.
 │   │ ├── redux                 # Redux related code aka data layer of the app.
 │   │ │   ├── modules           # Redux modules.   
 │   │ │   ├── reducers.ts       # Main reducers file to combine them.  
 │   │ │   └── store.ts          # Redux store, contains global app state.    
 │   │ └── routes.tsx            # Routes.
-│   ├── client.tsx              # Entry point for client side rendering.
-│   └── server.tsx              # Entry point for server side rendering.
-├── typings                     # Type definitions installed with typings.              
-├── .dockerignore               # Tells docker which files to ignore.
 ├── .gitignore                  # Tells git which files to ignore.
 ├── .stylelintrc                # Configures stylelint.
-├── Dockerfile                  # Dockerfile.
 ├── favicon.ico                 # Favicon.
 ├── package.json                # Package configuration.
 ├── README.md                   # This file
 ├── tsconfig.json               # TypeScript transpiler configuration.
 ├── tslint.json                 # Configures tslint.
-└── typings.json                # Typings package configuration.
 ```
 
 ## Installation
 
-You can clone from this repository or [install the latest version](https://github.com/barbar/vortigern/releases) as a zip file or a tarball. 
+You can clone from this repository or [install the latest version](https://github.com/snippetmodule/docs-search-client.git ) as a zip file or a tarball. 
 
 ```bash
-$ git clone https://github.com/barbar/vortigern
-$ cd vortigern
+$ git clone https://github.com/snippetmodule/docs-search-client.git 
+$ cd docs-search-client.git
 $ npm install
 ```
 
@@ -150,9 +125,6 @@ $ npm build # This builds the app in development mode
 $ NODE_ENV=production npm build # or
 $ npm run build:prod
 
-# Testing
-$ npm test
-```
 
 For Windows users, we recommend using the shortcuts instead of setting environment variables because they work a little different on Windows.
 
@@ -163,21 +135,3 @@ $ typings install dt~<package> --global --save
 # or if it's located on npm
 $ typings install <package> --save
 ```
-
-## Credits
-
-Vortigern is released under the [MIT license](LICENSE). 
-
-The image in this README belongs to [hhvferry.com](http://www.hhvferry.com/vortscrap.html).
-
-___
-
-## [Barbar Startup Factory](https://www.barbar.com.tr/?ref=vortigern)
-
-<a target="_blank" href="https://www.barbar.com.tr/?ref=vortigern-barbar-logo"><img src="https://barbaruploads.s3.amazonaws.com/bicoz/logo2x.png" height="55px" /></a>
-
-We help startups start and stay started by helping them plan, strategize, fund and execute their vision. 
-
-You can contact us at [hey@barbar.com.tr](mailto:hey@barbar.com.tr)
-
-Be sure to check out available [jobs at Barbar](https://github.com/barbar/hr).
