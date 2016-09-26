@@ -112,8 +112,9 @@ var config = {
     new ExtractTextPlugin('css/[name].[hash].css'),
     new webpack.DefinePlugin({
       'process.env': {
-        BROWSER: JSON.stringify(true),
-        NODE_ENV: JSON.stringify('production')
+        browser: JSON.stringify(true),
+        development:JSON.stringify(true),
+        version:JSON.stringify('0.1'),
       }
     })
   ]

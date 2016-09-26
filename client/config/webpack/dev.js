@@ -96,8 +96,9 @@ var config = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        BROWSER: JSON.stringify(true),
-        NODE_ENV: JSON.stringify('development')
+        browser: JSON.stringify(true),
+        development:JSON.stringify(true),
+        version:JSON.stringify('0.1'),
       }
     }),
     new webpack.HotModuleReplacementPlugin(),

@@ -24,7 +24,7 @@ export function configureStore(history, initialState?: any): Redux.Store<IReduxS
 
   const store: Redux.Store<IReduxState> = finalCreateStore(rootReducer, initialState);
 
-  if (app.htmlConfig.env === 'development' && (module as any).hot) {
+  if (app.htmlConfig.isDevelopment && (module as any).hot) {
     (module as any).hot.accept('./reducers', () => {
       store.replaceReducer((require('./reducers')));
     });

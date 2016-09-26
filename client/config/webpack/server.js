@@ -1,7 +1,7 @@
 "use strict";
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var config = require('./dev.js');
+var config = process.env.NODE_ENV === 'production'? require('./prod.js'):require('./dev.js');
 
 //------webpack - dev - server------------------
 var server = new WebpackDevServer(webpack(config), {

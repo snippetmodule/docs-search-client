@@ -1,8 +1,6 @@
 import { Docs } from './core/Docs';
 let _htmlConfig = {
-    env: process.env.NODE_ENV || 'development',
-    isDevelopment: this.env === 'development' ? true : false,
-
+    isDevelopment: process.env.development || false,
     // This part goes to React-Helmet for Head of our HTML
     app: {
         head: {

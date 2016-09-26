@@ -94,12 +94,16 @@ class Header extends React.Component<any, void> {
         <h1 className="_logo">
           <Link to="/" className="_nav-link" title="Offline API Documentation Browser">Docs中文网</Link>
         </h1>
-        <nav className="_nav" role="navigation">
-          <Link to="/" className="_nav-link">Offline</Link>
-          <Link to="/about" className="_nav-link">About</Link>
-          <Link to="/counter" className="_nav-link">counter</Link>
-          <Link to="/stars" className="_nav-link">stars</Link>
-        </nav>
+        {AppConfig.default.htmlConfig.isDevelopment ?
+          <nav className="_nav" role="navigation">
+            <Link to="/" className="_nav-link">Offline</Link>
+            <Link to="/about" className="_nav-link">About</Link>
+            <Link to="/counter" className="_nav-link">counter</Link>
+            <Link to="/stars" className="_nav-link">stars</Link>
+          </nav> :
+          <nav className="_nav" role="navigation">
+            <Link to="/about" className="_nav-link">About</Link>
+          </nav>}
       </header>
     );
   }
