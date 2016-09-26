@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { getStars } from '../../redux/reducers/stars';
-import { IStars } from '../../redux/reducers/stars.model';
+import { getStars } from '../../redux/reducers/stars';
+import { IStars } from '../../redux/reducers/stars.model';
 import { IReduxAction } from '../../redux/reducers/model';
 const { connect } = require('react-redux');
 const { asyncConnect } = require('redux-connect');
@@ -23,9 +23,13 @@ class Stars extends React.Component<IProps, {}> {
   public render() {
     const { stars } = this.props;
 
-    return(
-      <div>
-        { stars.isFetching ? 'Fetching Stars' : stars.count }
+    return (
+      <div className="_container" role="document">
+        <div className="_content">
+          <div>
+            {stars.isFetching ? 'Fetching Stars' : stars.count}
+          </div>
+        </div>
       </div>
     );
   }

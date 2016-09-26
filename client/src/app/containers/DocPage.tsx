@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { PageNotFound } from './PageNotFound';
-import { IDocPageState } from '../../redux/reducers/docpage';
-import { startRequestPage } from '../../redux/reducers/docpage';
-import { ICanExpendedItem } from '../../containers/App/ExpandedDocList';
-import * as appConfig from '../../config';
-import { history } from '../../routes';
+import { IDocPageState } from '../redux/reducers/docpage';
+import { startRequestPage } from '../redux/reducers/docpage';
+import { ICanExpendedItem } from '../containers/App/ExpandedDocList';
+import * as appConfig from '../config';
+import { history } from '../routes';
 const { connect } = require('react-redux');
 
 let docs_host_link = appConfig.default.docs.getConfig().docs_host_link;

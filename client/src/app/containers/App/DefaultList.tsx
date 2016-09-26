@@ -4,7 +4,7 @@ import ReactList from './ReactList';
 import { IDocInfo } from '../../core/model';
 import * as appConfig from '../../config';
 import { ICanExpendedItem, ICanExpendedState, ExpandedDocList, setSelectionIndex } from './ExpandedDocList';
-import { onDocsPageLoactionChangeCallback } from '../DocPage/';
+import { onDocsPageLoactionChangeCallback } from '../DocPage';
 import { EnableDocItem } from './EnableDocItem';
 import { DisenableDocItem } from './DisenableDocItem';
 

@@ -6,7 +6,7 @@ import ReactList from './ReactList';
 import { DefaultList } from './DefaultList';
 import { history } from '../../routes';
 import * as appConfig from '../../config';
-import { onDocsPageLoactionChangeCallback } from '../DocPage/';
+import { onDocsPageLoactionChangeCallback } from '../DocPage';
 const { connect } = require('react-redux');
 
 let classNames = require('classnames');

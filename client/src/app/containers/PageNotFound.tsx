@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { history } from '../../routes';
+import { history } from '../routes';
+
 export interface IPageNotFoundProp {
     pathname: string;
     onClickRetry: (event) => void;

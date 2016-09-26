@@ -2,7 +2,7 @@ import app from '../../config';
 import * as React from 'react';
 // import * as ReadtDom from 'react-dom';
 import * as Helmet from 'react-helmet';
-import { Header } from '../../components';
+import { Header } from './Header';
 import { Left } from './left';
 import { startInit, IInitState, IInitAction } from '../../redux/reducers/init';
 const { connect } = require('react-redux');
