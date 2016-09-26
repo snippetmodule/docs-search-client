@@ -25,10 +25,12 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         }
     }
     public componentDidMount() {
+        window.addEventListener('resize', this.updateScrollPosition.bind(this));
         this.mListRef.addEventListener('scroll', this.updateScrollPosition.bind(this));
         this.updateScrollPosition();
     }
     public componentWillUnmount() {
+        window.removeEventListener('resize', this.updateScrollPosition.bind(this));
         this.mListRef.removeEventListener('scroll', this.updateScrollPosition.bind(this));
     }
     public updateScrollPosition() {

@@ -173,8 +173,10 @@ class Docs {
         return config;
     }
     private save() {
-        Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate);
-        Cookies.set('Docs_isDocChangedByUser', this.isDocChangedByUser);
+        let expiresDate: Date = new Date();
+        expiresDate.setFullYear(2020);
+        Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate, { expires: expiresDate });
+        Cookies.set('Docs_isDocChangedByUser', this.isDocChangedByUser, { expires: expiresDate });
     }
     public search(input: string): Promise<Array<ISearchItem>> {
         return new Promise((resolve, reject) => {

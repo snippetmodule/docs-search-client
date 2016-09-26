@@ -1,19 +1,32 @@
 {
-  "extends": ["tslint:latest", "tslint-react"],
+  "extends": [
+    "tslint:latest",
+    "tslint-react"
+  ],
   "rules": {
-    "indent": [ true, "spaces" ],
-    "quotemark": [ true, "single", "jsx-double" ],
+    "indent": [
+      true,
+      "spaces"
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
+    ],
     "no-var-requires": false,
     "ordered-imports": false,
-    "no-unused-variable": [true, "react"],
-    "member-ordering": false,
+    "no-unused-variable": [
+      true,
+      "react"
+    ],
+    "member-ordering": [],
     "object-literal-sort-keys": false,
     "no-shadowed-variable": false,
-    "no-console": false,
+    "no-console": [],
     "variable-name": false,
     "no-string-literal": false,
-    "eofline":false,
-    "no-conditional-assignment":false,
-    "max-line-length":false 
+    "eofline": false,
+    "no-conditional-assignment": false,
+    "max-line-length": []
   }
 }
