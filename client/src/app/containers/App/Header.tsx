@@ -1,20 +1,17 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { getSearchResult } from '../../redux/reducers/searchdocs';
-import { getSearchTag, keyEnterHandler } from '../../containers/App/left';
 import * as AppConfig from '../../config';
-const { connect } = require('react-redux');
 
-@connect(
-  null,
-  dispatch => ({
-    getSearchResult: (input: string) => dispatch(getSearchResult(dispatch, input)),
-  })
-)
-class Header extends React.Component<any, void> {
+export interface IHeaderProps {
+  doSearch: (searchKey: string) => any;
+  getSearchTag: () => { name: string, slug: string };
+  keyEnterHandler: () => any;
+}
+class Header extends React.Component<IHeaderProps, void> {
   private mCleanBtnRef: HTMLElement;
   private mSearchTagRef: HTMLElement;
   private mInputRef: HTMLInputElement;
+
   private stripscript(s: string): string {
     let pattern = new RegExp('[`~!@#$^&*()=|{}\:\;,\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：\“。，、？]');
     let rs = '';
@@ -33,7 +30,7 @@ class Header extends React.Component<any, void> {
     let keyCode = event.keyCode || event.which;
 
     if (keyCode === 9) {
-      let searchTag = getSearchTag();
+      let searchTag = this.props.getSearchTag();
       event.preventDefault();
       if (searchTag) {
         this.mSearchTagRef.style.display = 'block';
@@ -43,7 +40,7 @@ class Header extends React.Component<any, void> {
         this.mInputRef.placeholder = '';
         AppConfig.default.selectedPath = '/docs/' + searchTag.slug + '/';
         AppConfig.default.docs.init(searchTag.slug).then(() => {
-          this.props.getSearchResult('');
+          this.props.doSearch('');
         });
       }
     } else if (keyCode === 8 || keyCode === 46) { // backspace 和 delete
@@ -53,14 +50,14 @@ class Header extends React.Component<any, void> {
         this.mInputRef.placeholder = 'Search…';
         AppConfig.default.selectedPath = '';
         AppConfig.default.docs.init('').then(() => {
-          this.props.getSearchResult('');
+          this.props.doSearch('');
         });
       }
     } else if (keyCode === 13) { // 回车
       event.preventDefault();
       event.stopPropagation();
       if (document.activeElement.className === this.mInputRef.className) {
-        keyEnterHandler();
+        this.props.keyEnterHandler();
       }
     }
   }
@@ -71,7 +68,7 @@ class Header extends React.Component<any, void> {
   private handleChange(event) {
     let input: string = event.target.value;
     input = this.stripscript(input);
-    this.props.getSearchResult(input);
+    this.props.doSearch(input);
     event.stopPropagation();
     event.preventDefault();
     if (input) {

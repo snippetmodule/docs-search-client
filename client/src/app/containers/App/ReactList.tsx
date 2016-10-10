@@ -66,9 +66,16 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         let items = this.getCurrentItems();
         return (
             <section ref={ref => { this.mListRef = ref; } } className="_sidebar" tabIndex={-1} >
-                <div role="navigation" className="_list _resizer-left-div" style={{ height: this.props.length * this.props.itemHeight }}>
-                    {items}
-                </div>
+                {
+                    this.props.length === 0
+                        ? <div role="navigation" className="_list _resizer-left-div" style={{ height: '100%' }}>
+                           <div style={{ textAlign: 'center' }}>没有搜到.</div>
+                        </div>
+                        :
+                        <div role="navigation" className="_list _resizer-left-div" style={{ height: this.props.length * this.props.itemHeight }}>
+                            {items}
+                        </div>
+                }
                 <div className="_sidebar-footer _resizer-left-div" style={{ display: 'none' }}>
                     <button type="button" className="_sidebar-footer-link _sidebar-footer-edit" data-pick-docs="">Select documentation</button>
                     <button type="button" className="_sidebar-footer-link _sidebar-footer-light" title="Toggle light" data-light="">Toggle light</button>

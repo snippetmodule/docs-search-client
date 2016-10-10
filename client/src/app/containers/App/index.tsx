@@ -1,11 +1,60 @@
 import app from '../../config';
 import * as React from 'react';
-// import * as ReadtDom from 'react-dom';
 import * as Helmet from 'react-helmet';
 import { Header } from './Header';
 import { Left } from './left';
 import { PromiseComponent } from '../../utils/PromiseComponent';
+import { ISearchItem } from '../../core/model';
 
+class AppImpl extends React.Component<any, void> {
+    private mLeftRef: Left;
+    private mHeaderRef: Header;
+
+    private doSearch(searchKey: string) {
+        app.docs.search(searchKey).then((res: Array<ISearchItem>) => {
+            this.mLeftRef.setState({
+                input: searchKey,
+                isSearch: false,
+                error: false,
+                message: res,
+            });
+        }).catch(err => {
+            this.mLeftRef.setState({
+                input: searchKey,
+                isSearch: false,
+                error: true,
+                message: err,
+            });
+        });
+    }
+    private getSearchTag() {
+        if (this.mLeftRef) {
+            return this.mLeftRef.getSearchTag();
+        }
+        return null;
+    }
+    private keyEnterHandler() {
+        if (this.mLeftRef) {
+            return this.mLeftRef.keyEnterHandler();
+        }
+        return null;
+    }
+    public render() {
+        return (
+            <div className="_app" >
+                <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head} />
+                <Header ref={ref => this.mHeaderRef = ref}
+                    doSearch={this.doSearch.bind(this)}
+                    getSearchTag={this.getSearchTag.bind(this)}
+                    keyEnterHandler={this.keyEnterHandler.bind(this)} />
+                <Left ref={ref => this.mLeftRef = ref} />
+                {this.props.children}
+                <div onMouseMove={this.props.resizer}
+                    title="Click to toggle sidebar on/off" className="_resizer" draggable={true}></div>
+            </div>
+        );
+    }
+}
 class App extends React.Component<void, void> {
     constructor(props) {
         super(props);
@@ -39,25 +88,18 @@ class App extends React.Component<void, void> {
     }
     private renderFetched() {
         return (
-            <div className="_app" >
-                <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head} />
-                <Header />
-                <Left />
-                {this.props.children}
-                <div onMouseMove={this.resizer.bind(this)}
-                    title="Click to toggle sidebar on/off" className="_resizer" draggable={true}></div>
-            </div>
+            <AppImpl resizer={this.resizer.bind(this)} {...this.props} />
         );
     }
 
     public render() {
         return (
             <PromiseComponent
-                params={{}}
+                params={undefined}
                 renderLoading={this.renderLoading.bind(this)}
                 renderFetched={this.renderFetched.bind(this)}
                 fragments={{
-                    init: app.docs.init.bind(app.docs),
+                    init: async (any) => { await app.docs.init(); },
                 }}
                 />
         );
