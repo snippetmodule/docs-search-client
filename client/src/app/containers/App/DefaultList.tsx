@@ -18,9 +18,12 @@ export interface IRenderItemProp {
 
 export class DefaultList extends React.Component<any, ICanExpendedState> {
     private mListRef: ReactList;
-    constructor() {
-        super();
-        this.state = new ExpandedDocList(true);
+    constructor(props) {
+        super(props);
+        this.state = new ExpandedDocList(true); // 初始化 enableDocs, disableDocs
+        if (this.state.setSelectedIndexByUrlPath(this.props.location.pathname)) {
+            this.state = new ExpandedDocList();
+        }
     }
     private onClickItem(index: number, stateItem: ICanExpendedItem) {
         if (stateItem.child.length > 0) {

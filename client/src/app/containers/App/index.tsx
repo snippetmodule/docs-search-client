@@ -47,7 +47,7 @@ class AppImpl extends React.Component<any, void> {
                     doSearch={this.doSearch.bind(this)}
                     getSearchTag={this.getSearchTag.bind(this)}
                     keyEnterHandler={this.keyEnterHandler.bind(this)} />
-                <Left ref={ref => this.mLeftRef = ref} />
+                <Left ref={ref => this.mLeftRef = ref} {...this.props}/>
                 {this.props.children}
                 <div onMouseMove={this.props.resizer}
                     title="Click to toggle sidebar on/off" className="_resizer" draggable={true}></div>

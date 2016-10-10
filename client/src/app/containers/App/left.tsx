@@ -11,7 +11,7 @@ interface ISearchState {
     error?: boolean;
     message?: Array<ISearchItem>;
 }
-class Left extends React.Component<void, ISearchState> {
+class Left extends React.Component<any, ISearchState> {
     private mSearchResultListRef: SearchResultList;
 
     private enableDocs(selectedPath: string, docInfo: IDocInfo) {
@@ -41,7 +41,7 @@ class Left extends React.Component<void, ISearchState> {
     }
     public render() {
         if (!this.state || !this.state.input) {
-            return (<DefaultList />);
+            return (<DefaultList {...this.props}/>);
         }
         if (this.state.error) {
             return (<div> {this.state.error} </div>);
