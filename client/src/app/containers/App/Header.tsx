@@ -95,8 +95,6 @@ class Header extends React.Component<IHeaderProps, void> {
           <nav className="_nav" role="navigation">
             <Link to="/" className="_nav-link">Offline</Link>
             <Link to="/about" className="_nav-link">About</Link>
-            <Link to="/counter" className="_nav-link">counter</Link>
-            <Link to="/stars" className="_nav-link">stars</Link>
           </nav> :
           <nav className="_nav" role="navigation">
             <Link to="/about" className="_nav-link">About</Link>
