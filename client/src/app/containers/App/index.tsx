@@ -95,11 +95,10 @@ class App extends React.Component<void, void> {
     public render() {
         return (
             <PromiseComponent
-                params={undefined}
                 renderLoading={this.renderLoading.bind(this)}
                 renderFetched={this.renderFetched.bind(this)}
                 fragments={{
-                    init: async (any) => { await app.docs.init(); },
+                    init: async () => { await app.docs.init(); },
                 }}
                 />
         );

@@ -177,7 +177,7 @@ class DocPage extends React.Component<IDocPageProps, void> {
             </div>
         );
     }
-    private async fetchData(params) {
+    private async fetchData() {
         let _url = this.props.location.pathname;
         let _clickExpendedItem: ICanExpendedItem = getDocInfoByUrlPath(_url);
         if (_clickExpendedItem && _clickExpendedItem.data.docType && !_clickExpendedItem.data.docEntry) {
@@ -198,7 +198,6 @@ class DocPage extends React.Component<IDocPageProps, void> {
     public render() {
         return (
             <PromiseComponent
-                params={null}
                 renderLoading={this.renderLoading.bind(this)}
                 renderFetched={this.renderFetched.bind(this)}
                 renderFailure={this.renderFailure.bind(this)}

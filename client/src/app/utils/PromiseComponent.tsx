@@ -2,17 +2,13 @@
 import * as React from 'react';
 import { assignProperty } from './react-utils';
 
-interface IParamType {
-    [key: string]: any;
-}
 export interface IPromiseComponentProps {
-    params?: IParamType;
     renderLoading?: () => JSX.Element;
     renderFailure?: (err: Error, reloadFun: () => any) => JSX.Element;
     renderFetched: (data: any, reloadFun: () => any) => JSX.Element;
-    shouldContainerUpdate?: (IParamType) => boolean; // 第一次promise 请求后，prop 改变后，是否还要重新请求
+    shouldContainerUpdate?: () => boolean; // 第一次promise 请求后，prop 改变后，是否还要重新请求
     fragments: {
-        [fragmentName: string]: (IParamType) => Promise<any>;
+        [fragmentName: string]: () => Promise<any>;
     };
 }
 interface IPromiseComponentState {
@@ -23,15 +19,13 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
     private fetching: boolean = false;
     private _mounted: boolean;
 
-    public getFragment(fragmentName: string, params: IParamType) {
+    public getFragment(fragmentName: string) {
         if (!this.props.fragments[fragmentName]) {
             throw new Error('PromiseComponent has no ' + fragmentName + 'fragment');
         }
-
-        params = Object.assign({}, this.props.params || {}, params || {});
-        return this.props.fragments[fragmentName](params);
+        return this.props.fragments[fragmentName]();
     }
-    public async getAllFragments(params: IParamType, optionalFragmentNames: string[]) {
+    public async getAllFragments(optionalFragmentNames: string[]) {
         let promises = [];
         optionalFragmentNames = optionalFragmentNames || [];
         Object.keys(this.props.fragments).forEach((fragmentName) => {
@@ -39,7 +33,7 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
                 return;
             }
             let promise = this.getFragment(
-                fragmentName, params
+                fragmentName
             ).then((fragmentResult) => {
                 return assignProperty({}, fragmentName, fragmentResult);
             }).catch(err => {
@@ -59,7 +53,7 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
         if (!this.fetching) {
             let missingFragments = this.missingFragments(false);
             if (missingFragments.length) {
-                this.forceFetch({}, missingFragments);
+                this.forceFetch(missingFragments);
             }
         }
     }
@@ -73,16 +67,15 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
     /**
      * @returns {Promise|Boolean}
      */
-    public async forceFetch(nextPram: IParamType, optionalFragmentNames: string[] = []) {
+    public async forceFetch(optionalFragmentNames: string[] = []) {
         this.fetching = true;
-        nextPram = nextPram || {};
-        if (this.props.shouldContainerUpdate && Object.keys(nextPram).length) {
-            if (!this.props.shouldContainerUpdate.call(this, nextPram)) {
+        if (this.props.shouldContainerUpdate) {
+            if (!this.props.shouldContainerUpdate.call(this)) {
                 return Promise.resolve(null);
             }
         }
         try {
-            let fetchedFragments = await this.getAllFragments(this.props.params, optionalFragmentNames);
+            let fetchedFragments = await this.getAllFragments(optionalFragmentNames);
             this.safeguardedSetState(Object.assign({ err: undefined }, fetchedFragments));
         } catch (_err) {
             this.safeguardedSetState({ err: _err });
@@ -122,18 +115,18 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
     public componentWillMount() {
         let missingFragments = this.missingFragments(true);
         if (missingFragments.length) {
-            this.forceFetch({}, missingFragments);
+            this.forceFetch(missingFragments);
         }
     }
 
     public componentWillReceiveProps(nextProps: IPromiseComponentProps) {
-        this.forceFetch(nextProps.params);
+        this.forceFetch();
     }
     private reload() {
         if (this._isMounted) {
             this.state = {};
             this.forceUpdate();
-            this.forceFetch(this.props.params);
+            this.forceFetch();
         }
     }
     public render() {
