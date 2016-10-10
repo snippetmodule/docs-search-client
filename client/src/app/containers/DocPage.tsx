@@ -126,24 +126,22 @@ interface IDocPageProps {
 interface IDocPageState {
     url: string;
 }
-class DocPage extends React.Component<IDocPageProps, IDocPageState> {
+class DocPage extends React.Component<IDocPageProps, void> {
     constructor(props) {
         super(props);
-        this.state = { url: this.props.location.pathname };
     }
-    public componentDidUpdate(prevProps: IDocPageProps, prevState: IDocPageState, prevContext: any) {
+    public componentDidUpdate(prevProps: IDocPageProps, prevState: void, prevContext: any) {
         if (onLoactionChangeCallback
-            && this.state.url !== prevState.url) {
+            && this.props.location.pathname !== prevProps.location.pathname) {
             for (let key in onLoactionChangeCallback) {
                 if (onLoactionChangeCallback[key]) {
-                    onLoactionChangeCallback[key](this.state.url);
+                    onLoactionChangeCallback[key](this.props.location.pathname);
                 }
             }
         }
     }
-    public shouldComponentUpdate?(nextProps: IDocPageProps, nextState: IDocPageState, nextContext: any): boolean {
-        if (nextProps.location.pathname !== this.state.url) {
-            this.setState({ url: nextProps.location.pathname });
+    public shouldComponentUpdate?(nextProps: IDocPageProps, nextState: void, nextContext: any): boolean {
+        if (nextProps.location.pathname !== this.props.location.pathname) {
             return true;
         }
         return false;
@@ -180,7 +178,7 @@ class DocPage extends React.Component<IDocPageProps, IDocPageState> {
         );
     }
     private async fetchData(params) {
-        let _url = params.url;
+        let _url = this.props.location.pathname;
         let _clickExpendedItem: ICanExpendedItem = getDocInfoByUrlPath(_url);
         if (_clickExpendedItem && _clickExpendedItem.data.docType && !_clickExpendedItem.data.docEntry) {
             return { url: _url, htmlResponse: null, clickExpendedItem: _clickExpendedItem };
@@ -200,7 +198,7 @@ class DocPage extends React.Component<IDocPageProps, IDocPageState> {
     public render() {
         return (
             <PromiseComponent
-                params={this.state}
+                params={null}
                 renderLoading={this.renderLoading.bind(this)}
                 renderFetched={this.renderFetched.bind(this)}
                 renderFailure={this.renderFailure.bind(this)}
