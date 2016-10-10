@@ -139,6 +139,7 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
     public render() {
         // Don't render without data.
         if (this.state && this.state.err) {
+            console.log(`PromiseComponent err：${this.state.err.stack}`);
             return (this.props.renderFailure && this.props.renderFailure(this.state.err, this.reload.bind(this))) || null;
         } else if (this.missingFragments(true).length) {
             return (this.props.renderLoading && this.props.renderLoading()) || null;

@@ -4,23 +4,11 @@ import * as React from 'react';
 import * as Helmet from 'react-helmet';
 import { Header } from './Header';
 import { Left } from './left';
-import { startInit, IInitState, IInitAction } from '../../redux/reducers/init';
-const { connect } = require('react-redux');
+import { PromiseComponent } from '../../utils/PromiseComponent';
 
-interface IProps {
-    init: IInitState;
-    startInit: Redux.ActionCreator<IInitAction>;
-}
-@connect(
-    state => ({ init: state.initReducer }),
-    dispatch => ({
-        startInit: () => dispatch(startInit(dispatch)),
-    })
-)
-class App extends React.Component<IProps, any> {
+class App extends React.Component<void, void> {
     constructor(props) {
         super(props);
-        this.props.startInit();
     }
     // private mLeftElements: any[] = [];
     // private mRightElements: Element[] = [];
@@ -36,20 +24,20 @@ class App extends React.Component<IProps, any> {
         // }
         // console.log('resizer:' + event.clientX);
     }
-    public render() {
-        if (!this.props.init.isInited) {
-            return (
-                <div style={{
-                    height: '100px',
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    fontSize: '2rem',
-                    color: 'grey',
-                    margin: '-50px 0 0 -50px',
-                }} > Loading </div>
-            );
-        }
+    private renderLoading() {
+        return (
+            <div style={{
+                height: '100px',
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                fontSize: '2rem',
+                color: 'grey',
+                margin: '-50px 0 0 -50px',
+            }} > Loading </div>
+        );
+    }
+    private renderFetched() {
         return (
             <div className="_app" >
                 <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head} />
@@ -59,6 +47,19 @@ class App extends React.Component<IProps, any> {
                 <div onMouseMove={this.resizer.bind(this)}
                     title="Click to toggle sidebar on/off" className="_resizer" draggable={true}></div>
             </div>
+        );
+    }
+
+    public render() {
+        return (
+            <PromiseComponent
+                params={{}}
+                renderLoading={this.renderLoading.bind(this)}
+                renderFetched={this.renderFetched.bind(this)}
+                fragments={{
+                    init: app.docs.init.bind(app.docs),
+                }}
+                />
         );
     }
 }
