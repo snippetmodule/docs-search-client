@@ -10,11 +10,7 @@ import 'react';
 import 'react-dom';
 import 'react-router';
 import 'react-helmet';
-import 'react-router-redux';
-import 'redux';
 import 'react-dom';
-import 'redux-connect';
-import 'redux-thunk';
 
 import app from './app/config';
 if (app.htmlConfig.isDevelopment) {

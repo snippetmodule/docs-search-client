@@ -14,10 +14,7 @@
       "node",
       "react",
       "react-dom",
-      "redux",
-      "redux-thunk",
       "react-router",
-      "react-router-redux",
       "localforage",
       "isomorphic-fetch"
     ],
