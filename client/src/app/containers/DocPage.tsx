@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { PageNotFound } from './PageNotFound';
-import { IDocPageState } from '../redux/reducers/docpage';
-import { startRequestPage } from '../redux/reducers/docpage';
-import { ICanExpendedItem } from '../containers/App/ExpandedDocList';
+import { getDocInfoByUrlPath, ICanExpendedItem } from '../containers/App/ExpandedDocList';
 import * as appConfig from '../config';
 import { history } from '../routes';
-const { connect } = require('react-redux');
+import { PromiseComponent } from '../utils/PromiseComponent';
 
 let docs_host_link = appConfig.default.docs.getConfig().docs_host_link;
 
@@ -17,78 +15,15 @@ export function onDocsPageLoactionChangeCallback(key: string, callback: (string)
     onLoactionChangeCallback[key] = callback;
 }
 
-interface IProps {
-    location?: any;
-    docPageState?: IDocPageState;
-    startRequestPage?: (url: string) => void;
-}
-
-@connect(
-    state => ({ docPageState: state.initDocPageReducer }),
-    dispatch => ({
-        startRequestPage: (url: string) => (dispatch(startRequestPage(dispatch, url))),
-    }))
-class DocPage extends React.Component<IProps, void> {
-    constructor(props) {
-        super(props);
-        this.props.startRequestPage(this.props.location.pathname);
-    }
-    public componentDidUpdate(prevProps: IProps, prevState: void, prevContext: any) {
-        if (onLoactionChangeCallback
-            && this.props.docPageState
-            && this.props.docPageState.url !== prevProps.docPageState.url) {
-            for (let key in onLoactionChangeCallback) {
-                if (onLoactionChangeCallback[key]) {
-                    onLoactionChangeCallback[key](this.props.docPageState.url);
-                }
-            }
-        }
-    }
-    public componentWillReceiveProps(nextProps: IProps, nextContext: any) {
-        if (nextProps.location.pathname !== this.props.location.pathname) {
-            nextProps.startRequestPage(nextProps.location.pathname);
-        }
-    }
-
-    public render() {
-        if (!this.props.docPageState.isOk) {
-            return (
-                <div style={{ height: '100%' }}>
-                    <div className="_container" role="document">
-                        <main className="_content _content-loading" role="main" tabIndex={-1}>
-                            <div className="_page">
-                            </div>
-                        </main>
-                    </div>
-                </div>
-            );
-        }
-        if (this.props.docPageState.err) {
-            console.log('DocPage' + this.props.docPageState.err.stack);
-            return (
-                <div style={{ height: '100%' }}>
-                    <div className="_container" role="document">
-                        <PageNotFound pathname={this.props.location.pathname} onClickRetry={
-                            (event: Event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                this.props.startRequestPage(this.props.location.pathname);
-                            }
-                        } />
-                    </div>
-                </div>
-            );
-        }
-        return (
-            <DocContentPage {...this.props.docPageState} />
-        );
-    }
+interface IDocPageState {
+    url: string;
+    htmlResponse?: string;
+    clickExpendedItem?: ICanExpendedItem;
 }
 
 class DocContentPage extends React.Component<IDocPageState, any> {
     private rootElem: HTMLElement;
-
-    public componentDidMount() {
+    public componentDidUpdate() {
         if (!this.rootElem || !this.rootElem.getElementsByTagName) {
             return;
         }
@@ -182,6 +117,97 @@ class BottomMark extends React.Component<IBottomMarkProps, any> {
                 <Link to={docType ? docType.pathname : ''} className="_path-item">{docType ? docType.name : ''}</Link>
                 <span className="_path-item">{docEntry ? docEntry.name : ''}</span>
             </div >
+        );
+    }
+}
+interface IDocPageProps {
+    location?: any;
+}
+interface IDocPageState {
+    url: string;
+}
+class DocPage extends React.Component<IDocPageProps, IDocPageState> {
+    constructor(props) {
+        super(props);
+        this.state = { url: this.props.location.pathname };
+    }
+    public componentDidUpdate(prevProps: IDocPageProps, prevState: IDocPageState, prevContext: any) {
+        if (onLoactionChangeCallback
+            && this.state.url !== prevState.url) {
+            for (let key in onLoactionChangeCallback) {
+                if (onLoactionChangeCallback[key]) {
+                    onLoactionChangeCallback[key](this.state.url);
+                }
+            }
+        }
+    }
+    public shouldComponentUpdate?(nextProps: IDocPageProps, nextState: IDocPageState, nextContext: any): boolean {
+        if (nextProps.location.pathname !== this.state.url) {
+            this.setState({ url: nextProps.location.pathname });
+            return true;
+        }
+        return false;
+    }
+    private renderLoading() {
+        return (
+            <div style={{ height: '100%' }}>
+                <div className="_container" role="document">
+                    <main className="_content _content-loading" role="main" tabIndex={-1}>
+                        <div className="_page">
+                        </div>
+                    </main>
+                </div>
+            </div>
+        );
+    }
+    private renderFetched(data, reload: () => any) {
+        return (<DocContentPage {...data.getHtml} />);
+    }
+    private renderFailure(err: Error, reload: () => any) {
+        console.log('DocPage' + err.stack);
+        return (
+            <div style={{ height: '100%' }}>
+                <div className="_container" role="document">
+                    <PageNotFound pathname={this.props.location.pathname} onClickRetry={
+                        (event: Event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            reload();
+                        }
+                    } />
+                </div>
+            </div>
+        );
+    }
+    private async fetchData(params) {
+        let _url = params.url;
+        let _clickExpendedItem: ICanExpendedItem = getDocInfoByUrlPath(_url);
+        if (_clickExpendedItem && _clickExpendedItem.data.docType && !_clickExpendedItem.data.docEntry) {
+            return { url: _url, htmlResponse: null, clickExpendedItem: _clickExpendedItem };
+        }
+        let res = await fetch(appConfig.default.docs.getConfig().docs_host + _url, {
+            headers: {
+                Accept: 'text/html',
+            },
+        });
+        if (res.ok) {
+            let text = await res.text();
+            return { url: _url, htmlResponse: text, clickExpendedItem: _clickExpendedItem };
+        } else {
+            throw new Error(`fetch error url:${res.url} status:${res.status} statusText:${res.statusText}`);
+        }
+    }
+    public render() {
+        return (
+            <PromiseComponent
+                params={this.state}
+                renderLoading={this.renderLoading.bind(this)}
+                renderFetched={this.renderFetched.bind(this)}
+                renderFailure={this.renderFailure.bind(this)}
+                fragments={{
+                    getHtml: this.fetchData.bind(this),
+                }}
+                />
         );
     }
 }

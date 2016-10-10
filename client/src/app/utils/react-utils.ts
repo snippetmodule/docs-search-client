@@ -1,6 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+export function assignProperty(object, key, value) {
+    if (typeof object === 'object') {
+        object[key] = value;
+    }
+    return object;
+}
+
 export function isMounted(component: React.ReactInstance) {
     try {
         ReactDOM.findDOMNode(component);
