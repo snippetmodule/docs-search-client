@@ -4,9 +4,8 @@
   "description": "First server Test",
   "main": "build/www.js",
   "scripts": {
-    "clear": "rm -rf build/* node_modules/* typings/*",
+    "clear": "rm -rf build/* node_modules/*",
     "stop": "$(lsof -i :8081 | awk '{print \"kill -9 \" $2}')",
-    "postinstall": "typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "build": "tsc -w &",
@@ -16,18 +15,24 @@
   "author": "wfc",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^1.0.0",
-    "typescript": "^1.7.3"
+    "@types/async": "^2.0.38",
+    "@types/bunyan": "0.0.35",
+    "@types/fs-extra": "0.0.37",
+    "@types/isomorphic-fetch": "0.0.32",
+    "@types/node": "^7.0.5",
+    "@types/restify": "^2.0.40",
+    "concurrently": "^3.3.0",
+    "typescript": "^2.1.6"
   },
   "dependencies": {
     "async": "^2.0.1",
     "babel": "^6.3.26",
     "bunyan": "^1.8.1",
-    "fs-extra": "^0.30.0",
+    "fs-extra": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
     "mongoose": "^4.3.4",
     "restify": "^4.0.3",
     "serve-static-restify": "^1.0.0",
-    "systemjs": "^0.19.9"
+    "systemjs": "^0.20.9"
   }
 }

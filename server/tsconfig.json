@@ -9,10 +9,15 @@
     "experimentalDecorators": true,
     "moduleResolution": "node"
   },
+  "types": [
+    "node",
+    "async",
+    "bunyan",
+    "fs-extra",
+    "isomorphic-fetch",
+    "restify"
+  ],
   "exclude": [
-    "node_modules",
-    "build",
-    "typings/main",
-    "typings/main.d.ts"
+    "node_modules"
   ]
 }

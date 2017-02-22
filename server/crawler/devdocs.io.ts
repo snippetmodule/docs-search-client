@@ -21,8 +21,8 @@ interface IDocsItem {
 }
 
 async function getDocsListImpl() {
-    let res: IResponse = await fetch(
-        'http://cdn.devdocs.io/assets/docs-71a1b5319f1da19014ec52369623974ccb9017b2ff926ed892b16001bb5ebc84.js'
+    let res: ResponseInterface = await fetch(
+        'http://cdn.devdocs.io/assets/docs-7895029bdcd2710cf526c8299fecfa4bb8416d663e25164765f1ede096e07e78.js'
         , {
             headers: {
                 Referer: 'http://devdocs.io/'
@@ -119,7 +119,7 @@ class TasksPromise {
             // console.log('------------item start ' + item.slug);
             if (this.isCancel) {
                 console.log('task has canceled ');
-                callback('task has canceled ');
+                callback(new Error('task has canceled '));
             } else {
                 let path = rootPath + item.slug;
                 let promises: Promise<any>[] = [];

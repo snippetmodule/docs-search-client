@@ -20,7 +20,7 @@ interface IDocsItem {
 }
 
 async function getDocsListImpl() {
-    let res: IResponse = await fetch('http://www.devdocs.me/assets/docs.js');
+    let res: ResponseInterface = await fetch('http://www.devdocs.me/assets/docs.js');
     let result: string;
     if (res.ok) {
         result = await res.text();
@@ -36,7 +36,7 @@ async function getDocsListImpl() {
 }
 
 async function download(url: string, path: string) {
-    let res: IResponse = await fetch(url);
+    let res: ResponseInterface = await fetch(url);
     let result: string;
     if (res.ok) {
         result = await res.text();
