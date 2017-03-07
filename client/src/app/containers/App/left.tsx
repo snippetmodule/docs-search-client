@@ -17,14 +17,12 @@ class Left extends React.Component<any, ISearchState> {
     private enableDocs(selectedPath: string, docInfo: IDocInfo) {
         appConfig.default.selectedPath = selectedPath;
         appConfig.default.docs.addDoc(docInfo).then((res) => {
-            this.state.input = '';
-            this.forceUpdate();
+            this.setState({ input: '' });
         }).catch(err => console.log('enableDoc err:' + docInfo.slug + err.stack));
     }
     private setSelectDoc(selectedPath: string) {
         appConfig.default.selectedPath = selectedPath;
-        this.state.input = '';
-        this.forceUpdate();
+        this.setState({ input: '' });
     }
 
     public getSearchTag(): { name: string, slug: string } {
@@ -41,7 +39,7 @@ class Left extends React.Component<any, ISearchState> {
     }
     public render() {
         if (!this.state || !this.state.input) {
-            return (<DefaultList {...this.props}/>);
+            return (<DefaultList {...this.props} />);
         }
         if (this.state.error) {
             return (<div> {this.state.error} </div>);

@@ -29,9 +29,8 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         if (stateItem.child.length > 0) {
             stateItem.isExpended = !stateItem.isExpended;
         }
-        this.state.selectedIndex = index;
         setSelectionIndex(index);
-        this.setState(new ExpandedDocList());
+        this.setState(new ExpandedDocList(false, index));
         if (stateItem.data.name === 'disable') {
             return;
         }
@@ -75,7 +74,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
                 itemRenderer={this.renderItem.bind(this)}
                 length={this.state.listItems.length}
                 itemHeight={30}
-                />
+            />
         );
     }
     public componentWillMount() {
