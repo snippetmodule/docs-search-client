@@ -41,17 +41,17 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     private enableDoc(docInfo: IDocInfo) {
         appConfig.default.docs.addDoc(docInfo).then((res) => {
             this.setState(new ExpandedDocList(true));
-        }).catch(err => console.log('enableDoc err:' + docInfo.slug + err.stack));
+        }).catch((err) => console.log('enableDoc err:' + docInfo.slug + err.stack));
     }
     private disableDoc(docInfo: IDocInfo) {
         appConfig.default.docs.removeDoc(docInfo).then((res) => {
             this.setState(new ExpandedDocList(true));
-        }).catch(err => console.log('disableDoc err:' + docInfo.slug + err.stack));
+        }).catch((err) => console.log('disableDoc err:' + docInfo.slug + err.stack));
     }
 
     private renderItem(index, key) {
-        let _stateItem: ICanExpendedItem = this.state.listItems[index];
-        let itemProps: IRenderItemProp = {
+        const _stateItem: ICanExpendedItem = this.state.listItems[index];
+        const itemProps: IRenderItemProp = {
             stateItem: _stateItem,
             _isSelected: index === this.state.selectedIndex,
             onClickItem: (event) => { event.preventDefault(); event.stopPropagation(); this.onClickItem(index, _stateItem); },
@@ -70,7 +70,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
     }
     public render() {
         return (
-            <ReactList ref={ref => this.mListRef = ref}
+            <ReactList ref={(ref) => this.mListRef = ref}
                 itemRenderer={this.renderItem.bind(this)}
                 length={this.state.listItems.length}
                 itemHeight={30}
@@ -78,7 +78,7 @@ export class DefaultList extends React.Component<any, ICanExpendedState> {
         );
     }
     public componentWillMount() {
-        onDocsPageLoactionChangeCallback('DefaultList', locationUrl => {
+        onDocsPageLoactionChangeCallback('DefaultList', (locationUrl) => {
             if (this.state.setSelectedIndexByUrlPath(locationUrl)) {
                 this.setState(new ExpandedDocList());
             }

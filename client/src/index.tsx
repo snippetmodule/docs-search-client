@@ -5,7 +5,4 @@ import { routeConfig } from './app/routes';
 
 require('./css/application.css.scss');
 
-ReactDOM.render(
-  routeConfig,
-  document.getElementById('app')
-);
+ReactDOM.render(routeConfig, document.getElementById('app'));

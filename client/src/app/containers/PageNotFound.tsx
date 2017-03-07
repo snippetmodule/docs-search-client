@@ -17,11 +17,11 @@ class PageNotFound extends React.Component<IPageNotFoundProp, any> {
                             If you keep seeing this, you're likely behind a proxy or firewall that blocks cross-domain requests.
                         </p>
                         <p className="_error-links">
-                            <a href="#" data-behavior="back" onClick={event => {
+                            <a href="#" data-behavior="back" onClick={(event) => {
                                 event.preventDefault();
                                 event.stopPropagation();
                                 history.goBack();
-                            } } className="_error-link">Go back</a> ·
+                            }} className="_error-link">Go back</a> ·
                                 <a href={this.props.pathname}  target="_top" className="_error-link">Reload</a> ·
                                 <a href="" onClick={this.props.onClickRetry}
                                 className="_error-link" data-retry="">Retry</a>

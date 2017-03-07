@@ -1,6 +1,6 @@
 const localForage: LocalForage = require('localforage');
 
-let localStorage: LocalForage = localForage.createInstance({
+const localStorage: LocalForage = localForage.createInstance({
     driver: localForage.LOCALSTORAGE, // Force WebSQL; same as using setDriver()
     name: 'docs',
     version: 1.0,
@@ -8,7 +8,7 @@ let localStorage: LocalForage = localForage.createInstance({
     storeName: 'keyvaluepairs', // Should be alphanumeric, with underscores.
     description: 'docs localStorage description',
 });
-let webSql: LocalForage = localForage.createInstance({
+const webSql: LocalForage = localForage.createInstance({
     driver: localForage.WEBSQL, // Force WebSQL; same as using setDriver()
     name: 'docs',
     version: 1.0,
@@ -16,7 +16,7 @@ let webSql: LocalForage = localForage.createInstance({
     storeName: 'keyvaluepairs', // Should be alphanumeric, with underscores.
     description: 'docs localStorage description',
 });
-let indexDB: LocalForage = localForage.createInstance({
+const indexDB: LocalForage = localForage.createInstance({
     driver: localForage.INDEXEDDB, // Force WebSQL; same as using setDriver()
     name: 'docs',
     version: 1.0,

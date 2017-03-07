@@ -22,38 +22,38 @@ function initSearcher(docsInfoArrays: IDocInfo[]): Searcher<ISearchItem> {
             return { entries: _entries, types: _types };
         }).map((item: { entries: ISearchItem[], types: ISearchItem[] }) => {
             return [...item.entries, ...item.types];
-        }).forEach(item => {
+        }).forEach((item) => {
             searchItems = searchItems.concat(item);
         });
 
-    searchItems.push(...docsInfoArrays.filter(item => {
+    searchItems.push(...docsInfoArrays.filter((item) => {
         if (item.storeValue) {
             return false;
         }
         return true;
-    }).map(item => {
+    }).map((item) => {
         return { name: item.slug, pathname: item.pathname, slug: item.slug, doc: item };
     }));
     return new Searcher(searchItems, ['name']);
 }
 
 async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[]) {
-    let downloadInfos: IDocInfo[] = downloadDocs.map(item => {
-        for (let docInfo of docsInfoArrays) {
+    const downloadInfos: IDocInfo[] = downloadDocs.map((item) => {
+        for (const docInfo of docsInfoArrays) {
             if (docInfo.slug === item) {
                 return docInfo;
             }
         }
         return null;
     });
-    for (let _downloadDocInfo of downloadInfos) {
+    for (const _downloadDocInfo of downloadInfos) {
         await downloadDoc(_downloadDocInfo);
     }
-    let keys: string[] = await localStorage.keys();
-    for (let key of keys) {
-        for (let info of docsInfoArrays) {
+    const keys: string[] = await localStorage.keys();
+    for (const key of keys) {
+        for (const info of docsInfoArrays) {
             if (info.slug === key) {
-                let value: IDocInfo = <IDocInfo> (await localStorage.getItem(key));
+                const value: IDocInfo = await localStorage.getItem(key) as IDocInfo;
                 if (value) {
                     info.storeValue = value.storeValue;
                 }
@@ -62,19 +62,19 @@ async function initDocsArray(docsInfoArrays: IDocInfo[], downloadDocs: string[])
     }
 }
 async function downloadDoc(docInfo: IDocInfo) {
-    let res = await fetch(config.docs_host + '/docs/' + docInfo.slug + '/index.json', {
+    const res = await fetch(config.docs_host + '/docs/' + docInfo.slug + '/index.json', {
         headers: { Accept: 'application/json' },
     });
     if (res && res.ok) {
-        let responseString = await res.text();
+        const responseString = await res.text();
         docInfo.storeValue = JSON.parse(responseString);
         docInfo.storeValue.types = sortTyps(docInfo.storeValue.types);
-        docInfo.storeValue.entries.forEach(item => item.pathname = docInfo.pathname + item.path);
-        docInfo.storeValue.types.forEach(item => item.pathname = docInfo.pathname + item.slug + '/');
+        docInfo.storeValue.entries.forEach((item) => item.pathname = docInfo.pathname + item.path);
+        docInfo.storeValue.types.forEach((item) => item.pathname = docInfo.pathname + item.slug + '/');
         await localStorage.setItem(docInfo.slug, docInfo);
     }
 }
-let GUIDES_RGX = /(^|[\s\(])(guide|tutorial|reference|getting\ started)/i;
+const GUIDES_RGX = /(^|[\s\(])(guide|tutorial|reference|getting\ started)/i;
 function _groupFor(type) {
     if (GUIDES_RGX.test(type.name)) {
         return 0;
@@ -83,10 +83,11 @@ function _groupFor(type) {
     }
 };
 function sortTyps(types: DocsModelTypeType[]): DocsModelTypeType[] {
-    let result = [];
+    const result = [];
     let name;
-    for (let i = 0, len = types.length; i < len; i++) {
-        let type = types[i];
+    const len = types.length;
+    for (let i = 0; i < len; i++) {
+        const type = types[i];
         (result[name = _groupFor(type)] || (result[name] = [])).push(type);
     }
     if (!result[0]) {
@@ -97,7 +98,7 @@ function sortTyps(types: DocsModelTypeType[]): DocsModelTypeType[] {
     }
     return [...(result[0]), ...result[1]];
 }
-let config = {
+const config = {
     default_docs: ['css', 'dom', 'dom_events', 'html', 'http', 'javascript'],
     docs_host: 'http://127.0.0.1:8081',
     docs_host_link: 'localhost:8080',
@@ -116,14 +117,14 @@ class Docs {
     private isDocChangedByUser: boolean;
 
     private mSearcher: Searcher<ISearchItem>;
-    constructor(private docsInfoArrays: Array<IDocInfo> = []) {
-        this.docsInfoArrays.forEach(item => item.pathname = '/docs/' + item.slug + '/');
+    constructor(private docsInfoArrays: IDocInfo[] = []) {
+        this.docsInfoArrays.forEach((item) => item.pathname = '/docs/' + item.slug + '/');
         this.isAutoUpdate = Cookies.get('Docs_IsAutoUpdate') === 'false' ? false : true; // 默认为true
         this.isDocChangedByUser = Cookies.get('Docs_isDocChangedByUser') === 'true' ? true : false; // 默认为false
     }
     public async init(searchFilter: string = '') {
         await initDocsArray(this.docsInfoArrays, this.isDocChangedByUser ? [] : config.default_docs);
-        this.mSearcher = initSearcher(searchFilter ? this.docsInfoArrays.filter(item => {
+        this.mSearcher = initSearcher(searchFilter ? this.docsInfoArrays.filter((item) => {
             if (item.slug === searchFilter) {
                 return true;
             }
@@ -157,7 +158,7 @@ class Docs {
         this.isDocChangedByUser = true;
         this.save();
         await localStorage.removeItem(docInfo.slug);
-        for (let doc of this.docsInfoArrays) {
+        for (const doc of this.docsInfoArrays) {
             if (doc.slug === docInfo.slug) {
                 doc.storeValue = undefined;
                 break;
@@ -173,12 +174,12 @@ class Docs {
         return config;
     }
     private save() {
-        let expiresDate: Date = new Date();
+        const expiresDate: Date = new Date();
         expiresDate.setFullYear(2020);
         Cookies.set('Docs_IsAutoUpdate', this.isAutoUpdate, { expires: expiresDate });
         Cookies.set('Docs_isDocChangedByUser', this.isDocChangedByUser, { expires: expiresDate });
     }
-    public search(input: string): Promise<Array<ISearchItem>> {
+    public search(input: string): Promise<ISearchItem[]> {
         return new Promise((resolve, reject) => {
             resolve(this.mSearcher.search(input));
         });

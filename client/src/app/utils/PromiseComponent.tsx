@@ -26,19 +26,18 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
         return this.props.fragments[fragmentName]();
     }
     public async getAllFragments(optionalFragmentNames: string[]) {
-        let promises = [];
+        const promises = [];
         optionalFragmentNames = optionalFragmentNames || [];
         Object.keys(this.props.fragments).forEach((fragmentName) => {
             if (optionalFragmentNames.length && optionalFragmentNames.indexOf(fragmentName) < 0) {
                 return;
             }
-            let promise = this.getFragment(
-                fragmentName
-            ).then((fragmentResult) => {
-                return assignProperty({}, fragmentName, fragmentResult);
-            }).catch(err => {
-                throw err;
-            });
+            const promise = this.getFragment(fragmentName)
+                .then((fragmentResult) => {
+                    return assignProperty({}, fragmentName, fragmentResult);
+                }).catch((err) => {
+                    throw err;
+                });
             promises.push(promise);
         });
         return Promise.all(promises).then((fetchedFragments) => {
@@ -51,7 +50,7 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
         // returns true when using renderToString() from react-dom/server.
         this._mounted = true;
         if (!this.fetching) {
-            let missingFragments = this.missingFragments(false);
+            const missingFragments = this.missingFragments(false);
             if (missingFragments.length) {
                 this.forceFetch(missingFragments);
             }
@@ -75,7 +74,7 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
             }
         }
         try {
-            let fetchedFragments = await this.getAllFragments(optionalFragmentNames);
+            const fetchedFragments = await this.getAllFragments(optionalFragmentNames);
             this.safeguardedSetState(Object.assign({ err: undefined }, fetchedFragments));
         } catch (_err) {
             this.safeguardedSetState({ err: _err });
@@ -91,13 +90,13 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
     }
 
     public missingFragments(nullAllowed): string[] {
-        let state = this.state || {};
-        let props = this.props || {};
+        const state = this.state || {};
+        const props = this.props || {};
         if (!Object.keys(this.props.fragments).length) {
             return [];
         }
-        let missing: string[] = [];
-        for (let fragmentName of Object.keys(this.props.fragments)) {
+        const missing: string[] = [];
+        for (const fragmentName of Object.keys(this.props.fragments)) {
             if (props.hasOwnProperty(fragmentName) ||
                 state.hasOwnProperty(fragmentName)) {
                 if (nullAllowed) {
@@ -113,7 +112,7 @@ export class PromiseComponent extends React.Component<IPromiseComponentProps, IP
     }
 
     public componentWillMount() {
-        let missingFragments = this.missingFragments(true);
+        const missingFragments = this.missingFragments(true);
         if (missingFragments.length) {
             this.forceFetch(missingFragments);
         }

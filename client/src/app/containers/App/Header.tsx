@@ -13,7 +13,7 @@ class Header extends React.Component<IHeaderProps, void> {
   private mInputRef: HTMLInputElement;
 
   private stripscript(s: string): string {
-    let pattern = new RegExp('[`~!@#$^&*()=|{}\:\;,\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：\“。，、？]');
+    const pattern = new RegExp('[`~!@#$^&*()=|{}\:\;,\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：\“。，、？]');
     let rs = '';
     for (let i = 0; i < s.length; i++) {
       rs = rs + s.substr(i, 1).replace(pattern, '');
@@ -27,10 +27,10 @@ class Header extends React.Component<IHeaderProps, void> {
     document.onkeydown = null;
   }
   private handerTabKey(event: KeyboardEvent) {
-    let keyCode = event.keyCode || event.which;
+    const keyCode = event.keyCode || event.which;
 
     if (keyCode === 9) {
-      let searchTag = this.props.getSearchTag();
+      const searchTag = this.props.getSearchTag();
       event.preventDefault();
       if (searchTag) {
         this.mSearchTagRef.style.display = 'block';
@@ -81,12 +81,12 @@ class Header extends React.Component<IHeaderProps, void> {
     return (
       <header className="_header" role="banner">
         <form className="_search" role="search">
-          <input ref={ref => this.mInputRef = ref} type="search" className="_search-input" placeholder="Search…"
+          <input ref={(ref) => this.mInputRef = ref} type="search" className="_search-input" placeholder="Search…"
             autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false}
             maxLength={30} aria-label="Search" autoFocus={true}
             onChange={this.handleChange.bind(this)} />
-          <button ref={ref => this.mCleanBtnRef = ref} onClick={this.handleCleanBtn.bind(this)} type="reset" className="_search-clear" title="Clear search">Clear search</button>
-          <div ref={ref => this.mSearchTagRef = ref} className="_search-tag"></div>
+          <button ref={(ref) => this.mCleanBtnRef = ref} onClick={this.handleCleanBtn.bind(this)} type="reset" className="_search-clear" title="Clear search">Clear search</button>
+          <div ref={(ref) => this.mSearchTagRef = ref} className="_search-tag"></div>
         </form>
         <h1 className="_logo">
           <Link to="/" className="_nav-link" title="Offline API Documentation Browser">Docs中文网</Link>

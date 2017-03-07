@@ -9,7 +9,7 @@ interface ISearchState {
     input: string;
     isSearch: boolean;
     error?: boolean;
-    message?: Array<ISearchItem>;
+    message?: ISearchItem[];
 }
 class Left extends React.Component<any, ISearchState> {
     private mSearchResultListRef: SearchResultList;
@@ -18,7 +18,7 @@ class Left extends React.Component<any, ISearchState> {
         appConfig.default.selectedPath = selectedPath;
         appConfig.default.docs.addDoc(docInfo).then((res) => {
             this.setState({ input: '' });
-        }).catch(err => console.log('enableDoc err:' + docInfo.slug + err.stack));
+        }).catch((err) => console.log('enableDoc err:' + docInfo.slug + err.stack));
     }
     private setSelectDoc(selectedPath: string) {
         appConfig.default.selectedPath = selectedPath;
@@ -45,7 +45,7 @@ class Left extends React.Component<any, ISearchState> {
             return (<div> {this.state.error} </div>);
         }
         return (
-            <SearchResultList ref={ref => this.mSearchResultListRef = ref}
+            <SearchResultList ref={(ref) => this.mSearchResultListRef = ref}
                 enableDocs={this.enableDocs.bind(this)}
                 setSelectDoc={this.setSelectDoc.bind(this)}
                 searchResult={this.state.message} />

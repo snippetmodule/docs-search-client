@@ -3,7 +3,7 @@ import { IndexRoute, Route } from 'react-router';
 import { App, Home, About, DocPage } from './containers';
 import { Router, browserHistory } from 'react-router';
 
-let history = browserHistory;
+const history = browserHistory;
 
 const routeConfig = (
   <Router history={browserHistory}>

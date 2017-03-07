@@ -11,14 +11,14 @@ class AppImpl extends React.Component<any, void> {
     private mHeaderRef: Header;
 
     private doSearch(searchKey: string) {
-        app.docs.search(searchKey).then((res: Array<ISearchItem>) => {
+        app.docs.search(searchKey).then((res: ISearchItem[]) => {
             this.mLeftRef.setState({
                 input: searchKey,
                 isSearch: false,
                 error: false,
                 message: res,
             });
-        }).catch(err => {
+        }).catch((err) => {
             this.mLeftRef.setState({
                 input: searchKey,
                 isSearch: false,
@@ -43,11 +43,11 @@ class AppImpl extends React.Component<any, void> {
         return (
             <div className="_app" >
                 <Helmet {...app.htmlConfig.app} {...app.htmlConfig.app.head} />
-                <Header ref={ref => this.mHeaderRef = ref}
+                <Header ref={(ref) => this.mHeaderRef = ref}
                     doSearch={this.doSearch.bind(this)}
                     getSearchTag={this.getSearchTag.bind(this)}
                     keyEnterHandler={this.keyEnterHandler.bind(this)} />
-                <Left ref={ref => this.mLeftRef = ref} {...this.props}/>
+                <Left ref={(ref) => this.mLeftRef = ref} {...this.props} />
                 {this.props.children}
                 <div onMouseMove={this.props.resizer}
                     title="Click to toggle sidebar on/off" className="_resizer" draggable={true}></div>
@@ -100,7 +100,7 @@ class App extends React.Component<void, void> {
                 fragments={{
                     init: async () => { await app.docs.init(); },
                 }}
-                />
+            />
         );
     }
 }

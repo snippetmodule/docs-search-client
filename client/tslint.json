@@ -27,6 +27,13 @@
     "no-string-literal": false,
     "eofline": false,
     "no-conditional-assignment": false,
+    "max-classes-per-file": [
+      false
+    ],
+    "jsx-self-close":false,
+    "jsx-alignment":false,
+    "jsx-no-lambda":false,
+    "jsx-no-multiline-js":false,
     "max-line-length": []
   }
 }

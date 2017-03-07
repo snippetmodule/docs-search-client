@@ -6,10 +6,10 @@ import * as appConfig from '../config';
 import { history } from '../routes';
 import { PromiseComponent } from '../utils/PromiseComponent';
 
-let docs_host_link = appConfig.default.docs.getConfig().docs_host_link;
+const docs_host_link = appConfig.default.docs.getConfig().docs_host_link;
 
-let onLoactionChangeCallback: {
-    [key: string]: (string) => void
+const onLoactionChangeCallback: {
+    [key: string]: (string) => void,
 } = {};
 export function onDocsPageLoactionChangeCallback(key: string, callback: (string) => void) {
     onLoactionChangeCallback[key] = callback;
@@ -28,9 +28,10 @@ class DocContentPage extends React.Component<IDocPageState, any> {
             return;
         }
         let nextScroolToElement: string = null;
-        let links = this.rootElem.getElementsByTagName('a');
+        const links = this.rootElem.getElementsByTagName('a');
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < links.length; i++) {
-            let link = links[i];
+            const link = links[i];
             link.onclick = (event: MouseEvent) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -45,7 +46,7 @@ class DocContentPage extends React.Component<IDocPageState, any> {
         }
         nextScroolToElement = this.props.url.split('#')[1];
         if (nextScroolToElement) {
-            let element = document.getElementById(nextScroolToElement);
+            const element = document.getElementById(nextScroolToElement);
             if (element) {
                 this.rootElem.scrollTop = element.offsetTop;
             }
@@ -55,11 +56,11 @@ class DocContentPage extends React.Component<IDocPageState, any> {
     }
 
     public render() {
-        let clickExpendedItem = this.props.clickExpendedItem;
+        const clickExpendedItem = this.props.clickExpendedItem;
         let htmlContent = this.props.htmlResponse;
-        let iconCss = (clickExpendedItem && clickExpendedItem.data.docInfo ? '_' + clickExpendedItem.data.docInfo.type : '');
+        const iconCss = (clickExpendedItem && clickExpendedItem.data.docInfo ? '_' + clickExpendedItem.data.docInfo.type : '');
         if (clickExpendedItem) {
-            let mDocInfo = clickExpendedItem.data.docInfo;
+            const mDocInfo = clickExpendedItem.data.docInfo;
             if (mDocInfo && mDocInfo.links) {
                 htmlContent = '<p class="_links">' +
                     (mDocInfo.links.home ? ('<a href="XXXX" class="_links-link">Homepage</a>'.replace('XXXX', mDocInfo.links.home)) : '') +
@@ -70,7 +71,7 @@ class DocContentPage extends React.Component<IDocPageState, any> {
                 return (
                     <div style={{ height: '100%' }}>
                         <div className="_container" role="document">
-                            <main ref={ref => this.rootElem = ref} className="_content" role="main" tabIndex={-1}>
+                            <main ref={(ref) => this.rootElem = ref} className="_content" role="main" tabIndex={-1}>
                                 <div className="_page">
                                     <h1>{clickExpendedItem.data.name + ' / ' + clickExpendedItem.parent.data.name}</h1>
                                     <ul>
@@ -94,7 +95,7 @@ class DocContentPage extends React.Component<IDocPageState, any> {
         return (
             <div style={{ height: '100%' }}>
                 <div className="_container" role="document">
-                    <main ref={ref => this.rootElem = ref} className="_content" role="main" tabIndex={-1}>
+                    <main ref={(ref) => this.rootElem = ref} className="_content" role="main" tabIndex={-1}>
                         <div dangerouslySetInnerHTML={{ __html: htmlContent }}
                             className={'_page ' + iconCss} >
                         </div>
@@ -110,7 +111,7 @@ interface IBottomMarkProps {
 }
 class BottomMark extends React.Component<IBottomMarkProps, any> {
     public render() {
-        let {docInfo, docType, docEntry} = this.props.data.data;
+        const { docInfo, docType, docEntry } = this.props.data.data;
         return (
             <div role="complementary" className="_path" style={{ display: !docType && !docEntry ? 'none' : 'block' }}>
                 <Link to={docInfo.pathname} className={'_path-item _icon-' + docInfo.slug.split('~')[0]}> {docInfo.name + ' ' + (docInfo.version || '')}</Link>
@@ -133,7 +134,7 @@ class DocPage extends React.Component<IDocPageProps, void> {
     public componentDidUpdate(prevProps: IDocPageProps, prevState: void, prevContext: any) {
         if (onLoactionChangeCallback
             && this.props.location.pathname !== prevProps.location.pathname) {
-            for (let key in onLoactionChangeCallback) {
+            for (const key in onLoactionChangeCallback) {
                 if (onLoactionChangeCallback[key]) {
                     onLoactionChangeCallback[key](this.props.location.pathname);
                 }
@@ -178,18 +179,18 @@ class DocPage extends React.Component<IDocPageProps, void> {
         );
     }
     private async fetchData() {
-        let _url = this.props.location.pathname;
-        let _clickExpendedItem: ICanExpendedItem = getDocInfoByUrlPath(_url);
+        const _url = this.props.location.pathname;
+        const _clickExpendedItem: ICanExpendedItem = getDocInfoByUrlPath(_url);
         if (_clickExpendedItem && _clickExpendedItem.data.docType && !_clickExpendedItem.data.docEntry) {
             return { url: _url, htmlResponse: null, clickExpendedItem: _clickExpendedItem };
         }
-        let res = await fetch(appConfig.default.docs.getConfig().docs_host + _url, {
+        const res = await fetch(appConfig.default.docs.getConfig().docs_host + _url, {
             headers: {
                 Accept: 'text/html',
             },
         });
         if (res.ok) {
-            let text = await res.text();
+            const text = await res.text();
             return { url: _url, htmlResponse: text, clickExpendedItem: _clickExpendedItem };
         } else {
             throw new Error(`fetch error url:${res.url} status:${res.status} statusText:${res.statusText}`);
@@ -204,7 +205,7 @@ class DocPage extends React.Component<IDocPageProps, void> {
                 fragments={{
                     getHtml: this.fetchData.bind(this),
                 }}
-                />
+            />
         );
     }
 }

@@ -9,7 +9,7 @@ interface IReactListProps {
 interface IReactListState {
     forceSelectedIndex: number;
     from: number;
-    to: number; // 当前列表显示的开始位置,和结束位置 
+    to: number; // 当前列表显示的开始位置,和结束位置
 }
 export default class ReactList extends React.Component<IReactListProps, IReactListState> {
     public state = { from: 0, to: 0, forceSelectedIndex: -1 };
@@ -37,12 +37,12 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         if (!this.mListRef) {
             return;
         }
-        let newScrollPosition = Math.ceil(this.mListRef.scrollTop / this.props.itemHeight);
-        let _to = newScrollPosition + Math.floor(this.mListRef.clientHeight / this.props.itemHeight);
+        const newScrollPosition = Math.ceil(this.mListRef.scrollTop / this.props.itemHeight);
+        const _to = newScrollPosition + Math.floor(this.mListRef.clientHeight / this.props.itemHeight);
         this.setState({ from: newScrollPosition, to: _to, forceSelectedIndex: -1 });
     }
     public scroolToPosition(position: number) {
-        let nextSeletexItem: any = this.mListRef.childNodes[0].childNodes[position];
+        const nextSeletexItem: any = this.mListRef.childNodes[0].childNodes[position];
         if (nextSeletexItem
             && nextSeletexItem.offsetTop >= this.mListRef.scrollTop
             && nextSeletexItem.offsetTop <= this.mListRef.scrollTop + this.mListRef.clientHeight) {
@@ -54,7 +54,7 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         this.setState({ from: position, to: _to, forceSelectedIndex: position });
     }
     private getCurrentItems() {
-        let { to } = this.state;
+        const { to } = this.state;
         if (this.mCacheLists.length < to) {
             for (let index = this.mCacheLists.length; index <= to && index < this.props.length; index++) {
                 this.mCacheLists.push(this.props.itemRenderer(index, index));
@@ -63,13 +63,13 @@ export default class ReactList extends React.Component<IReactListProps, IReactLi
         return this.mCacheLists.slice(0, to + 1);
     }
     public render() {
-        let items = this.getCurrentItems();
+        const items = this.getCurrentItems();
         return (
-            <section ref={ref => { this.mListRef = ref; } } className="_sidebar" tabIndex={-1} >
+            <section ref={(ref) => { this.mListRef = ref; }} className="_sidebar" tabIndex={-1} >
                 {
                     this.props.length === 0
                         ? <div role="navigation" className="_list _resizer-left-div" style={{ height: '100%' }}>
-                           <div style={{ textAlign: 'center' }}>没有搜到.</div>
+                            <div style={{ textAlign: 'center' }}>没有搜到.</div>
                         </div>
                         :
                         <div role="navigation" className="_list _resizer-left-div" style={{ height: this.props.length * this.props.itemHeight }}>
